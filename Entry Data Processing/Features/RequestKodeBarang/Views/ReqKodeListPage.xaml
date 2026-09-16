@@ -1138,7 +1138,19 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 4. TOKO (Width 175) -->
+                        <!-- 4. TANGGAL REQUEST (Width 135) -->
+                        <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="135" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="#334155" />
+                                    <Setter Property="FontSize" Value="11.5" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- 5. TOKO (Width 175) -->
                         <DataGridTemplateColumn Header="TOKO" Width="175" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -1158,18 +1170,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
-                        <!-- 5. TANGGAL REQUEST (Width 120) -->
-                        <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="120" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Foreground" Value="#334155" />
-                                    <Setter Property="FontSize" Value="11.5" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
 
                         <!-- 6. NAMA BARANG + Badge (Width Flex *) -->
                         <DataGridTemplateColumn Header="NAMA BARANG" Width="*" MinWidth="150" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">

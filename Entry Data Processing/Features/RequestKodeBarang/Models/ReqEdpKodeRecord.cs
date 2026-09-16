@@ -61,7 +61,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
             : (!string.IsNullOrWhiteSpace(AccBy) ? AccBy : "-");
 
         public bool IsNewSupplier => string.IsNullOrWhiteSpace(KdSupp) && string.IsNullOrWhiteSpace(NmSupplier);
-        public string FormattedTglRequest => CreatedAt.HasValue && CreatedAt.Value != DateTime.MinValue ? CreatedAt.Value.ToString("dd/MM/yyyy") : "-";
+        public string FormattedTglRequest => CreatedAt.HasValue && CreatedAt.Value != DateTime.MinValue ? CreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "-";
         
         // Toko: "01/01 - HEAD OFFICE"
         public string TokoNamaDisplay => !string.IsNullOrWhiteSpace(StoreCall) 

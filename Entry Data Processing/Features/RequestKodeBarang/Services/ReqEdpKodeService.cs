@@ -138,7 +138,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 param.Add("Kw", $"%{filter.Keyword.Trim()}%");
             }
             
-            sql += " ORDER BY r.id DESC";
+            sql += " ORDER BY r.created_at DESC, r.id DESC";
 
             var list = (await connection.QueryAsync<ReqEdpKodeRecord>(sql, param)).AsList();
             for (int i = 0; i < list.Count; i++)
