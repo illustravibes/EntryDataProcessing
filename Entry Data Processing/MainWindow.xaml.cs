@@ -47,7 +47,7 @@ namespace Entry_Data_Processing
             // Set User name
             if (_userSession.IsLoggedIn)
             {
-                ProfileMenuItem.Content = _userSession.CurrentUser?.Name ?? "User";
+                ProfileNameText.Text = _userSession.CurrentUser?.Name ?? _userSession.CurrentUser?.Nama ?? "User";
             }
 
             // Navigate to Dashboard initially

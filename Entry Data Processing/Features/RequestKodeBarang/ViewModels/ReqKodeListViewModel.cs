@@ -57,15 +57,35 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         public bool IsBulkActionAvailable => SelectedTab == "Pending" || SelectedTab == "Semua";
 
         // Filters
-        public ObservableCollection<string> Areas { get; } = new() { "< Semua Area >" };
+        public ObservableCollection<string> Areas { get; } = new() { "Semua Area" };
         
         [ObservableProperty]
-        private string _selectedArea = "< Semua Area >";
+        private string _selectedArea = "Semua Area";
 
-        public ObservableCollection<string> Tokos { get; } = new() { "< Semua Toko >" };
+        public ObservableCollection<string> Tokos { get; } = new() { "Semua Toko" };
         
         [ObservableProperty]
-        private string _selectedToko = "< Semua Toko >";
+        private string _selectedToko = "Semua Toko";
+
+        // Single Field Date Filter Presets
+        public ObservableCollection<string> PeriodOptions { get; } = new()
+        {
+            "Semua Periode",
+            "Hari Ini",
+            "7 Hari Terakhir",
+            "30 Hari Terakhir",
+            "Bulan Ini",
+            "Bulan Lalu",
+            "Pilih Tanggal Tertentu"
+        };
+
+        [ObservableProperty]
+        private string _selectedPeriod = "Semua Periode";
+
+        [ObservableProperty]
+        private DateTime? _selectedSingleDate;
+
+        public bool IsSingleDateVisible => SelectedPeriod == "Pilih Tanggal Tertentu";
 
         [ObservableProperty]
         private DateTime? _startDate;
@@ -82,12 +102,116 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private ReqEdpKodeRecord? _selectedRequest;
 
+        // Auto-filter debounce timer & reset flag
+        private System.Threading.Timer? _debounceTimer;
+        private bool _isResettingFilter;
+
+        partial void OnSelectedAreaChanged(string value) => TriggerAutoFilter(immediate: true);
+        partial void OnSelectedTokoChanged(string value) => TriggerAutoFilter(immediate: true);
+
+        partial void OnSelectedPeriodChanged(string value)
+        {
+            OnPropertyChanged(nameof(IsSingleDateVisible));
+            CalculateDateRange();
+            TriggerAutoFilter(immediate: true);
+        }
+
+        partial void OnSelectedSingleDateChanged(DateTime? value)
+        {
+            CalculateDateRange();
+            TriggerAutoFilter(immediate: true);
+        }
+
+        partial void OnSearchKeywordChanged(string value) => TriggerAutoFilter(immediate: false);
+
+        private void CalculateDateRange()
+        {
+            var today = DateTime.Today;
+            switch (SelectedPeriod)
+            {
+                case "Hari Ini":
+                    StartDate = today;
+                    EndDate = today;
+                    break;
+                case "7 Hari Terakhir":
+                    StartDate = today.AddDays(-7);
+                    EndDate = today;
+                    break;
+                case "30 Hari Terakhir":
+                    StartDate = today.AddDays(-30);
+                    EndDate = today;
+                    break;
+                case "Bulan Ini":
+                    StartDate = new DateTime(today.Year, today.Month, 1);
+                    EndDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+                    break;
+                case "Bulan Lalu":
+                    var lastMonth = today.AddMonths(-1);
+                    StartDate = new DateTime(lastMonth.Year, lastMonth.Month, 1);
+                    EndDate = new DateTime(lastMonth.Year, lastMonth.Month, DateTime.DaysInMonth(lastMonth.Year, lastMonth.Month));
+                    break;
+                case "Pilih Tanggal Tertentu":
+                    if (SelectedSingleDate.HasValue)
+                    {
+                        StartDate = SelectedSingleDate.Value.Date;
+                        EndDate = SelectedSingleDate.Value.Date;
+                    }
+                    else
+                    {
+                        StartDate = null;
+                        EndDate = null;
+                    }
+                    break;
+                default: // "< Semua Periode >"
+                    StartDate = null;
+                    EndDate = null;
+                    break;
+            }
+        }
+
+        private void TriggerAutoFilter(bool immediate = false)
+        {
+            if (_isResettingFilter) return;
+
+            if (immediate)
+            {
+                _ = LoadDataAsync();
+            }
+            else
+            {
+                _debounceTimer?.Dispose();
+                _debounceTimer = new System.Threading.Timer(async _ =>
+                {
+                    if (System.Windows.Application.Current?.Dispatcher != null)
+                    {
+                        await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
+                        {
+                            await LoadDataAsync();
+                        });
+                    }
+                }, null, 350, System.Threading.Timeout.Infinite);
+            }
+        }
+
         // Pagination
         [ObservableProperty]
         private int _currentPage = 1;
 
         [ObservableProperty]
         private int _pageSize = 10;
+
+        public ObservableCollection<int> PageSizeOptions { get; } = new() { 10, 25, 50, 100 };
+
+        partial void OnPageSizeChanged(int value)
+        {
+            if (value <= 0) return;
+            if (_filteredRequests != null && _filteredRequests.Count > 0)
+            {
+                TotalPages = Math.Max(1, (int)Math.Ceiling(TotalRecords / (double)value));
+                CurrentPage = 1;
+                RefreshPagedView();
+            }
+        }
 
         [ObservableProperty]
         private int _totalRecords;
@@ -411,13 +535,30 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [RelayCommand]
         public void ResetFilter()
         {
-            SelectedArea = "< Semua Area >";
-            SelectedToko = "< Semua Toko >";
-            SelectedTab = "Semua";
-            StartDate = null;
-            EndDate = null;
-            SearchKeyword = string.Empty;
-            LoadDataCommand.Execute(null);
+            _isResettingFilter = true;
+            try
+            {
+                SelectedArea = "Semua Area";
+                SelectedToko = "Semua Toko";
+                SelectedPeriod = "Semua Periode";
+                SelectedSingleDate = null;
+                StartDate = null;
+                EndDate = null;
+                SearchKeyword = string.Empty;
+                SelectedTab = "Semua";
+            }
+            finally
+            {
+                _isResettingFilter = false;
+            }
+            _ = LoadDataAsync();
+        }
+
+        [RelayCommand]
+        public async Task SyncDataAsync()
+        {
+            await LoadDataAsync();
+            _snackbarService.Show("Sinkronisasi Selesai", "Data berhasil disinkronkan dari database server.", Wpf.Ui.Controls.ControlAppearance.Success, null, TimeSpan.FromSeconds(2.5));
         }
 
         [RelayCommand]

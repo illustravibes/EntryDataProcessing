@@ -105,13 +105,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(filter.Area) && filter.Area != "< Semua Area >")
+            if (!string.IsNullOrWhiteSpace(filter.Area) && filter.Area != "Semua Area" && filter.Area != "< Semua Area >")
             {
                 sql += " AND r.id_area = @Area";
                 param.Add("Area", filter.Area);
             }
 
-            if (!string.IsNullOrWhiteSpace(filter.Toko) && filter.Toko != "< Semua Toko >")
+            if (!string.IsNullOrWhiteSpace(filter.Toko) && filter.Toko != "Semua Toko" && filter.Toko != "< Semua Toko >")
             {
                 sql += " AND r.tkkd = @Toko";
                 param.Add("Toko", filter.Toko);

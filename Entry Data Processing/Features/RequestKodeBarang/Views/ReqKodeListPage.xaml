@@ -8,6 +8,114 @@
       ScrollViewer.CanContentScroll="False">
 
     <Page.Resources>
+        <!-- Primary Filter Button (Cari Data - Beautiful Ocean Blue Hover) -->
+        <Style x:Key="PrimaryFilterButton" TargetType="Button">
+            <Setter Property="Background" Value="#0284C7" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#0369A1" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#075985" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Sync Filter Button (Sync Data - Fresh Mint Green Hover) -->
+        <Style x:Key="SyncFilterButton" TargetType="Button">
+            <Setter Property="Background" Value="#F0FDF4" />
+            <Setter Property="Foreground" Value="#166534" />
+            <Setter Property="BorderBrush" Value="#BBF7D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#DCFCE7" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#86EFAC" />
+                                <Setter Property="Foreground" Value="#15803D" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#BBF7D0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Secondary Filter Button (Reset - Sleek Slate Hover) -->
+        <Style x:Key="SecondaryFilterButton" TargetType="Button">
+            <Setter Property="Background" Value="#F8FAFC" />
+            <Setter Property="Foreground" Value="#475569" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#F1F5F9" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#94A3B8" />
+                                <Setter Property="Foreground" Value="#0F172A" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#E2E8F0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Modern Toolbar Button -->
         <Style x:Key="ModernToolbarButton" TargetType="Button">
             <Setter Property="Background" Value="#F8FAFC" />
@@ -274,6 +382,97 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Modern DataGrid Column Header Base Style with Thin Inset Vertical Divider & Y-Padding -->
+        <Style x:Key="ModernColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC" />
+            <Setter Property="Foreground" Value="#475569" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridColumnHeader">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                            <Grid>
+                                <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                
+                                <!-- Clean Thin Inset Separator Line (with Y-padding: 9px top and 9px bottom) -->
+                                <Rectangle Width="1" 
+                                           Fill="#CBD5E1" 
+                                           HorizontalAlignment="Right" 
+                                           VerticalAlignment="Stretch" 
+                                           Margin="0,9,0,9" 
+                                           SnapsToDevicePixels="True" 
+                                           IsHitTestVisible="False" />
+                                
+                                <!-- Completely Invisible Resize Gripper (No 3D Bevel Artifacts) -->
+                                <Thumb x:Name="PART_RightHeaderGripper"
+                                       HorizontalAlignment="Right"
+                                       Width="6"
+                                       Cursor="SizeWE">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                             <Border Background="Transparent" />
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Centered Header Style (Checkbox, NO, AKSI, STATUS, TGL, DISKON) -->
+        <Style x:Key="ModernCenterColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="0,0" />
+        </Style>
+
+        <!-- First Column Header Style (Checkbox with left margin / gap from card edge) -->
+        <Style x:Key="ModernFirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="12,0,0,0" />
+        </Style>
+
+        <!-- Right-Aligned Header Style (PRICELIST) -->
+        <Style x:Key="ModernRightColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}">
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="Padding" Value="0,0,12,0" />
+        </Style>
+
+        <!-- Last Column Header Style (HARGA BELI - No Vertical Separator on the right edge) -->
+        <Style x:Key="ModernLastColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC" />
+            <Setter Property="Foreground" Value="#475569" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="Padding" Value="0,0,14,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridColumnHeader">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <!-- FIXED VIEWPORT: Root grid with no outer scrolling -->
@@ -282,10 +481,9 @@
             <RowDefinition Height="Auto" /> <!-- 0: Filter Card -->
             <RowDefinition Height="Auto" /> <!-- 1: Status Tabs & Bulk Action Bar -->
             <RowDefinition Height="*" />    <!-- 2: Data Grid & Integrated Pagination Card -->
-            <RowDefinition Height="Auto" /> <!-- 3: Status Bar -->
         </Grid.RowDefinitions>
 
-        <!-- 0. Modern Filter Card (Comfortable Sizing) -->
+        <!-- 0. Modern Filter Card (Cleaned Layout, Single Date Filter, Sync Action) -->
         <Border Grid.Row="0" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Margin="14,8,14,6" Padding="14,10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -293,49 +491,92 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Row 1: Area, Toko, Buttons -->
+                <!-- Row 1: Dropdown Filters (Area, Toko, Periode [1 Field] + Optional Specific Date) -->
                 <Grid Grid.Row="0" Margin="0,0,0,8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="145" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="160" />
-                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="155" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- Area Filter -->
                     <TextBlock Grid.Column="0" Text="Area:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
                     <ComboBox Grid.Column="1" ItemsSource="{Binding Areas}" SelectedItem="{Binding SelectedArea}" Height="32" FontSize="12" />
 
+                    <!-- Toko Filter -->
                     <TextBlock Grid.Column="2" Text="Toko:" VerticalAlignment="Center" Margin="16,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
                     <ComboBox Grid.Column="3" ItemsSource="{Binding Tokos}" SelectedItem="{Binding SelectedToko}" Height="32" FontSize="12" />
 
-                    <!-- Buttons Group -->
-                    <StackPanel Grid.Column="5" Orientation="Horizontal">
-                        <Button Content="Reset" Command="{Binding ResetFilterCommand}" Height="32" Padding="12,0" Background="#F8FAFC" Foreground="#475569" BorderBrush="#CBD5E1" BorderThickness="1" Margin="0,0,8,0" FontSize="12" FontWeight="Medium" Cursor="Hand" />
-                        <Button Content="🔍 Cari Data" Command="{Binding LoadDataCommand}" Height="32" Padding="14,0" Background="#0284C7" Foreground="White" FontWeight="SemiBold" BorderThickness="0" FontSize="12" Cursor="Hand" />
-                    </StackPanel>
+                    <!-- Single Periode Filter -->
+                    <TextBlock Grid.Column="4" Text="Periode:" VerticalAlignment="Center" Margin="16,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
+                    <ComboBox Grid.Column="5" ItemsSource="{Binding PeriodOptions}" SelectedItem="{Binding SelectedPeriod}" Height="32" FontSize="12" />
+
+                    <!-- Single Date Picker (Only appears when 'Pilih Tanggal Tertentu' is selected) -->
+                    <DatePicker Grid.Column="6" 
+                                SelectedDate="{Binding SelectedSingleDate}" 
+                                SelectedDateFormat="Short" 
+                                Height="32" 
+                                FontSize="12" 
+                                Width="130"
+                                Margin="8,0,0,0"
+                                Visibility="{Binding IsSingleDateVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
 
-                <!-- Row 2: Tanggal Range & Cari Input -->
+                <!-- Row 2: Search Input & Action Buttons (Sync, Reset, Cari) -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="135" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="135" />
-                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="Tanggal:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
-                    <DatePicker Grid.Column="1" SelectedDate="{Binding StartDate}" SelectedDateFormat="Short" Height="32" FontSize="12" />
+                    <TextBlock Grid.Column="0" Text="Cari:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
+                    <ui:TextBox Grid.Column="1" 
+                                Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" 
+                                PlaceholderText="Ketik nama barang / supplier / no request / jenis (otomatis filter saat mengetik)..." 
+                                Height="32" 
+                                FontSize="12" 
+                                Margin="0,0,12,0" />
 
-                    <TextBlock Grid.Column="2" Text="s/d:" VerticalAlignment="Center" Margin="10,0,10,0" FontSize="12" Foreground="#64748B" />
-                    <DatePicker Grid.Column="3" SelectedDate="{Binding EndDate}" SelectedDateFormat="Short" Height="32" FontSize="12" />
+                    <!-- Action Buttons Group -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <!-- Reset Button -->
+                        <Button Command="{Binding ResetFilterCommand}" 
+                                Style="{StaticResource SecondaryFilterButton}"
+                                Margin="0,0,8,0" 
+                                ToolTip="Reset Semua Filter ke Default">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ArrowReset20" FontSize="13" Foreground="#64748B" Margin="0,0,5,0" />
+                                <TextBlock Text="Reset" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
 
-                    <TextBlock Grid.Column="4" Text="Cari:" VerticalAlignment="Center" Margin="16,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
-                    <ui:TextBox Grid.Column="5" Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Ketik nama barang / supplier / no request / jenis..." Height="32" FontSize="12" />
+                        <!-- Sync Data Button -->
+                        <Button Command="{Binding SyncDataCommand}" 
+                                Style="{StaticResource SyncFilterButton}"
+                                Margin="0,0,8,0" 
+                                ToolTip="Sinkronisasi &amp; Refresh Data Terbaru dari Server">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ArrowSync20" FontSize="13" Foreground="#16A34A" Margin="0,0,5,0" />
+                                <TextBlock Text="Sync Data" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Cari Data Button (Rich Ocean Blue with Deep Blue Hover) -->
+                        <Button Command="{Binding LoadDataCommand}" 
+                                Style="{StaticResource PrimaryFilterButton}"
+                                ToolTip="Terapkan Filter / Cari Manual">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Search20" FontSize="13" Foreground="White" Margin="0,0,5,0" />
+                                <TextBlock Text="Cari Data" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>
@@ -607,7 +848,7 @@
         </Grid>
 
         <!-- 2. Modern Data Grid Card with Integrated Pagination -->
-        <Border Grid.Row="2" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Margin="14,0,14,6" ClipToBounds="True">
+        <Border Grid.Row="2" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Margin="14,0,14,14" ClipToBounds="True">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -627,13 +868,89 @@
                           HorizontalGridLinesBrush="#F1F5F9" 
                           Background="#FFFFFF" 
                           BorderThickness="0" 
-                          RowHeight="40" 
+                          RowHeight="44" 
                           FontSize="12" 
                           SelectionMode="Single" 
                           SelectionUnit="FullRow" 
                           ScrollViewer.CanContentScroll="True" 
                           ScrollViewer.VerticalScrollBarVisibility="Auto" 
                           ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                    <!-- Custom ControlTemplate ensuring Vertical ScrollBar only sits inside the Table Body (below header) -->
+                    <DataGrid.Template>
+                        <ControlTemplate TargetType="{x:Type DataGrid}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True"
+                                    Padding="{TemplateBinding Padding}">
+                                <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                                    <ScrollViewer.Template>
+                                        <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Full Header Background Bar spanning top row across all columns -->
+                                                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+                                                        Background="#F8FAFC" 
+                                                        BorderBrush="#E2E8F0" 
+                                                        BorderThickness="0,0,0,1" 
+                                                        Height="42" />
+
+                                                <!-- Column Headers Presenter -->
+                                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter"
+                                                                                Grid.Row="0"
+                                                                                Grid.Column="1"
+                                                                                Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+
+                                                <!-- Table Body (Scroll Content strictly in Row 1) -->
+                                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
+                                                                        Grid.Row="1"
+                                                                        Grid.Column="0"
+                                                                        Grid.ColumnSpan="2"
+                                                                        CanContentScroll="{TemplateBinding CanContentScroll}" />
+
+                                                <!-- Vertical ScrollBar strictly inside Table Body (Row 1, below header) -->
+                                                <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                           Grid.Row="1"
+                                                           Grid.Column="2"
+                                                           Maximum="{TemplateBinding ScrollableHeight}"
+                                                           Orientation="Vertical"
+                                                           Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                                           Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                           ViewportSize="{TemplateBinding ViewportHeight}" />
+
+                                                <!-- Horizontal ScrollBar in Row 2 -->
+                                                <Grid Grid.Row="2" Grid.Column="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                                               Grid.Column="1"
+                                                               Maximum="{TemplateBinding ScrollableWidth}"
+                                                               Orientation="Horizontal"
+                                                               Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                                               Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                               ViewportSize="{TemplateBinding ViewportWidth}" />
+                                                </Grid>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </ScrollViewer.Template>
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </ScrollViewer>
+                            </Border>
+                        </ControlTemplate>
+                    </DataGrid.Template>
 
                     <DataGrid.Resources>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
@@ -686,35 +1003,17 @@
                     </DataGrid.RowHeaderStyle>
 
                     <DataGrid.ColumnHeaderStyle>
-                        <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="#F8FAFC" />
-                            <Setter Property="Foreground" Value="#475569" />
-                            <Setter Property="FontWeight" Value="SemiBold" />
-                            <Setter Property="FontSize" Value="12" />
-                            <Setter Property="Padding" Value="6,8" />
-                            <Setter Property="BorderBrush" Value="#E2E8F0" />
-                            <Setter Property="BorderThickness" Value="0,0,0,1" />
-                        </Style>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}" />
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <!-- Checkbox Select Column (Width 38) - Always Visible, Disabled when Not Pending -->
-                        <DataGridTemplateColumn Width="38" CanUserResize="False">
-                            <DataGridTemplateColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F8FAFC" />
-                                    <Setter Property="BorderBrush" Value="#E2E8F0" />
-                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,8" />
-                                </Style>
-                            </DataGridTemplateColumn.HeaderStyle>
+                        <!-- Checkbox Select Column (Width 52, with left gap) - Always Visible, Disabled when Not Pending -->
+                        <DataGridTemplateColumn Width="52" CanUserResize="False" HeaderStyle="{StaticResource ModernFirstColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Padding" Value="12,0,0,0" />
                                     <Setter Property="BorderThickness" Value="0" />
                                     <Setter Property="Background" Value="Transparent" />
                                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -745,19 +1044,8 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- No (Width 36) -->
-                        <DataGridTextColumn Header="NO" Binding="{Binding RowNumber}" IsReadOnly="True" Width="36">
-                            <DataGridTextColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F8FAFC" />
-                                    <Setter Property="Foreground" Value="#475569" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                    <Setter Property="BorderBrush" Value="#E2E8F0" />
-                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,8" />
-                                </Style>
-                            </DataGridTextColumn.HeaderStyle>
+                        <!-- 1. NO (Width 46) -->
+                        <DataGridTextColumn Header="NO" Binding="{Binding RowNumber}" IsReadOnly="True" Width="46" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -768,19 +1056,111 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- TANGGAL REQUEST (Width 125) -->
-                        <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="125">
-                            <DataGridTextColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F8FAFC" />
-                                    <Setter Property="Foreground" Value="#475569" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                    <Setter Property="BorderBrush" Value="#E2E8F0" />
-                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,8" />
-                                </Style>
-                            </DataGridTextColumn.HeaderStyle>
+                        <!-- 2. AKSI (Width 108) -->
+                        <DataGridTemplateColumn Header="AKSI" Width="108" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <!-- Detail (Always visible) -->
+                                        <Button Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                CommandParameter="{Binding}" 
+                                                Style="{StaticResource RowActionDetailButton}" 
+                                                ToolTip="Lihat Detail">
+                                            <ui:SymbolIcon Symbol="Eye20" FontSize="13" Foreground="#475569" />
+                                        </Button>
+                                        <!-- Approve (Only when Pending) -->
+                                        <Button Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                CommandParameter="{Binding}" 
+                                                Style="{StaticResource RowActionApproveButton}" 
+                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                ToolTip="Setujui Request">
+                                            <ui:SymbolIcon Symbol="Checkmark20" FontSize="13" Foreground="#16A34A" />
+                                        </Button>
+                                        <!-- Reject (Only when Pending) -->
+                                        <Button Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                CommandParameter="{Binding}" 
+                                                Style="{StaticResource RowActionRejectButton}" 
+                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                ToolTip="Tolak Request">
+                                            <ui:SymbolIcon Symbol="Dismiss20" FontSize="13" Foreground="#DC2626" />
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 3. STATUS (Width 100) -->
+                        <DataGridTemplateColumn Header="STATUS" Width="100" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="8" Padding="8,3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Border.Style>
+                                             <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#FEF3C7" />
+                                                <Setter Property="BorderBrush" Value="#FDE68A" />
+                                                <Setter Property="BorderThickness" Value="1" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding AccTidak}" Value="1">
+                                                        <Setter Property="Background" Value="#DCFCE7" />
+                                                        <Setter Property="BorderBrush" Value="#BBF7D0" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding AccTidak}" Value="2">
+                                                        <Setter Property="Background" Value="#FEE2E2" />
+                                                        <Setter Property="BorderBrush" Value="#FECACA" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding AccTidak}" Value="3">
+                                                        <Setter Property="Background" Value="#EEF2FF" />
+                                                        <Setter Property="BorderBrush" Value="#E0E7FF" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                             </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding StatusBadgeText}" FontSize="10.5" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#B45309" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding AccTidak}" Value="1">
+                                                            <Setter Property="Foreground" Value="#15803D" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding AccTidak}" Value="2">
+                                                            <Setter Property="Foreground" Value="#B91C1C" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding AccTidak}" Value="3">
+                                                            <Setter Property="Foreground" Value="#4338CA" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 4. TOKO (Width 175) -->
+                        <DataGridTemplateColumn Header="TOKO" Width="175" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
+                                        <TextBlock Text="{Binding TokoKodeAndName}" 
+                                                    FontWeight="SemiBold" 
+                                                    FontSize="12" 
+                                                    Foreground="#0F172A" 
+                                                    TextTrimming="CharacterEllipsis" 
+                                                    MaxWidth="130" 
+                                                    VerticalAlignment="Center" />
+                                        <!-- Area Badge (JGJ) -->
+                                        <Border Background="#F1F5F9" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="3" Padding="4,1.5" Margin="5,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding AreaBadge}" FontSize="9" FontWeight="Bold" Foreground="#475569" />
+                                        </Border>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 5. TANGGAL REQUEST (Width 120) -->
+                        <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="120" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -791,39 +1171,18 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- TOKO (Width 170) -->
-                        <DataGridTemplateColumn Header="TOKO" Width="170">
+                        <!-- 6. NAMA BARANG + Badge (Width Flex *) -->
+                        <DataGridTemplateColumn Header="NAMA BARANG" Width="*" MinWidth="150" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
-                                        <TextBlock Text="{Binding TokoKodeAndName}" 
-                                                   FontWeight="SemiBold" 
-                                                   FontSize="12" 
-                                                   Foreground="#0F172A" 
-                                                   TextTrimming="CharacterEllipsis" 
-                                                   MaxWidth="125" 
-                                                   VerticalAlignment="Center" />
-                                        <!-- Area Badge (JGJ) -->
-                                        <Border Background="#F1F5F9" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="3" Padding="4,1.5" Margin="5,0,0,0" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding AreaBadge}" FontSize="9" FontWeight="Bold" Foreground="#475569" />
-                                        </Border>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <!-- NAMA BARANG + Badge (Width Flex *) -->
-                        <DataGridTemplateColumn Header="NAMA BARANG" Width="*" MinWidth="150">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
                                         <TextBlock Text="{Binding NmBrg}" 
-                                                   FontWeight="SemiBold" 
-                                                   FontSize="12" 
-                                                   Foreground="#0F172A" 
-                                                   TextTrimming="CharacterEllipsis" 
-                                                   MaxWidth="180"
-                                                   VerticalAlignment="Center" />
+                                                    FontWeight="SemiBold" 
+                                                    FontSize="12" 
+                                                    Foreground="#0F172A" 
+                                                    TextTrimming="CharacterEllipsis" 
+                                                    MaxWidth="250" 
+                                                    VerticalAlignment="Center" />
                                         <!-- R/M Inline Badge -->
                                         <Border CornerRadius="6" Padding="5,1.5" Margin="6,0,0,0" VerticalAlignment="Center">
                                             <Border.Style>
@@ -857,12 +1216,12 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- JENIS (Width 95) -->
-                        <DataGridTextColumn Header="JENIS" Binding="{Binding JenisDisplay}" IsReadOnly="True" Width="95">
+                        <!-- 7. JENIS (Width 105) -->
+                        <DataGridTextColumn Header="JENIS" Binding="{Binding JenisDisplay}" IsReadOnly="True" Width="105" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="4,0" />
+                                    <Setter Property="Padding" Value="8,0" />
                                     <Setter Property="Foreground" Value="#475569" />
                                     <Setter Property="FontSize" Value="11.5" />
                                     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -870,12 +1229,12 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- SUPPLIER (Width 110) -->
-                        <DataGridTemplateColumn Header="SUPPLIER" Width="110">
+                        <!-- 8. SUPPLIER (Width 130) -->
+                        <DataGridTemplateColumn Header="SUPPLIER" Width="130" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
-                                        <TextBlock Text="{Binding SupplierDisplay}" VerticalAlignment="Center" Foreground="#334155" FontSize="11.5" TextTrimming="CharacterEllipsis" MaxWidth="82" />
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
+                                        <TextBlock Text="{Binding SupplierDisplay}" VerticalAlignment="Center" Foreground="#334155" FontSize="11.5" TextTrimming="CharacterEllipsis" MaxWidth="95" />
                                         <Border Background="#FEF3C7" BorderBrush="#FDE68A" BorderThickness="1" CornerRadius="3" Padding="3,0" Margin="4,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsNewSupplier, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <TextBlock Text="BARU" FontSize="8" FontWeight="Bold" Foreground="#B45309" />
                                         </Border>
@@ -884,32 +1243,21 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- PRICELIST (Width 85) -->
-                        <DataGridTextColumn Header="PRICELIST" Binding="{Binding FormattedPricelist}" IsReadOnly="True" Width="85">
+                        <!-- 9. PRICELIST (Width 100) -->
+                        <DataGridTextColumn Header="PRICELIST" Binding="{Binding FormattedPricelist}" IsReadOnly="True" Width="100" HeaderStyle="{StaticResource ModernRightColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Right" />
                                     <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,0,6,0" />
+                                    <Setter Property="Padding" Value="0,0,10,0" />
                                     <Setter Property="Foreground" Value="#334155" />
                                     <Setter Property="FontSize" Value="12" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- DISKON (Badge, Width 60) -->
-                        <DataGridTemplateColumn Header="DISKON" Width="60">
-                            <DataGridTemplateColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F8FAFC" />
-                                    <Setter Property="Foreground" Value="#475569" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                    <Setter Property="BorderBrush" Value="#E2E8F0" />
-                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,8" />
-                                </Style>
-                            </DataGridTemplateColumn.HeaderStyle>
+                        <!-- 10. DISKON (Badge, Width 70) -->
+                        <DataGridTemplateColumn Header="DISKON" Width="70" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border HorizontalAlignment="Center" 
@@ -920,131 +1268,27 @@
                                             BorderBrush="{Binding DiscBadgeBorder}" 
                                             BorderThickness="1">
                                         <TextBlock Text="{Binding DiscBadgeText}" 
-                                                   FontSize="10.5" 
-                                                   FontWeight="SemiBold" 
-                                                   Foreground="{Binding DiscBadgeForeground}" />
+                                                    FontSize="10.5" 
+                                                    FontWeight="SemiBold" 
+                                                    Foreground="{Binding DiscBadgeForeground}" />
                                     </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- HARGA BELI (Width 95) -->
-                        <DataGridTextColumn Header="HARGA BELI" Binding="{Binding FormattedHrgBeli}" IsReadOnly="True" Width="95">
+                        <!-- 11. HARGA BELI (Last Column, Width 110) -->
+                        <DataGridTextColumn Header="HARGA BELI" Binding="{Binding FormattedHrgBeli}" IsReadOnly="True" Width="110" HeaderStyle="{StaticResource ModernLastColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Right" />
                                     <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,0,6,0" />
+                                    <Setter Property="Padding" Value="0,0,12,0" />
                                     <Setter Property="FontWeight" Value="SemiBold" />
                                     <Setter Property="Foreground" Value="#0F172A" />
                                     <Setter Property="FontSize" Value="12" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
-                        <!-- STATUS (Width 85) -->
-                        <DataGridTemplateColumn Header="STATUS" Width="85">
-                            <DataGridTemplateColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F8FAFC" />
-                                    <Setter Property="Foreground" Value="#475569" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                    <Setter Property="BorderBrush" Value="#E2E8F0" />
-                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,8" />
-                                </Style>
-                            </DataGridTemplateColumn.HeaderStyle>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border CornerRadius="8" Padding="7,2.5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Background" Value="#FEF3C7" />
-                                                <Setter Property="BorderBrush" Value="#FDE68A" />
-                                                <Setter Property="BorderThickness" Value="1" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding AccTidak}" Value="1">
-                                                        <Setter Property="Background" Value="#DCFCE7" />
-                                                        <Setter Property="BorderBrush" Value="#BBF7D0" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding AccTidak}" Value="2">
-                                                        <Setter Property="Background" Value="#FEE2E2" />
-                                                        <Setter Property="BorderBrush" Value="#FECACA" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding AccTidak}" Value="3">
-                                                        <Setter Property="Background" Value="#EEF2FF" />
-                                                        <Setter Property="BorderBrush" Value="#E0E7FF" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                        <TextBlock Text="{Binding StatusBadgeText}" FontSize="10.5" FontWeight="SemiBold">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="#B45309" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding AccTidak}" Value="1">
-                                                            <Setter Property="Foreground" Value="#15803D" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding AccTidak}" Value="2">
-                                                            <Setter Property="Foreground" Value="#B91C1C" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding AccTidak}" Value="3">
-                                                            <Setter Property="Foreground" Value="#4338CA" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <!-- AKSI (Width 108) -->
-                        <DataGridTemplateColumn Header="AKSI" Width="108">
-                            <DataGridTemplateColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F8FAFC" />
-                                    <Setter Property="Foreground" Value="#475569" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                    <Setter Property="BorderBrush" Value="#E2E8F0" />
-                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="0,8" />
-                                </Style>
-                            </DataGridTemplateColumn.HeaderStyle>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <!-- Detail (Always visible) -->
-                                        <Button Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                CommandParameter="{Binding}" 
-                                                Style="{StaticResource RowActionDetailButton}" 
-                                                ToolTip="Lihat Detail">
-                                            <ui:SymbolIcon Symbol="Eye20" FontSize="13" Foreground="#475569" />
-                                        </Button>
-                                        <!-- Approve (Only when Pending) -->
-                                        <Button Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                CommandParameter="{Binding}" 
-                                                Style="{StaticResource RowActionApproveButton}" 
-                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                                                ToolTip="Setujui Request">
-                                            <ui:SymbolIcon Symbol="Checkmark20" FontSize="13" Foreground="#16A34A" />
-                                        </Button>
-                                        <!-- Reject (Only when Pending) -->
-                                        <Button Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                CommandParameter="{Binding}" 
-                                                Style="{StaticResource RowActionRejectButton}" 
-                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                                                ToolTip="Tolak Request">
-                                            <ui:SymbolIcon Symbol="Dismiss20" FontSize="13" Foreground="#DC2626" />
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -1058,14 +1302,29 @@
                 <!-- 3. Dynamic Modern Pagination Footer (Integrated inside Card) -->
                 <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="14,8">
                     <Grid>
-                        <!-- Summary Text -->
+                        <!-- Left: Summary Text -->
                         <TextBlock Text="{Binding PaginationSummary}" 
+                                   HorizontalAlignment="Left"
                                    VerticalAlignment="Center" 
                                    Foreground="#64748B" 
                                    FontSize="12" 
                                    FontWeight="Medium" />
 
-                        <!-- Dynamic Pagination Buttons -->
+                        <!-- Center: Page Size Selector -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Tampilkan:" VerticalAlignment="Center" FontSize="12" Foreground="#64748B" Margin="0,0,6,0" />
+                            <ComboBox ItemsSource="{Binding PageSizeOptions}" 
+                                      SelectedItem="{Binding PageSize}" 
+                                      Height="32" 
+                                      FontSize="12" 
+                                      MinWidth="76" 
+                                      Padding="8,0"
+                                      VerticalContentAlignment="Center"
+                                      VerticalAlignment="Center" />
+                            <TextBlock Text="per halaman" VerticalAlignment="Center" FontSize="12" Foreground="#64748B" Margin="6,0,0,0" />
+                        </StackPanel>
+
+                        <!-- Right: Dynamic Pagination Buttons -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                             <Button Command="{Binding PrevPageCommand}" Style="{StaticResource PaginationNavButton}" ToolTip="Halaman Sebelumnya">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -1099,27 +1358,6 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-            </Grid>
-        </Border>
-
-        <!-- 4. Modern Bottom Status Bar -->
-        <Border Grid.Row="3" Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="14,6">
-            <Grid>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <!-- Green Connection Indicator -->
-                    <Ellipse Width="8" Height="8" Fill="#22C55E" Margin="0,0,6,0" VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding ServerInfo}" FontSize="11.5" Foreground="#475569" FontWeight="Medium" Margin="0,0,18,0" />
-
-                    <!-- User Info & Pending Count -->
-                    <TextBlock Text="{Binding UserInfo}" FontSize="11.5" Foreground="#475569" Margin="0,0,18,0" />
-                    <TextBlock Text="Total pending: " FontSize="11.5" Foreground="#475569" />
-                    <Border Background="#FEF3C7" CornerRadius="4" Padding="6,1.5" Margin="4,0,0,0">
-                        <TextBlock Text="{Binding TotalPendingCount}" FontSize="11.5" FontWeight="Bold" Foreground="#B45309" />
-                    </Border>
-                </StackPanel>
-
-                <!-- Current Date Time -->
-                <TextBlock Text="{Binding CurrentDateTime}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="11.5" Foreground="#94A3B8" />
             </Grid>
         </Border>
     </Grid>
