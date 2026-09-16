@@ -1,0 +1,63 @@
+<Page x:Class="Entry_Data_Processing.Features.RequestKodeBarang.Views.ReqKodeListPage"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+         Title="Daftar Request Kode Barang">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Request Kode Barang Baru" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,10" />
+
+        <!-- Toolbar / Filter -->
+        <Grid Grid.Row="1" Margin="0,15,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ui:TextBox Grid.Column="0" PlaceholderText="Cari barang atau nomor request..." Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" Width="300" HorizontalAlignment="Left" />
+            
+            <ComboBox Grid.Column="1" SelectedIndex="{Binding SelectedFilterIndex}" Margin="10,0,0,0" Width="150" VerticalAlignment="Center">
+                <ComboBoxItem Content="Pending" />
+                <ComboBoxItem Content="Disetujui" />
+                <ComboBoxItem Content="Ditolak" />
+                <ComboBoxItem Content="Semua Status" />
+            </ComboBox>
+
+            <ui:Button Grid.Column="2" Content="Refresh" Icon="{ui:SymbolIcon ArrowClockwise24}" Command="{Binding LoadDataCommand}" Margin="10,0,0,0" />
+        </Grid>
+
+        <!-- Data Grid -->
+        <ui:DataGrid Grid.Row="2" ItemsSource="{Binding Requests}" SelectedItem="{Binding SelectedRequest}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column">
+            <ui:DataGrid.Columns>
+                <DataGridTextColumn Header="No. Request" Binding="{Binding NoRequest}" />
+                <DataGridTextColumn Header="Tgl Request" Binding="{Binding CreatedAt, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" />
+                <DataGridTextColumn Header="Nama Barang" Binding="{Binding NmBrg}" Width="*" />
+                <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier}" Width="*" />
+                <DataGridTemplateColumn Header="Status">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding AccTidak, Converter={StaticResource StatusToColorConverter}}" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding StatusLabel}" Foreground="White" FontSize="12" FontWeight="SemiBold" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Aksi">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:Button Content="Detail" Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=ui:DataGrid}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </ui:DataGrid.Columns>
+        </ui:DataGrid>
+        
+        <ui:ProgressRing Grid.Row="2" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Page>

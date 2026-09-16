@@ -1,0 +1,13 @@
+<ui:ContentDialog x:Class="Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs.RejectReasonDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                  Title="Tolak Permohonan"
+                  PrimaryButtonText="Tolak"
+                  CloseButtonText="Batal">
+    <StackPanel Width="350">
+        <TextBlock Text="Berikan alasan mengapa permohonan ini ditolak:" Margin="0,0,0,10" TextWrapping="Wrap" />
+        <ui:TextBox x:Name="ReasonTextBox" PlaceholderText="Contoh: Barang sudah ada dengan kode X..." 
+                    TextWrapping="Wrap" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto" />
+    </StackPanel>
+</ui:ContentDialog>

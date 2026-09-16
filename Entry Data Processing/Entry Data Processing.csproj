@@ -16,13 +16,18 @@
     <PackageReference Include="Dapper" Version="2.1.86" />
     <PackageReference Include="MySqlConnector" Version="2.6.2" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Form1.cs" />
-    <Compile Remove="Form1.Designer.cs" />
-    <Compile Remove="Program.cs" />
-    <EmbeddedResource Remove="Form1.resx" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+
+
 
 </Project>
