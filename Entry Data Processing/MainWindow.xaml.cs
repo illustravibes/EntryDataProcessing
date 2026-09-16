@@ -12,11 +12,13 @@ namespace Entry_Data_Processing
         private readonly Entry_Data_Processing.Core.Navigation.INavigationService _coreNavigationService;
         private readonly ISnackbarService _snackbarService;
         private readonly IContentDialogService _contentDialogService;
+        private readonly Wpf.Ui.Abstractions.INavigationViewPageProvider _pageProvider;
         private readonly IUserSession _userSession;
 
         public MainWindow(
             Wpf.Ui.INavigationService wpfUiNavigationService,
             Entry_Data_Processing.Core.Navigation.INavigationService coreNavigationService,
+            Wpf.Ui.Abstractions.INavigationViewPageProvider pageProvider,
             ISnackbarService snackbarService,
             IContentDialogService contentDialogService,
             IUserSession userSession)
@@ -24,6 +26,7 @@ namespace Entry_Data_Processing
             InitializeComponent();
             _wpfUiNavigationService = wpfUiNavigationService;
             _coreNavigationService = coreNavigationService;
+            _pageProvider = pageProvider;
             _snackbarService = snackbarService;
             _contentDialogService = contentDialogService;
             _userSession = userSession;
@@ -33,6 +36,7 @@ namespace Entry_Data_Processing
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            RootNavigation.SetPageProviderService(_pageProvider);
             _wpfUiNavigationService.SetNavigationControl(RootNavigation);
             _snackbarService.SetSnackbarPresenter(RootSnackbar);
             _contentDialogService.SetDialogHost(RootContentDialog);
@@ -45,6 +49,21 @@ namespace Entry_Data_Processing
             {
                 ProfileMenuItem.Content = _userSession.CurrentUser?.Name ?? "User";
             }
+
+            // Navigate to Dashboard initially
+            _wpfUiNavigationService.Navigate(typeof(Features.Dashboard.Views.DashboardPage));
+
+            // Setup Logout
+            LogoutMenuItem.Click += (s, ev) =>
+            {
+                _userSession.Logout();
+                var loginWindow = App.GetService<Features.Auth.Views.LoginWindow>();
+                Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                loginWindow.Show();
+                Application.Current.MainWindow = loginWindow;
+                this.Close();
+                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            };
         }
     }
 }

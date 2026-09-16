@@ -48,14 +48,20 @@ namespace Entry_Data_Processing.Features.Auth.ViewModels
             if (result.IsSuccess)
             {
                 var mainWindow = App.GetService<MainWindow>();
+                Application.Current.MainWindow = mainWindow;
                 mainWindow.Show();
                 
-                if (Application.Current.MainWindow != null && Application.Current.MainWindow != mainWindow)
+                // Close LoginWindow safely
+                foreach (Window window in Application.Current.Windows)
                 {
-                    Application.Current.MainWindow.Close();
+                    if (window is Features.Auth.Views.LoginWindow)
+                    {
+                        window.Close();
+                        break;
+                    }
                 }
                 
-                Application.Current.MainWindow = mainWindow;
+                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             }
             else
             {

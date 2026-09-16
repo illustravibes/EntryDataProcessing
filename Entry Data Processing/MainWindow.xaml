@@ -2,6 +2,8 @@
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:dashboard="clr-namespace:Entry_Data_Processing.Features.Dashboard.Views"
+                 xmlns:req="clr-namespace:Entry_Data_Processing.Features.RequestKodeBarang.Views"
                  Title="EDP Portal Desktop" Height="720" Width="1080"
                  WindowStartupLocation="CenterScreen">
     <Grid>
@@ -17,12 +19,12 @@
                 <ui:NavigationViewItem x:Name="DashboardMenuItem"
                                        Content="Dashboard"
                                        Icon="{ui:SymbolIcon Home24}"
-                                       TargetPageType="{x:Type FrameworkElement}" />
+                                       TargetPageType="{x:Type dashboard:DashboardPage}" />
                                        
                 <ui:NavigationViewItem x:Name="ReqKodeMenuItem"
                                        Content="Request Kode Barang"
                                        Icon="{ui:SymbolIcon Box24}"
-                                       TargetPageType="{x:Type FrameworkElement}" />
+                                       TargetPageType="{x:Type req:ReqKodeListPage}" />
             </ui:NavigationView.MenuItems>
             
             <ui:NavigationView.FooterMenuItems>
@@ -31,7 +33,7 @@
                                        Icon="{ui:SymbolIcon Person24}" />
                 <ui:NavigationViewItem x:Name="LogoutMenuItem"
                                        Content="Logout"
-                                       Icon="{ui:SymbolIcon SignOut24}" />
+                                       Icon="{ui:SymbolIcon ArrowExit20}" />
             </ui:NavigationView.FooterMenuItems>
 
             <ui:NavigationView.ContentOverlay>

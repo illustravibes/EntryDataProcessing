@@ -26,6 +26,8 @@ namespace Entry_Data_Processing
         {
             base.OnStartup(e);
             
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
             await Host.StartAsync();
 
             var loginWindow = GetService<Features.Auth.Views.LoginWindow>();
@@ -60,7 +62,8 @@ namespace Entry_Data_Processing
                     services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
                     services.AddSingleton<IUserSession, UserSession>();
                     
-                    // WPF-UI Navigation Service
+                    // WPF-UI Navigation Service & Page Provider
+                    services.AddSingleton<Wpf.Ui.Abstractions.INavigationViewPageProvider, Entry_Data_Processing.Core.Navigation.PageService>();
                     services.AddSingleton<Wpf.Ui.INavigationService, Wpf.Ui.NavigationService>();
                     services.AddSingleton<Entry_Data_Processing.Core.Navigation.INavigationService, Entry_Data_Processing.Core.Navigation.NavigationService>();
                     

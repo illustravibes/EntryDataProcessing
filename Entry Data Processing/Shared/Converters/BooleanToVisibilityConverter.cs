@@ -16,6 +16,10 @@ namespace Entry_Data_Processing.Shared.Converters
             {
                 return b ? TrueValue : FalseValue;
             }
+            if (value is int i)
+            {
+                return i > 0 ? TrueValue : FalseValue;
+            }
             return FalseValue;
         }
 
