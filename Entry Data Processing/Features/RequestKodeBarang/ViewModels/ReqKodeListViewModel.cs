@@ -602,21 +602,15 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var target = record ?? SelectedRequest;
             if (target == null) return;
 
-            var dto = new ApprovalActionDto
-            {
-                Id = target.Id,
-                ApproverNip = _userSession.CurrentUser?.Nip ?? "SYSTEM"
-            };
+            var wizardVm = new ApprovalWizardViewModel(_service, _userSession, _snackbarService, _contentDialogService);
+            await wizardVm.InitializeAsync(target.Id);
 
-            var res = await _service.ApproveRequestAsync(dto);
-            if (res.IsSuccess)
+            var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm);
+            dialog.ShowDialog();
+
+            if (dialog.IsApproved)
             {
-                _snackbarService.Show("Sukses", $"Request {target.NmBrg} berhasil disetujui.", Wpf.Ui.Controls.ControlAppearance.Success, null, TimeSpan.FromSeconds(3));
                 await LoadDataAsync();
-            }
-            else
-            {
-                _snackbarService.Show("Gagal", res.ErrorMessage ?? "Terjadi kesalahan", Wpf.Ui.Controls.ControlAppearance.Danger, null, TimeSpan.FromSeconds(3));
             }
         }
 

@@ -341,5 +341,220 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 return Result<int>.Failure(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<ProductDataDto>> SearchProductsAsync(string query)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = @"
+                SELECT 
+                    p.BrPrdKd, 
+                    p.BrPrdNm, 
+                    p.BrPrdAcm, 
+                    p.BrPrdFacKd, 
+                    COALESCE(f.BrprdfacNm, '') AS BrPrdFacNm,
+                    p.Pencari, 
+                    p.BrJnsKd,
+                    COALESCE(j.BrJnsNm, '') AS BrJnsNm
+                FROM tmabrprd p
+                LEFT JOIN tmabrfac f ON CONVERT(p.BrPrdFacKd USING utf8mb4) = CONVERT(f.brprdfac USING utf8mb4)
+                LEFT JOIN tmabrgjns j ON CONVERT(p.BrJnsKd USING utf8mb4) = CONVERT(j.BrJnsKd USING utf8mb4)
+                WHERE (@Query = '' OR p.BrPrdKd LIKE @QueryPattern OR p.BrPrdNm LIKE @QueryPattern OR f.BrprdfacNm LIKE @QueryPattern OR j.BrJnsNm LIKE @QueryPattern)
+                ORDER BY p.BrPrdKd
+                LIMIT 50;
+            ";
+            var q = query?.Trim() ?? string.Empty;
+            return await connection.QueryAsync<ProductDataDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+        }
+
+        public async Task<bool> CheckProductExistsAsync(string brPrdKd)
+        {
+            if (string.IsNullOrWhiteSpace(brPrdKd)) return false;
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = "SELECT COUNT(*) FROM tmabrprd WHERE BrPrdKd = @BrPrdKd";
+            var count = await connection.ExecuteScalarAsync<int>(sql, new { BrPrdKd = brPrdKd.Trim() });
+            return count > 0;
+        }
+
+        public async Task<bool> CheckItemExistsAsync(string brKd)
+        {
+            if (string.IsNullOrWhiteSpace(brKd)) return false;
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = "SELECT COUNT(*) FROM tmabrg WHERE BrKd = @BrKd";
+            var count = await connection.ExecuteScalarAsync<int>(sql, new { BrKd = brKd.Trim() });
+            return count > 0;
+        }
+
+        public async Task<IEnumerable<FactoryDto>> SearchFactoriesAsync(string query)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = @"
+                SELECT brprdfac AS BrPrdFacKd, BrprdfacNm
+                FROM tmabrfac
+                WHERE (@Query = '' OR brprdfac LIKE @QueryPattern OR BrprdfacNm LIKE @QueryPattern)
+                ORDER BY BrprdfacNm ASC;
+            ";
+            var q = query?.Trim() ?? string.Empty;
+            return await connection.QueryAsync<FactoryDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+        }
+
+        public async Task<IEnumerable<ProductTypeDto>> SearchProductTypesAsync(string query)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = @"
+                SELECT BrJnsKd, BrJnsNm
+                FROM tmabrgjns
+                WHERE (@Query = '' OR BrJnsKd LIKE @QueryPattern OR BrJnsNm LIKE @QueryPattern)
+                ORDER BY BrJnsNm ASC;
+            ";
+            var q = query?.Trim() ?? string.Empty;
+            return await connection.QueryAsync<ProductTypeDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+        }
+
+        public async Task<IEnumerable<string>> GetPriceGroupsAsync()
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = "SELECT DISTINCT BrHrgGol FROM tmabrhrgjl WHERE BrHrgGol IS NOT NULL AND BrHrgGol != '' ORDER BY BrHrgGol";
+            return await connection.QueryAsync<string>(sql);
+        }
+
+        public async Task<IEnumerable<string>> SearchPriceGroupsAsync(string query)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = @"
+                SELECT DISTINCT BrHrgGol 
+                FROM tmabrhrgjl 
+                WHERE BrHrgGol IS NOT NULL AND BrHrgGol != '' 
+                  AND (@Query = '' OR BrHrgGol LIKE @QueryPattern)
+                ORDER BY BrHrgGol ASC;
+            ";
+            var q = query?.Trim() ?? string.Empty;
+            return await connection.QueryAsync<string>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+        }
+
+        public async Task<IEnumerable<UnitDto>> SearchUnitsAsync(string query)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = @"
+                SELECT satkd AS SatKd, satnm AS SatNm 
+                FROM tmabrsat 
+                WHERE (@Query = '' OR satkd LIKE @QueryPattern OR satnm LIKE @QueryPattern) 
+                ORDER BY satnm ASC;
+            ";
+            var q = query?.Trim() ?? string.Empty;
+            return await connection.QueryAsync<UnitDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+        }
+
+        public async Task<bool> CheckPriceCombinationExistsAsync(string brPrdKd, string brHrgGol, string satKd)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = "SELECT COUNT(*) FROM tmabrhrgjl WHERE BrPrdKd = @BrPrdKd AND BrHrgGol = @BrHrgGol AND SatKd = @SatKd";
+            var count = await connection.ExecuteScalarAsync<int>(sql, new { BrPrdKd = brPrdKd, BrHrgGol = brHrgGol, SatKd = satKd });
+            return count > 0;
+        }
+
+        public async Task<Result<bool>> ProcessWizardApprovalAsync(ApprovalWizardSubmitDto data)
+        {
+            try
+            {
+                using var connection = _connectionFactory.CreateConnection();
+                connection.Open();
+                using var transaction = connection.BeginTransaction();
+                
+                try
+                {
+                    // 1. Handle tmabrprd
+                    if (data.ProductData.IsNewProduct)
+                    {
+                        var checkSql = "SELECT COUNT(*) FROM tmabrprd WHERE BrPrdKd = @BrPrdKd";
+                        var prodCount = await connection.ExecuteScalarAsync<int>(checkSql, new { BrPrdKd = data.ProductData.BrPrdKd }, transaction);
+                        if (prodCount == 0)
+                        {
+                            var insProd = @"
+                                INSERT INTO tmabrprd (BrPrdKd, BrPrdNm, BrPrdAcm, BrPrdFacKd, Pencari, BrJnsKd, Aktif) 
+                                VALUES (@BrPrdKd, @BrPrdNm, @BrPrdAcm, @BrPrdFacKd, @Pencari, @BrJnsKd, 1);";
+                            await connection.ExecuteAsync(insProd, data.ProductData, transaction);
+                        }
+                    }
+
+                    // 2. Handle tmabrhrgjl
+                    var checkPriceSql = "SELECT id_hrg FROM tmabrhrgjl WHERE BrPrdKd = @BrPrdKd AND BrHrgGol = @BrHrgGol AND SatKd = @SatKd";
+                    var existingIdHrg = await connection.QueryFirstOrDefaultAsync<short?>(checkPriceSql, new 
+                    { 
+                        BrPrdKd = data.ProductData.BrPrdKd,
+                        BrHrgGol = data.PriceData.BrHrgGol,
+                        SatKd = data.PriceData.SatKd
+                    }, transaction);
+
+                    if (!existingIdHrg.HasValue)
+                    {
+                        var insPrice = "INSERT INTO tmabrhrgjl (BrPrdKd, BrHrgGol, SatKd) VALUES (@BrPrdKd, @BrHrgGol, @SatKd); SELECT LAST_INSERT_ID();";
+                        var newIdHrg = await connection.ExecuteScalarAsync<short>(insPrice, new 
+                        { 
+                            BrPrdKd = data.ProductData.BrPrdKd,
+                            BrHrgGol = data.PriceData.BrHrgGol,
+                            SatKd = data.PriceData.SatKd
+                        }, transaction);
+                        
+                        // Insert into thrgjual for all active areas
+                        var areasSql = "SELECT id_area FROM harga_area WHERE aktif = 1";
+                        var areas = await connection.QueryAsync<int>(areasSql, null, transaction);
+                        
+                        if (areas.Any())
+                        {
+                            var insHrgJualSql = "INSERT INTO thrgjual (id_hrg, id_area) VALUES (@IdHrg, @IdArea)";
+                            foreach (var areaId in areas)
+                            {
+                                await connection.ExecuteAsync(insHrgJualSql, new { IdHrg = newIdHrg, IdArea = areaId }, transaction);
+                            }
+                        }
+                    }
+
+                    // 3. Handle tmabrg
+                    var brKdFormatted = $"{data.ProductData.BrPrdKd}.{data.PriceData.SatKd}.{data.ItemData.BrKdNo}";
+                    var checkItemSql = "SELECT COUNT(*) FROM tmabrg WHERE BrKd = @BrKd";
+                    var itemCount = await connection.ExecuteScalarAsync<int>(checkItemSql, new { BrKd = brKdFormatted }, transaction);
+                    
+                    if (itemCount == 0)
+                    {
+                        var insItem = @"
+                            INSERT INTO tmabrg (BrKd, SatKd, BrPrdKd, BrKdNo, BrNm, BrHrgGol, Aktif) 
+                            VALUES (@BrKd, @SatKd, @BrPrdKd, @BrKdNo, @BrNm, @BrHrgGol, 1);";
+                        await connection.ExecuteAsync(insItem, new 
+                        {
+                            BrKd = brKdFormatted,
+                            SatKd = data.PriceData.SatKd,
+                            BrPrdKd = data.ProductData.BrPrdKd,
+                            BrKdNo = data.ItemData.BrKdNo,
+                            BrNm = data.ItemData.BrNm,
+                            BrHrgGol = data.PriceData.BrHrgGol
+                        }, transaction);
+                    }
+
+                    // 4. Update request status
+                    var updateReqSql = @"
+                        UPDATE req_edp_kode 
+                        SET acc_tidak = 1,
+                            acc_by = @ApproverNip,
+                            acc_at = NOW(),
+                            status = 'approve',
+                            updated_at = NOW()
+                        WHERE id = @RequestId;
+                    ";
+                    await connection.ExecuteAsync(updateReqSql, new { ApproverNip = data.ApproverNip, RequestId = data.RequestId }, transaction);
+
+                    transaction.Commit();
+                    return Result<bool>.Success(true);
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result<bool>.Failure($"Gagal menyimpan data: {ex.Message}");
+            }
+        }
     }
 }

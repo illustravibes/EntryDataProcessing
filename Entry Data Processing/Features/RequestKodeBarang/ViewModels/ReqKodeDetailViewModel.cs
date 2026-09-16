@@ -67,24 +67,15 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         {
             if (RequestDetail == null || _userSession.CurrentUser == null) return;
 
-            IsLoading = true;
-            var action = new ApprovalActionDto
-            {
-                Id = RequestDetail.Id,
-                ApproverNip = _userSession.CurrentUser.Nip ?? "UNKNOWN"
-            };
+            var wizardVm = new ApprovalWizardViewModel(_service, _userSession, _snackbarService, _contentDialogService);
+            await wizardVm.InitializeAsync(RequestDetail.Id);
 
-            var result = await _service.ApproveRequestAsync(action);
-            IsLoading = false;
+            var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm);
+            dialog.ShowDialog();
 
-            if (result.IsSuccess)
+            if (dialog.IsApproved)
             {
-                _snackbarService.Show("Sukses", "Permohonan berhasil disetujui", ControlAppearance.Success, null, System.TimeSpan.FromSeconds(3));
-                LoadRequest(RequestDetail.Id); // Reload to update status
-            }
-            else
-            {
-                _snackbarService.Show("Error", result.ErrorMessage ?? "Gagal memproses", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                LoadRequest(RequestDetail.Id); 
             }
         }
 
