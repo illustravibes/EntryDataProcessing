@@ -16,8 +16,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views
             Loaded += OnLoaded;
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+            await _viewModel.InitializeLookupsAsync();
             _viewModel.LoadDataCommand.Execute(null);
         }
     }

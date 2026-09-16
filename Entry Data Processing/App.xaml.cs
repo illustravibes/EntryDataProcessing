@@ -25,8 +25,14 @@ namespace Entry_Data_Processing
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+            DispatcherUnhandledException += (s, args) =>
+            {
+                MessageBox.Show($"Terjadi kesalahan: {args.Exception.Message}\n\n{args.Exception.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                args.Handled = true;
+            };
+
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
             await Host.StartAsync();
 

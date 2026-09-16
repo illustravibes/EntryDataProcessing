@@ -2,7 +2,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
 {
     public class ReqEdpFilter
     {
-        public int? Status { get; set; } // null = All, 0 = Pending, 1 = Approved, 2 = Rejected
+        public string? TabStatus { get; set; } // "All", "Draft", "Pending", "Approved", "Rejected"
+        public int? Status { get; set; }
         public string? Keyword { get; set; }
+        public string? Area { get; set; }
+        public string? Toko { get; set; }
+        public System.DateTime? StartDate { get; set; }
+        public System.DateTime? EndDate { get; set; }
     }
 }
