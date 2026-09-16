@@ -1,4 +1,4 @@
-﻿using Entry_Data_Processing.ViewModels;
+using Entry_Data_Processing.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -42,6 +42,8 @@ namespace Entry_Data_Processing.Views
                 VisiblePasswordBox.Text = PasswordBox.Password;
                 PasswordBox.Visibility = Visibility.Collapsed;
                 VisiblePasswordBox.Visibility = Visibility.Visible;
+                EyeOpenIcon.Visibility = Visibility.Collapsed;
+                EyeClosedIcon.Visibility = Visibility.Visible;
                 PasswordToggleButton.ToolTip = "Sembunyikan password";
             }
             else
@@ -49,6 +51,8 @@ namespace Entry_Data_Processing.Views
                 PasswordBox.Password = VisiblePasswordBox.Text;
                 VisiblePasswordBox.Visibility = Visibility.Collapsed;
                 PasswordBox.Visibility = Visibility.Visible;
+                EyeOpenIcon.Visibility = Visibility.Visible;
+                EyeClosedIcon.Visibility = Visibility.Collapsed;
                 PasswordToggleButton.ToolTip = "Tampilkan password";
             }
         }
@@ -56,6 +60,19 @@ namespace Entry_Data_Processing.Views
         private void OnLoginSucceeded()
         {
             this.DialogResult = true;
+            this.Close();
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }
