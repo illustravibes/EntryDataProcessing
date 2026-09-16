@@ -58,13 +58,17 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                     r.changed_by,
                     r.changed_at,
                     r.acc_by,
+                    u_acc.nama AS acc_by_name,
                     r.acc_at,
-                    r.created_by
+                    r.created_by,
+                    u_cr.nama AS created_by_name
                 FROM req_edp_kode r
                 LEFT JOIN tmabrgjns j ON CONVERT(r.jns_brg USING utf8mb4) = CONVERT(j.BrJnsKd USING utf8mb4)
                 LEFT JOIN store s ON CONVERT(r.tkkd USING utf8mb4) = CONVERT(s.kode_toko USING utf8mb4)
                 LEFT JOIN t_bridge_supplier bs ON CONVERT(r.supplier USING utf8mb4) = CONVERT(bs.id_supplier USING utf8mb4)
                 LEFT JOIN t_supplier ts ON bs.id_suppAll = ts.id_suppAll
+                LEFT JOIN user u_cr ON CONVERT(r.created_by USING utf8mb4) = CONVERT(u_cr.nip USING utf8mb4)
+                LEFT JOIN user u_acc ON CONVERT(r.acc_by USING utf8mb4) = CONVERT(u_acc.nip USING utf8mb4)
                 WHERE 1=1
             ";
 
@@ -207,12 +211,16 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                     j.BrJnsNm AS nm_jns,
                     s.store_call,
                     s.nama_toko,
-                    ts.namaPT AS nm_supplier
+                    ts.namaPT AS nm_supplier,
+                    u_cr.nama AS created_by_name,
+                    u_acc.nama AS acc_by_name
                 FROM req_edp_kode r
                 LEFT JOIN tmabrgjns j ON CONVERT(r.jns_brg USING utf8mb4) = CONVERT(j.BrJnsKd USING utf8mb4)
                 LEFT JOIN store s ON CONVERT(r.tkkd USING utf8mb4) = CONVERT(s.kode_toko USING utf8mb4)
                 LEFT JOIN t_bridge_supplier bs ON CONVERT(r.supplier USING utf8mb4) = CONVERT(bs.id_supplier USING utf8mb4)
                 LEFT JOIN t_supplier ts ON bs.id_suppAll = ts.id_suppAll
+                LEFT JOIN user u_cr ON CONVERT(r.created_by USING utf8mb4) = CONVERT(u_cr.nip USING utf8mb4)
+                LEFT JOIN user u_acc ON CONVERT(r.acc_by USING utf8mb4) = CONVERT(u_acc.nip USING utf8mb4)
                 WHERE r.id = @Id;
             ";
             return await connection.QueryFirstOrDefaultAsync<ReqEdpKodeRecord>(sql, new { Id = id });

@@ -45,11 +45,21 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public string? ChangedBy { get; set; }
         public DateTime? ChangedAt { get; set; }
         public string? AccBy { get; set; }
+        public string? AccByName { get; set; }
         public DateTime? AccAt { get; set; }
         public string? CreatedBy { get; set; }
+        public string? CreatedByName { get; set; }
         public string? KeteranganTolak { get; set; }
         
         // Virtual Display Properties
+        public string PengajuDisplay => !string.IsNullOrWhiteSpace(CreatedByName) 
+            ? CreatedByName 
+            : (!string.IsNullOrWhiteSpace(CreatedBy) ? CreatedBy : "-");
+        
+        public string AccByDisplay => !string.IsNullOrWhiteSpace(AccByName) 
+            ? AccByName 
+            : (!string.IsNullOrWhiteSpace(AccBy) ? AccBy : "-");
+
         public bool IsNewSupplier => string.IsNullOrWhiteSpace(KdSupp) && string.IsNullOrWhiteSpace(NmSupplier);
         public string FormattedTglRequest => CreatedAt.HasValue && CreatedAt.Value != DateTime.MinValue ? CreatedAt.Value.ToString("dd/MM/yyyy") : "-";
         
@@ -95,6 +105,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
             _ => !string.IsNullOrWhiteSpace(Status) ? Status.ToUpper() : "Draft"
         };
         public string StatusLabel => StatusBadgeText;
+        public bool IsRejected => AccTidak == 2 || string.Equals(Status, "reject", StringComparison.OrdinalIgnoreCase);
         public bool CanApproveOrReject => AccTidak == 0 || Status == "pending";
     }
 }

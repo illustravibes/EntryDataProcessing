@@ -562,13 +562,37 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         }
 
         [RelayCommand]
-        public void ViewDetail(ReqEdpKodeRecord? record = null)
+        public async Task ViewDetailAsync(ReqEdpKodeRecord? record = null)
         {
             var target = record ?? SelectedRequest;
-            if (target != null)
+            if (target == null) return;
+
+            try
             {
-                App.GetService<ReqKodeDetailViewModel>().LoadRequest(target.Id);
-                _navigationService.NavigateTo(typeof(Views.ReqKodeDetailPage));
+                var fresh = await _service.GetRequestByIdAsync(target.Id);
+                if (fresh != null)
+                {
+                    target = fresh;
+                }
+            }
+            catch
+            {
+                // Fallback to currently selected item
+            }
+
+            var dialog = new Views.Dialogs.ReqKodeDetailDialog(target)
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            dialog.ShowDialog();
+
+            if (dialog.ActionTaken == "Approve")
+            {
+                await Approve(target);
+            }
+            else if (dialog.ActionTaken == "Reject")
+            {
+                await Reject(target);
             }
         }
 
