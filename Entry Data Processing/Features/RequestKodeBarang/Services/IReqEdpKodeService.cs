@@ -12,6 +12,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         Task<ReqEdpKodeRecord?> GetRequestByIdAsync(int id);
         Task<Result<bool>> ApproveRequestAsync(ApprovalActionDto action);
         Task<Result<bool>> RejectRequestAsync(ApprovalActionDto action);
+        Task<Result<int>> ApproveBulkAsync(IEnumerable<int> ids, string approverNip);
+        Task<Result<int>> RejectBulkAsync(IEnumerable<int> ids, string approverNip, string? alasan);
         Task<IEnumerable<string>> GetDistinctAreasAsync();
         Task<IEnumerable<string>> GetDistinctTokosAsync();
     }
