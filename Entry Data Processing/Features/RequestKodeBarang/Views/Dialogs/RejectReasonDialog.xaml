@@ -6,7 +6,7 @@
                   PrimaryButtonText="Tolak"
                   CloseButtonText="Batal">
     <StackPanel Width="350">
-        <TextBlock Text="Berikan alasan mengapa permohonan ini ditolak:" Margin="0,0,0,10" TextWrapping="Wrap" />
+        <ui:TextBlock Text="Berikan alasan mengapa permohonan ini ditolak:" Margin="0,0,0,10" TextWrapping="Wrap" />
         <ui:TextBox x:Name="ReasonTextBox" PlaceholderText="Contoh: Barang sudah ada dengan kode X..." 
                     TextWrapping="Wrap" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto" />
     </StackPanel>

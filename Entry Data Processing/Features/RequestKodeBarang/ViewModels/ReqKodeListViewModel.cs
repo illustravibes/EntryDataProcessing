@@ -27,9 +27,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private System.Collections.Generic.List<ReqEdpKodeRecord> _rawLoadedRequests = new();
         private System.Collections.Generic.List<ReqEdpKodeRecord> _filteredRequests = new();
 
-        // Status Tabs: "Semua", "Pending", "Approved", "Rejected"
+        // Status Tabs: "Pending", "Approved", "Rejected", "Semua"
         [ObservableProperty]
-        private string _selectedTab = "Semua";
+        private string _selectedTab = "Pending";
 
         // Tab Counts
         [ObservableProperty]
@@ -122,7 +122,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             TriggerAutoFilter(immediate: true);
         }
 
-        partial void OnSearchKeywordChanged(string value) => TriggerAutoFilter(immediate: false);
+        partial void OnSearchKeywordChanged(string value)
+        {
+            OnPropertyChanged(nameof(EmptyStateTitle));
+            OnPropertyChanged(nameof(EmptyStateDescription));
+            TriggerAutoFilter(immediate: false);
+        }
 
         private void CalculateDateRange()
         {
@@ -226,6 +231,43 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         [ObservableProperty]
         private int _totalPendingCount;
+
+        // Empty State Properties
+        public bool IsEmpty => !IsLoading && TotalRecords == 0;
+
+        public string EmptyStateTitle
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(SearchKeyword))
+                    return "Pencarian Tidak Ditemukan";
+
+                return SelectedTab switch
+                {
+                    "Pending" => "Belum Ada Pending Approval",
+                    "Approved" => "Belum Ada Permohonan Disetujui",
+                    "Rejected" => "Tidak Ada Permohonan Ditolak",
+                    _ => "Tidak Ada Data Permohonan"
+                };
+            }
+        }
+
+        public string EmptyStateDescription
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(SearchKeyword))
+                    return $"Tidak ditemukan data pengajuan yang sesuai dengan kata kunci \"{SearchKeyword}\". Silakan periksa kembali filter atau kata kunci Anda.";
+
+                return SelectedTab switch
+                {
+                    "Pending" => "Semua pengajuan telah diproses dengan baik. Saat ini belum ada permohonan kode barang yang menunggu persetujuan (pending approval).",
+                    "Approved" => "Belum ada permohonan kode barang yang berstatus disetujui pada periode atau filter saat ini.",
+                    "Rejected" => "Tidak ada permohonan kode barang yang berstatus ditolak pada filter saat ini.",
+                    _ => "Tidak ada data permohonan kode barang yang tersedia untuk ditampilkan."
+                };
+            }
+        }
 
         // Status bar
         public string ServerInfo => "Terkoneksi (172.22.167.232)";
@@ -415,6 +457,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             finally
             {
                 IsLoading = false;
+                OnPropertyChanged(nameof(IsEmpty));
+                OnPropertyChanged(nameof(EmptyStateTitle));
+                OnPropertyChanged(nameof(EmptyStateDescription));
             }
         }
 
@@ -441,6 +486,10 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var endIdx = Math.Min(CurrentPage * PageSize, TotalRecords);
             PaginationSummary = $"Menampilkan {startIdx} – {endIdx} dari {TotalRecords} request ({SelectedTab})";
             UpdateSelectionState();
+
+            OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(EmptyStateTitle));
+            OnPropertyChanged(nameof(EmptyStateDescription));
         }
 
         [RelayCommand]
@@ -545,7 +594,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 StartDate = null;
                 EndDate = null;
                 SearchKeyword = string.Empty;
-                SelectedTab = "Semua";
+                SelectedTab = "Pending";
             }
             finally
             {

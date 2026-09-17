@@ -81,16 +81,24 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Status" FontWeight="SemiBold" Margin="0,5" />
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RequestDetail.StatusLabel}" Margin="0,5" FontWeight="Bold" Foreground="{Binding RequestDetail.AccTidak, Converter={StaticResource StatusToColorConverter}}" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RequestDetail.StatusLabel}" Margin="0,5" FontWeight="Bold" Foreground="{Binding RequestDetail.NormalizedStatus, Converter={StaticResource StatusToColorConverter}}" />
 
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Keterangan Request" FontWeight="SemiBold" Margin="0,5" />
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RequestDetail.Keterangan}" Margin="0,5" TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RequestDetail.KetBeli}" Margin="0,5" TextWrapping="Wrap" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Keterangan Ditolak" FontWeight="SemiBold" Margin="0,5" Visibility="{Binding RequestDetail.KeteranganTolak, Converter={StaticResource NullToVisibilityConverter}}" />
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RequestDetail.KeteranganTolak}" Margin="0,5" TextWrapping="Wrap" Foreground="Red" Visibility="{Binding RequestDetail.KeteranganTolak, Converter={StaticResource NullToVisibilityConverter}}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Petugas ACC" FontWeight="SemiBold" Margin="0,5" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RequestDetail.AccByDisplay}" Margin="0,5" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Tanggal Disetujui" FontWeight="SemiBold" Margin="0,5" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RequestDetail.FormattedTglAcc}" Margin="0,5" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Keterangan Ditolak" FontWeight="SemiBold" Margin="0,5" Visibility="{Binding RequestDetail.KeteranganTolak, Converter={StaticResource NullToVisibilityConverter}}" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RequestDetail.KeteranganTolak}" Margin="0,5" TextWrapping="Wrap" Foreground="Red" Visibility="{Binding RequestDetail.KeteranganTolak, Converter={StaticResource NullToVisibilityConverter}}" />
                     </Grid>
                 </ui:CardControl>
             </StackPanel>

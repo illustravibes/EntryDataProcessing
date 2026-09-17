@@ -324,7 +324,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Modern Compact DataGrid CheckBox Style (Prevents wide template clipping) -->
+        <!-- Modern Fluent DataGrid CheckBox Style (WPF UI Fluent Aesthetic) -->
         <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox">
             <Setter Property="MinWidth" Value="18" />
             <Setter Property="MinHeight" Value="18" />
@@ -339,43 +339,75 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
-                        <Border x:Name="CheckBorder"
-                                Width="18" Height="18"
-                                Background="#FFFFFF"
-                                BorderBrush="#94A3B8"
-                                BorderThickness="1.5"
-                                CornerRadius="4">
-                            <Path x:Name="CheckMark"
-                                  Data="M 3.5,9 L 7.5,13 L 14.5,5"
-                                  Stroke="#FFFFFF"
-                                  StrokeThickness="2.2"
-                                  StrokeStartLineCap="Round"
-                                  StrokeEndLineCap="Round"
-                                  StrokeLineJoin="Round"
-                                  Visibility="Collapsed"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center" />
-                        </Border>
+                        <Grid x:Name="RootGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
+                            <Border x:Name="CheckBorder"
+                                    Width="18" Height="18"
+                                    Background="#FFFFFF"
+                                    BorderBrush="#94A3B8"
+                                    BorderThickness="1.5"
+                                    CornerRadius="5">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <!-- Fluent Rounded Checkmark -->
+                                    <Path x:Name="CheckMark"
+                                          Data="M 3.8,9.2 L 7.4,12.8 L 14.2,5.2"
+                                          Stroke="#FFFFFF"
+                                          StrokeThickness="1.85"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round"
+                                          Visibility="Collapsed"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                                    
+                                    <!-- Indeterminate Bar (Smooth Rounded Pill) -->
+                                    <Rectangle x:Name="IndeterminateMark"
+                                               Width="9" Height="2.5"
+                                               RadiusX="1.25" RadiusY="1.25"
+                                               Fill="#FFFFFF"
+                                               Visibility="Collapsed"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </Grid>
                         <ControlTemplate.Triggers>
+                            <!-- Hover Unchecked: Subtle Gray Fill & Accent Border -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#F8FAFC" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
+                            </Trigger>
+                            <!-- Pressed Unchecked -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#F1F5F9" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0369A1" />
+                            </Trigger>
+                            <!-- Checked: Fluent Primary Fill & White Checkmark -->
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#0284C7" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
                                 <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
                             </Trigger>
+                            <!-- Hover Checked: Darker Accent -->
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsChecked" Value="True" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#0369A1" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0369A1" />
+                            </MultiTrigger>
+                            <!-- Indeterminate: Fluent Accent Fill & Pill Bar -->
                             <Trigger Property="IsChecked" Value="{x:Null}">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#0284C7" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
-                                <Setter TargetName="CheckMark" Property="Data" Value="M 4,9 L 14,9" />
-                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
-                            </Trigger>
+                            <!-- Disabled State: Muted Gray & Inactive Opacity -->
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="CheckBorder" Property="Background" Value="#F1F5F9" />
-                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#CBD5E1" />
-                                <Setter Property="Opacity" Value="0.45" />
-                                <Setter Property="Cursor" Value="No" />
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#F8FAFC" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#E2E8F0" />
+                                <Setter Property="Opacity" Value="0.4" />
+                                <Setter Property="Cursor" Value="Arrow" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -588,64 +620,15 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <!-- Status Tabs: Semua, Pending, Approved, Rejected -->
+            <!-- Status Tabs: Pending, Approved, Rejected, Semua -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <!-- Tab: Semua -->
-                <Button Command="{Binding SelectTabCommand}" CommandParameter="Semua">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
-                                    <Setter Property="Background" Value="#0284C7" />
-                                    <Setter Property="Foreground" Value="#FFFFFF" />
-                                </DataTrigger>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding SelectedTab}" Value="Semua" />
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Background" Value="#0369A1" />
-                                    <Setter Property="Foreground" Value="#FFFFFF" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Semua" FontSize="12.5" />
-                        <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Background" Value="#E2E8F0" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
-                                            <Setter Property="Background" Value="#0369A1" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <TextBlock Text="{Binding CountAll}" FontSize="11.5" FontWeight="Bold">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#334155" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
-                                                <Setter Property="Foreground" Value="#FFFFFF" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Border>
-                    </StackPanel>
-                </Button>
-
-                <!-- Tab: Pending -->
+                <!-- Tab: Pending (Warna Kuning) -->
                 <Button Command="{Binding SelectTabCommand}" CommandParameter="Pending">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab}" Value="Pending">
-                                    <Setter Property="Background" Value="#D97706" />
+                                    <Setter Property="Background" Value="#EAB308" />
                                     <Setter Property="Foreground" Value="#FFFFFF" />
                                 </DataTrigger>
                                 <MultiDataTrigger>
@@ -653,7 +636,7 @@
                                         <Condition Binding="{Binding SelectedTab}" Value="Pending" />
                                         <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
                                     </MultiDataTrigger.Conditions>
-                                    <Setter Property="Background" Value="#B45309" />
+                                    <Setter Property="Background" Value="#CA8A04" />
                                     <Setter Property="Foreground" Value="#FFFFFF" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
@@ -664,10 +647,10 @@
                         <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="Background" Value="#FEF3C7" />
+                                    <Setter Property="Background" Value="#FEF9C3" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding SelectedTab}" Value="Pending">
-                                            <Setter Property="Background" Value="#B45309" />
+                                            <Setter Property="Background" Value="#CA8A04" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -675,7 +658,7 @@
                             <TextBlock Text="{Binding CountPending}" FontSize="11.5" FontWeight="Bold">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#B45309" />
+                                        <Setter Property="Foreground" Value="#A16207" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SelectedTab}" Value="Pending">
                                                 <Setter Property="Foreground" Value="#FFFFFF" />
@@ -776,6 +759,55 @@
                                         <Setter Property="Foreground" Value="#B91C1C" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SelectedTab}" Value="Rejected">
+                                                <Setter Property="Foreground" Value="#FFFFFF" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Border>
+                    </StackPanel>
+                </Button>
+
+                <!-- Tab: Semua -->
+                <Button Command="{Binding SelectTabCommand}" CommandParameter="Semua">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
+                                    <Setter Property="Background" Value="#0284C7" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding SelectedTab}" Value="Semua" />
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="#0369A1" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Semua" FontSize="12.5" />
+                        <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#E2E8F0" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
+                                            <Setter Property="Background" Value="#0369A1" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="{Binding CountAll}" FontSize="11.5" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#334155" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
                                                 <Setter Property="Foreground" Value="#FFFFFF" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -1007,13 +1039,14 @@
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <!-- Checkbox Select Column (Width 52, with left gap) - Always Visible, Disabled when Not Pending -->
-                        <DataGridTemplateColumn Width="52" CanUserResize="False" HeaderStyle="{StaticResource ModernFirstColumnHeaderStyle}">
+                        <!-- Checkbox Select Column (Width 52) - Perfectly Centered and Aligned -->
+                        <DataGridTemplateColumn Width="52" CanUserResize="False" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                                    <Setter Property="Padding" Value="12,0,0,0" />
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
                                     <Setter Property="BorderThickness" Value="0" />
                                     <Setter Property="Background" Value="Transparent" />
                                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -1100,15 +1133,15 @@
                                                 <Setter Property="BorderBrush" Value="#FDE68A" />
                                                 <Setter Property="BorderThickness" Value="1" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding AccTidak}" Value="1">
+                                                    <DataTrigger Binding="{Binding NormalizedStatus}" Value="Disetujui">
                                                         <Setter Property="Background" Value="#DCFCE7" />
                                                         <Setter Property="BorderBrush" Value="#BBF7D0" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding AccTidak}" Value="2">
+                                                    <DataTrigger Binding="{Binding NormalizedStatus}" Value="Ditolak">
                                                         <Setter Property="Background" Value="#FEE2E2" />
                                                         <Setter Property="BorderBrush" Value="#FECACA" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding AccTidak}" Value="3">
+                                                    <DataTrigger Binding="{Binding NormalizedStatus}" Value="Draft">
                                                         <Setter Property="Background" Value="#EEF2FF" />
                                                         <Setter Property="BorderBrush" Value="#E0E7FF" />
                                                     </DataTrigger>
@@ -1120,13 +1153,13 @@
                                                 <Style TargetType="TextBlock">
                                                     <Setter Property="Foreground" Value="#B45309" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding AccTidak}" Value="1">
+                                                        <DataTrigger Binding="{Binding NormalizedStatus}" Value="Disetujui">
                                                             <Setter Property="Foreground" Value="#15803D" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding AccTidak}" Value="2">
+                                                        <DataTrigger Binding="{Binding NormalizedStatus}" Value="Ditolak">
                                                             <Setter Property="Foreground" Value="#B91C1C" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding AccTidak}" Value="3">
+                                                        <DataTrigger Binding="{Binding NormalizedStatus}" Value="Draft">
                                                             <Setter Property="Foreground" Value="#4338CA" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -1138,8 +1171,20 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 4. TANGGAL REQUEST (Width 135) -->
-                        <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="135" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
+                        <!-- 4. TANGGAL REQUEST (Width 130) -->
+                        <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="130" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="#334155" />
+                                    <Setter Property="FontSize" Value="11.5" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- 5. TGL APPROVE (Width 130) -->
+                        <DataGridTextColumn Header="TGL APPROVE" Binding="{Binding FormattedTglAcc}" IsReadOnly="True" Width="130" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -1291,6 +1336,50 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+
+                <!-- Empty State Overlay (Visible when table has no items) -->
+                <Border Grid.Row="0" 
+                        Margin="0,42,0,0" 
+                        Background="#FFFFFF"
+                        Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="24,40">
+                        <!-- Yellow Circular Icon Badge -->
+                        <Border Width="64" Height="64" CornerRadius="32" Background="#FEF9C3" BorderBrush="#FEF08A" BorderThickness="1.5" HorizontalAlignment="Center" Margin="0,0,0,16">
+                            <ui:SymbolIcon Symbol="ClipboardCheckmark24" FontSize="30" Foreground="#CA8A04" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+
+                        <!-- Title -->
+                        <TextBlock Text="{Binding EmptyStateTitle}" 
+                                   FontSize="15" 
+                                   FontWeight="Bold" 
+                                   Foreground="#0F172A" 
+                                   HorizontalAlignment="Center" 
+                                   Margin="0,0,0,6" />
+
+                        <!-- Description -->
+                        <TextBlock Text="{Binding EmptyStateDescription}" 
+                                   FontSize="12.5" 
+                                   Foreground="#64748B" 
+                                   HorizontalAlignment="Center" 
+                                   TextAlignment="Center" 
+                                   MaxWidth="480" 
+                                   TextWrapping="Wrap" />
+
+                        <!-- Segarkan Action Button -->
+                        <ui:Button Command="{Binding LoadDataCommand}" 
+                                   Margin="0,18,0,0" 
+                                   Padding="16,6" 
+                                   Appearance="Secondary"
+                                   CornerRadius="6"
+                                   HorizontalAlignment="Center" 
+                                   Cursor="Hand">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ArrowSync24" FontSize="14" Foreground="#475569" Margin="0,0,6,0" />
+                                <TextBlock Text="Segarkan Data" FontSize="12" FontWeight="Medium" Foreground="#334155" />
+                            </StackPanel>
+                        </ui:Button>
+                    </StackPanel>
+                </Border>
 
                 <!-- Loading Overlay -->
                 <ui:ProgressRing Grid.Row="0"
