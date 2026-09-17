@@ -28,6 +28,18 @@
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
+
+        <Style x:Key="InlineValidationTextStyle" TargetType="ui:TextBlock">
+            <Setter Property="Foreground" Value="#DC2626" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Margin" Value="0,3,0,8" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <!-- Outer Shadow Layer -->
@@ -473,6 +485,7 @@
 
                                     <!-- Search Box -->
                                     <ui:TextBlock Text="Cari Produk" Style="{StaticResource FormLabelStyle}"/>
+                                    <ui:TextBlock Text="{Binding ProductSelectionError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                     <ui:TextBox Text="{Binding ProductSearchQuery, UpdateSourceTrigger=PropertyChanged}" 
                                                 PlaceholderText="cari produk ..." 
                                                 Icon="{ui:SymbolIcon Search24}"
@@ -547,6 +560,7 @@
                                             FontSize="13" 
                                             FontWeight="SemiBold"
                                             Margin="0,0,0,4"/>
+                                <ui:TextBlock Text="{Binding ProductCodeError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
                                 <!-- Live Validation Indicator -->
                                 <Border Margin="0,0,0,14">
@@ -633,10 +647,12 @@
                                         <StackPanel Grid.Column="0" Margin="0,0,8,0">
                                             <ui:TextBlock Text="Nama Produk" Style="{StaticResource FormLabelStyle}"/>
                                             <ui:TextBox Text="{Binding ProductData.BrPrdNm, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="nama produk ..."/>
+                                            <ui:TextBlock Text="{Binding ProductNameError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Margin="8,0,0,0">
                                             <ui:TextBlock Text="Akronim" Style="{StaticResource FormLabelStyle}"/>
                                             <ui:TextBox Text="{Binding ProductData.BrPrdAcm, UpdateSourceTrigger=PropertyChanged}" MaxLength="18" PlaceholderText="akronim ..."/>
+                                            <ui:TextBlock Text="{Binding ProductAcronymError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                         </StackPanel>
                                     </Grid>
 
@@ -656,6 +672,7 @@
                                                       IsTextSearchEnabled="True" 
                                                       TextSearch.TextPath="DisplayText"
                                                       Loaded="SearchableComboBox_Loaded"/>
+                                            <ui:TextBlock Text="{Binding FactoryError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Margin="8,0,0,0">
                                             <ui:TextBlock Text="Jenis" Style="{StaticResource FormLabelStyle}"/>
@@ -667,12 +684,14 @@
                                                       IsTextSearchEnabled="True" 
                                                       TextSearch.TextPath="DisplayText"
                                                       Loaded="SearchableComboBox_Loaded"/>
+                                            <ui:TextBlock Text="{Binding ProductTypeError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                         </StackPanel>
                                     </Grid>
 
                                     <!-- Row 3: Pencari -->
                                     <ui:TextBlock Text="Pencari" Style="{StaticResource FormLabelStyle}"/>
                                     <ui:TextBox Text="{Binding ProductData.Pencari, UpdateSourceTrigger=PropertyChanged}" MaxLength="15" PlaceholderText="pencari ..." Margin="0,0,0,12"/>
+                                    <ui:TextBlock Text="{Binding RequesterError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -717,6 +736,7 @@
                                       IsTextSearchEnabled="True"
                                       Loaded="SearchableComboBox_Loaded"
                                       Margin="0,0,0,14"/>
+                            <ui:TextBlock Text="{Binding PriceGroupError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
                             <!-- Satuan Searchable ComboBox -->
                             <ui:TextBlock Text="Satuan" Style="{StaticResource FormLabelStyle}"/>
@@ -729,6 +749,7 @@
                                       TextSearch.TextPath="DisplayText"
                                       Loaded="SearchableComboBox_Loaded"
                                       Margin="0,0,0,14"/>
+                            <ui:TextBlock Text="{Binding UnitError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
                             <!-- Status Kombinasi Master Harga Jual (tmabrhrgjl & thrgjual) -->
                             <ui:Card Padding="14,10" Margin="0,2,0,8">
@@ -825,6 +846,7 @@
                                             FontSize="13" 
                                             FontWeight="SemiBold" 
                                             Margin="0,0,0,4"/>
+                                <ui:TextBlock Text="{Binding PriceIdError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                 <ui:TextBlock Text="* Masukkan ID Harga (id_hrg) baru untuk pendaftaran ke tabel tmabrhrgjl." 
                                               FontSize="10.5" 
                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
@@ -870,11 +892,13 @@
                             <!-- Input No Kode Barang -->
                             <ui:TextBlock Text="No. Kode Barang" Style="{StaticResource FormLabelStyle}"/>
                             <ui:TextBox Text="{Binding ItemData.BrKdNo, UpdateSourceTrigger=PropertyChanged}" MaxLength="25" Margin="0,0,0,4" PlaceholderText="no. kode barang ..." FontSize="13" FontWeight="SemiBold"/>
+                            <ui:TextBlock Text="{Binding ItemCodeError}" Style="{StaticResource InlineValidationTextStyle}"/>
                             <ui:TextBlock Text="* Tentukan kode penomoran barang manual sesuai formula/aturan internal EDP." FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,14"/>
 
                             <!-- Read-only Summary Fields -->
                             <ui:TextBlock Text="Nama Barang" Style="{StaticResource FormLabelStyle}"/>
                             <ui:TextBox Text="{Binding ItemData.BrNm}" IsReadOnly="True" Background="#F8FAFC" Margin="0,0,0,12"/>
+                            <ui:TextBlock Text="{Binding ItemNameError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions>
@@ -940,7 +964,7 @@
                             <!-- Lanjut Button (WPF UI Primary Button) -->
                             <ui:Button Content="Lanjut" 
                                        Icon="{ui:SymbolIcon ArrowRight20}"
-                                       Command="{Binding NextStepCommand}" 
+                                       Click="NextStep_Click"
                                        IsEnabled="{Binding CanGoNext}" 
                                        Appearance="Primary" 
                                        Padding="18,6"

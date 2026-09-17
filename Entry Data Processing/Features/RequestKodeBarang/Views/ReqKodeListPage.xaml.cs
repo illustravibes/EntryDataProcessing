@@ -21,5 +21,10 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views
             await _viewModel.InitializeLookupsAsync();
             _viewModel.LoadDataCommand.Execute(null);
         }
+
+        private void DataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -906,7 +906,7 @@
                           SelectionUnit="FullRow" 
                           ScrollViewer.CanContentScroll="True" 
                           ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionChanged="DataGrid_SelectionChanged">
 
                     <!-- Custom ControlTemplate ensuring Vertical ScrollBar only sits inside the Table Body (below header) -->
                     <DataGrid.Template>

@@ -254,6 +254,18 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
             Close();
         }
 
+        private async void NextStep_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await _viewModel.NextStepAsync();
+            }
+            catch (Exception ex)
+            {
+                _viewModel.SetValidationWarning("Terjadi Kesalahan", $"Gagal memvalidasi data: {ex.Message}");
+            }
+        }
+
         private async void Submit_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -233,6 +233,58 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private string _validationWarningMessage = string.Empty;
 
+        private string _productSelectionError = string.Empty;
+        public string ProductSelectionError { get => _productSelectionError; set => SetProperty(ref _productSelectionError, value); }
+
+        private string _productCodeError = string.Empty;
+        public string ProductCodeError { get => _productCodeError; set => SetProperty(ref _productCodeError, value); }
+
+        private string _productNameError = string.Empty;
+        public string ProductNameError { get => _productNameError; set => SetProperty(ref _productNameError, value); }
+
+        private string _productAcronymError = string.Empty;
+        public string ProductAcronymError { get => _productAcronymError; set => SetProperty(ref _productAcronymError, value); }
+
+        private string _factoryError = string.Empty;
+        public string FactoryError { get => _factoryError; set => SetProperty(ref _factoryError, value); }
+
+        private string _productTypeError = string.Empty;
+        public string ProductTypeError { get => _productTypeError; set => SetProperty(ref _productTypeError, value); }
+
+        private string _requesterError = string.Empty;
+        public string RequesterError { get => _requesterError; set => SetProperty(ref _requesterError, value); }
+
+        private string _priceGroupError = string.Empty;
+        public string PriceGroupError { get => _priceGroupError; set => SetProperty(ref _priceGroupError, value); }
+
+        private string _unitError = string.Empty;
+        public string UnitError { get => _unitError; set => SetProperty(ref _unitError, value); }
+
+        private string _priceIdError = string.Empty;
+        public string PriceIdError { get => _priceIdError; set => SetProperty(ref _priceIdError, value); }
+
+        private string _itemCodeError = string.Empty;
+        public string ItemCodeError { get => _itemCodeError; set => SetProperty(ref _itemCodeError, value); }
+
+        private string _itemNameError = string.Empty;
+        public string ItemNameError { get => _itemNameError; set => SetProperty(ref _itemNameError, value); }
+
+        private void ClearFieldErrors()
+        {
+            ProductSelectionError = string.Empty;
+            ProductCodeError = string.Empty;
+            ProductNameError = string.Empty;
+            ProductAcronymError = string.Empty;
+            FactoryError = string.Empty;
+            ProductTypeError = string.Empty;
+            RequesterError = string.Empty;
+            PriceGroupError = string.Empty;
+            UnitError = string.Empty;
+            PriceIdError = string.Empty;
+            ItemCodeError = string.Empty;
+            ItemNameError = string.Empty;
+        }
+
         [RelayCommand]
         public void ClearValidationWarning()
         {
@@ -598,37 +650,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             _ = SearchProductTypesAsync();
         }
 
-        partial void OnSelectedFactoryChanged(FactoryDto? value)
-        {
-            ClearValidationWarning();
-            ProductData.BrPrdFacKd = value?.BrPrdFacKd ?? string.Empty;
-            ProductData.BrPrdFacNm = value?.BrPrdFacNm ?? string.Empty;
-        }
-
-        partial void OnSelectedProductTypeChanged(ProductTypeDto? value)
-        {
-            ClearValidationWarning();
-            ProductData.BrJnsKd = value?.BrJnsKd ?? string.Empty;
-            ProductData.BrJnsNm = value?.BrJnsNm ?? string.Empty;
-        }
-
         partial void OnSelectedProductChanged(ProductDataDto? value)
         {
             ClearValidationWarning();
-        }
-
-        partial void OnSelectedPriceGroupChanged(string value)
-        {
-            ClearValidationWarning();
-            PriceData.BrHrgGol = value?.Trim() ?? string.Empty;
-            _ = CheckPriceCombinationStatusAsync();
-        }
-
-        partial void OnSelectedUnitChanged(UnitDto? value)
-        {
-            ClearValidationWarning();
-            PriceData.SatKd = value?.SatKd?.Trim() ?? string.Empty;
-            _ = CheckPriceCombinationStatusAsync();
         }
 
         // Price Group Selection Commands
@@ -737,7 +761,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         }
 
         [RelayCommand]
-        private async Task NextStepAsync()
+        public async Task NextStepAsync()
         {
             if (await ValidateCurrentStepAsync())
             {
@@ -856,76 +880,102 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         private async Task<bool> ValidateCurrentStepAsync()
         {
+            ClearFieldErrors();
+
             if (CurrentStepIndex == 0)
             {
                 if (!IsNewProductMode)
                 {
-                    // Segment 1: Pilih Produk Terdaftar
                     if (!HasSelectedProduct || SelectedProduct == null || string.IsNullOrWhiteSpace(ProductData.BrPrdKd))
                     {
-                        SetValidationWarning("Master Produk Belum Dipilih", "Silakan cari dan klik tombol 'Pilih' pada salah satu produk terdaftar di bawah sebelum melanjutkan.");
+                        ProductSelectionError = "Pilih produk terdaftar terlebih dahulu.";
+                        SetValidationWarning("Master Produk Belum Dipilih", ProductSelectionError);
                         return false;
                     }
+
                     ProductData.IsNewProduct = false;
                     ClearValidationWarning();
                     return true;
                 }
-                else
+
+                var kd = NewProductCode?.Trim() ?? string.Empty;
+                var hasError = false;
+
+                if (string.IsNullOrWhiteSpace(kd))
                 {
-                    // Segment 2: Buat Master Produk Baru
-                    var kd = NewProductCode?.Trim();
-                    if (string.IsNullOrWhiteSpace(kd))
-                    {
-                        SetValidationWarning("Kode Produk Wajib Diisi", "Silakan masukkan kode produk baru (maksimal 5 karakter) untuk master produk.");
-                        return false;
-                    }
-
-                    if (IsCheckingProductCode)
-                    {
-                        SetValidationWarning("Memeriksa Kode Produk", "Sistem sedang memeriksa ketersediaan kode produk di database, harap tunggu sebentar.");
-                        return false;
-                    }
-
-                    if (IsProductCodeValid == false)
-                    {
-                        SetValidationWarning("Kode Produk Sudah Terdaftar", $"Kode produk '{kd}' sudah terdaftar di master produk database! Silakan tentukan kode produk lain yang unik.");
-                        return false;
-                    }
-
-                    // Final safety check against tmabrprd
-                    var exists = await _service.CheckProductExistsAsync(kd);
-                    if (exists)
-                    {
-                        IsProductCodeValid = false;
-                        ProductCodeValidationMessage = $"Kode '{kd}' sudah digunakan di master produk.";
-                        SetValidationWarning("Kode Produk Sudah Terdaftar", $"Kode produk '{kd}' sudah terdaftar di database! Tidak boleh sama saat membuat master produk baru.");
-                        return false;
-                    }
-
-                    if (string.IsNullOrWhiteSpace(ProductData.BrPrdNm))
-                    {
-                        SetValidationWarning("Nama Produk Wajib Diisi", "Silakan masukkan nama produk baru yang sesuai dengan permohonan.");
-                        return false;
-                    }
-
-                    if (SelectedFactory == null && string.IsNullOrWhiteSpace(ProductData.BrPrdFacKd))
-                    {
-                        SetValidationWarning("Pabrik Wajib Dipilih", "Silakan pilih pabrik produsen untuk produk baru ini dari daftar pilihan pabrik.");
-                        return false;
-                    }
-
-                    if (SelectedProductType == null && string.IsNullOrWhiteSpace(ProductData.BrJnsKd))
-                    {
-                        SetValidationWarning("Jenis Barang Wajib Dipilih", "Silakan pilih kategori/jenis barang untuk produk baru ini.");
-                        return false;
-                    }
-
-                    ProductData.BrPrdKd = kd;
-                    ProductData.IsNewProduct = true;
-                    ClearValidationWarning();
-                    return true;
+                    ProductCodeError = "Kode produk wajib diisi.";
+                    hasError = true;
                 }
+                else if (kd.Length > 5)
+                {
+                    ProductCodeError = "Maksimal 5 karakter.";
+                    hasError = true;
+                }
+                else if (IsCheckingProductCode)
+                {
+                    ProductCodeError = "Sedang memeriksa ketersediaan kode.";
+                    hasError = true;
+                }
+                else if (IsProductCodeValid != true)
+                {
+                    ProductCodeError = IsProductCodeValid == false
+                        ? "Kode produk sudah digunakan."
+                        : "Kode produk belum berhasil diverifikasi.";
+                    hasError = true;
+                }
+
+                if (string.IsNullOrWhiteSpace(ProductData.BrPrdNm))
+                {
+                    ProductNameError = "Nama produk wajib diisi.";
+                    hasError = true;
+                }
+
+                if (string.IsNullOrWhiteSpace(ProductData.BrPrdAcm))
+                {
+                    ProductAcronymError = "Akronim wajib diisi.";
+                    hasError = true;
+                }
+
+                if (SelectedFactory == null && string.IsNullOrWhiteSpace(ProductData.BrPrdFacKd))
+                {
+                    FactoryError = "Pabrik wajib dipilih.";
+                    hasError = true;
+                }
+
+                if (SelectedProductType == null && string.IsNullOrWhiteSpace(ProductData.BrJnsKd))
+                {
+                    ProductTypeError = "Jenis barang wajib dipilih.";
+                    hasError = true;
+                }
+
+                if (string.IsNullOrWhiteSpace(ProductData.Pencari))
+                {
+                    RequesterError = "Pencari wajib diisi.";
+                    hasError = true;
+                }
+
+                if (hasError)
+                {
+                    SetValidationWarning("Data Produk Belum Lengkap", "Lengkapi field yang ditandai sebelum melanjutkan.");
+                    return false;
+                }
+
+                var exists = await _service.CheckProductExistsAsync(kd);
+                if (exists)
+                {
+                    IsProductCodeValid = false;
+                    ProductCodeError = "Kode produk sudah terdaftar di database.";
+                    ProductCodeValidationMessage = $"Kode '{kd}' sudah digunakan di master produk.";
+                    SetValidationWarning("Kode Produk Sudah Terdaftar", ProductCodeError);
+                    return false;
+                }
+
+                ProductData.BrPrdKd = kd;
+                ProductData.IsNewProduct = true;
+                ClearValidationWarning();
+                return true;
             }
+
             if (CurrentStepIndex == 1)
             {
                 if (!string.IsNullOrWhiteSpace(SelectedPriceGroup))
@@ -937,37 +987,43 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                     PriceData.SatKd = SelectedUnit.SatKd.Trim();
                 }
 
-                if (string.IsNullOrWhiteSpace(PriceData.BrHrgGol) && string.IsNullOrWhiteSpace(PriceData.SatKd))
-                {
-                    SetValidationWarning("Golongan Harga & Satuan Belum Dipilih", "Silakan pilih Golongan Harga dan Satuan barang untuk menentukan master harga jual.");
-                    return false;
-                }
-
+                var hasError = false;
                 if (string.IsNullOrWhiteSpace(PriceData.BrHrgGol))
                 {
-                    SetValidationWarning("Golongan Harga Wajib Dipilih", "Silakan pilih Golongan Harga (misal: 01, 02, dst.) dari pilihan yang tersedia.");
-                    return false;
+                    PriceGroupError = "Golongan harga wajib dipilih.";
+                    hasError = true;
                 }
-
                 if (string.IsNullOrWhiteSpace(PriceData.SatKd))
                 {
-                    SetValidationWarning("Satuan Barang Wajib Dipilih", "Silakan pilih Satuan barang (misal: PCS, BTL, CAN, dst.) dari daftar satuan.");
+                    UnitError = "Satuan wajib dipilih.";
+                    hasError = true;
+                }
+                if (hasError)
+                {
+                    SetValidationWarning("Data Harga Belum Lengkap", "Lengkapi field yang ditandai sebelum melanjutkan.");
+                    return false;
+                }
+                if (IsPriceCombinationExisting == null)
+                {
+                    PriceGroupError = "Status kombinasi harga belum selesai diperiksa.";
+                    SetValidationWarning("Kombinasi Harga Belum Terverifikasi", PriceGroupError);
                     return false;
                 }
 
-                // If price combination does not exist in tmabrhrgjl, ID Harga is required and must be valid & unique
                 if (IsPriceCombinationExisting == false)
                 {
                     if (string.IsNullOrWhiteSpace(NewIdHrgText) || !short.TryParse(NewIdHrgText.Trim(), out var manualId) || manualId <= 0)
                     {
-                        SetValidationWarning("ID Harga Wajib Diisi", "Kombinasi harga ini belum terdaftar di master harga. Silakan masukkan ID Harga baru dengan angka valid (1 - 32767).");
+                        PriceIdError = "ID Harga wajib diisi dengan angka valid 1-32767.";
+                        SetValidationWarning("ID Harga Wajib Diisi", PriceIdError);
                         return false;
                     }
 
                     var idExists = await _service.CheckIdHrgExistsAsync(manualId);
                     if (idExists)
                     {
-                        SetValidationWarning("ID Harga Sudah Digunakan", $"ID Harga '{manualId}' sudah terdaftar di master harga (tmabrhrgjl). Masukkan ID Harga lain yang belum terpakai.");
+                        PriceIdError = "ID Harga sudah digunakan.";
+                        SetValidationWarning("ID Harga Sudah Digunakan", PriceIdError);
                         return false;
                     }
 
@@ -981,6 +1037,30 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 ClearValidationWarning();
                 return true;
             }
+
+            if (CurrentStepIndex == 2)
+            {
+                var kdNo = ItemData?.BrKdNo?.Trim() ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(kdNo))
+                {
+                    ItemCodeError = "No. Kode Barang wajib diisi.";
+                    SetValidationWarning("No. Kode Barang Wajib Diisi", ItemCodeError);
+                    return false;
+                }
+                if (kdNo.Length > 25)
+                {
+                    ItemCodeError = "Maksimal 25 karakter.";
+                    SetValidationWarning("No. Kode Barang Terlalu Panjang", ItemCodeError);
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(ItemData.BrNm))
+                {
+                    ItemNameError = "Nama barang belum tersedia.";
+                    SetValidationWarning("Nama Barang Wajib Diisi", ItemNameError);
+                    return false;
+                }
+            }
+
             ClearValidationWarning();
             return true;
         }
@@ -997,6 +1077,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             if (string.IsNullOrWhiteSpace(kdNo))
             {
                 SetValidationWarning("No. Kode Barang Wajib Diisi", "Silakan masukkan penomoran kode barang (bagian akhir) untuk melengkapi format kode barang unik.");
+                return false;
+            }
+
+            if (kdNo.Length > 25)
+            {
+                SetValidationWarning("No. Kode Barang Terlalu Panjang", "No. Kode Barang maksimal 25 karakter.");
                 return false;
             }
 
