@@ -1,31 +1,42 @@
 <ui:FluentWindow x:Class="Entry_Data_Processing.Features.Auth.Views.LoginWindow"
-                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 Title="EDP Portal - Login" Height="500" Width="400"
-                 WindowStartupLocation="CenterScreen"
-                 ResizeMode="NoResize">
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                  Title="EDP Portal" Height="520" Width="400"
+                  WindowStartupLocation="CenterScreen"
+                  ResizeMode="NoResize">
     <ui:FluentWindow.InputBindings>
         <KeyBinding Key="Enter" Command="{Binding LoginCommand}" />
     </ui:FluentWindow.InputBindings>
 
     <Grid>
-        <ui:SnackbarPresenter x:Name="RootSnackbar" />
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Margin="0,-40,0,0">
-            <ui:SymbolIcon Symbol="Person24" FontSize="64" Foreground="{DynamicResource BrandYellow}" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" 
+                     Title="EDP Portal" 
+                     Icon="{ui:ImageIcon 'pack://application:,,,/Assets/logo.png'}" 
+                     CloseWindowByDoubleClickOnIcon="False" />
+
+        <ui:SnackbarPresenter Grid.Row="1" x:Name="RootSnackbar" />
+
+        <!-- Login Form Body -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Margin="0,-20,0,0">
+            <Image Source="/Assets/logo.png" Height="84" HorizontalAlignment="Center" Margin="0,0,0,18" />
+            <ui:TextBlock Text="EDP Portal" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
+            <ui:TextBlock Text="Silakan login untuk melanjutkan" FontSize="13.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,26" />
             
-            <TextBlock Text="EDP Portal" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
-            <TextBlock Text="Silakan login untuk melanjutkan" FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,30" />
-            
-            <TextBlock Text="NIP" Margin="0,0,0,5" />
+            <ui:TextBlock Text="NIP" Margin="0,0,0,5" FontWeight="Medium" />
             <ui:TextBox Text="{Binding Nip, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan NIP..." Margin="0,0,0,15" />
             
-            <TextBlock Text="Password" Margin="0,0,0,5" />
-            <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan password..." Margin="0,0,0,25" />
+            <ui:TextBlock Text="Password" Margin="0,0,0,5" FontWeight="Medium" />
+            <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan password..." Margin="0,0,0,24" />
             
-            <ui:Button Content="Login" Appearance="Primary" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" IsDefault="True" />
+            <ui:Button Content="Login" Appearance="Primary" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" IsDefault="True" Padding="0,8" />
             
-            <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,20,0,0" />
+            <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,18,0,0" Width="28" Height="28" />
         </StackPanel>
     </Grid>
 </ui:FluentWindow>
