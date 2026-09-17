@@ -9,12 +9,10 @@
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
-            
-            <!-- Brand Yellow Accent Colors -->
+
             <SolidColorBrush x:Key="BrandYellow" Color="#D97706" />
             <SolidColorBrush x:Key="BrandYellowLight" Color="#FBBF24" />
-            
-            <!-- Converters -->
+
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

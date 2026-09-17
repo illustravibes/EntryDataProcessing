@@ -44,16 +44,13 @@ namespace Entry_Data_Processing
             {
                 coreNav.SetNavigationControl(_wpfUiNavigationService);
             }
-            // Set User name
             if (_userSession.IsLoggedIn)
             {
                 ProfileNameText.Text = _userSession.CurrentUser?.Name ?? _userSession.CurrentUser?.Nama ?? "User";
             }
 
-            // Navigate to Dashboard initially
             _wpfUiNavigationService.Navigate(typeof(Features.Dashboard.Views.DashboardPage));
 
-            // Setup Logout
             LogoutMenuItem.Click += (s, ev) =>
             {
                 _userSession.Logout();

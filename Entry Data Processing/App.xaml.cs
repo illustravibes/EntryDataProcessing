@@ -48,14 +48,19 @@ namespace Entry_Data_Processing
             base.OnExit(e);
         }
     }
-    
-    public static class Program 
+
+    public static class Program
     {
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((context, builder) =>
+                .ConfigureAppConfiguration(
+                    (context, builder) =>
                 {
-                    builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    builder.AddJsonFile(
+                        "appsettings.json",
+                        optional: false,
+                        reloadOnChange: true
+                    );
                 })
                 .ConfigureServices((context, services) =>
                 {
@@ -63,33 +68,27 @@ namespace Entry_Data_Processing
                     context.Configuration.Bind(appConfig);
                     services.AddSingleton(appConfig);
 
-                    // Core Services
                     services.AddSingleton<IDbConnectionFactory, MySqlConnectionFactory>();
                     services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
                     services.AddSingleton<IUserSession, UserSession>();
-                    
-                    // WPF-UI Navigation Service & Page Provider
+
                     services.AddSingleton<Wpf.Ui.Abstractions.INavigationViewPageProvider, Entry_Data_Processing.Core.Navigation.PageService>();
                     services.AddSingleton<Wpf.Ui.INavigationService, Wpf.Ui.NavigationService>();
                     services.AddSingleton<Entry_Data_Processing.Core.Navigation.INavigationService, Entry_Data_Processing.Core.Navigation.NavigationService>();
-                    
+
                     services.AddSingleton<Wpf.Ui.ISnackbarService, Wpf.Ui.SnackbarService>();
                     services.AddSingleton<Wpf.Ui.IContentDialogService, Wpf.Ui.ContentDialogService>();
 
-                    // Main Window
                     services.AddSingleton<MainWindow>();
-                    
-                    // Auth
+
                     services.AddSingleton<Features.Auth.Services.IAuthService, Features.Auth.Services.AuthService>();
                     services.AddTransient<Features.Auth.ViewModels.LoginViewModel>();
                     services.AddTransient<Features.Auth.Views.LoginWindow>();
-                    
-                    // Dashboard
+
                     services.AddSingleton<Features.Dashboard.Services.DashboardService>();
                     services.AddTransient<Features.Dashboard.ViewModels.DashboardViewModel>();
                     services.AddTransient<Features.Dashboard.Views.DashboardPage>();
-                    
-                    // Request Kode Barang
+
                     services.AddSingleton<Features.RequestKodeBarang.Services.IReqEdpKodeService, Features.RequestKodeBarang.Services.ReqEdpKodeService>();
                     services.AddTransient<Features.RequestKodeBarang.ViewModels.ReqKodeListViewModel>();
                     services.AddTransient<Features.RequestKodeBarang.ViewModels.ReqKodeDetailViewModel>();
