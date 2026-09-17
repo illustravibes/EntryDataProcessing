@@ -68,7 +68,14 @@ namespace Entry_Data_Processing
                     context.Configuration.Bind(appConfig);
                     services.AddSingleton(appConfig);
 
-                    services.AddSingleton<IDbConnectionFactory, MySqlConnectionFactory>();
+                    if (appConfig.ConnectionStrings.Provider.Equals("Access", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        services.AddSingleton<IDbConnectionFactory, AccessConnectionFactory>();
+                    }
+                    else
+                    {
+                        services.AddSingleton<IDbConnectionFactory, MySqlConnectionFactory>();
+                    }
                     services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
                     services.AddSingleton<IUserSession, UserSession>();
 

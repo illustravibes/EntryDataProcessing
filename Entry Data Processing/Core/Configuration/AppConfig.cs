@@ -10,7 +10,9 @@ namespace Entry_Data_Processing.Core.Configuration
 
     public class ConnectionStringsConfig
     {
+        public string Provider { get; set; } = "Access";
         public string WambDatabase { get; set; } = string.Empty;
+        public string AccessDatabase { get; set; } = string.Empty;
     }
 
     public class ApplicationConfig

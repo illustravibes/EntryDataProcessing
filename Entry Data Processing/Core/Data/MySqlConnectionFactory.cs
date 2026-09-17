@@ -13,6 +13,8 @@ namespace Entry_Data_Processing.Core.Data
             _connectionString = config.ConnectionStrings.WambDatabase;
         }
 
+        public DatabaseProvider Provider => DatabaseProvider.MySql;
+
         public IDbConnection CreateConnection()
         {
             return new MySqlConnection(_connectionString);

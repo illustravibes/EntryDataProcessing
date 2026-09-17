@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
 using Dapper;
+using MySqlConnector;
 using Entry_Data_Processing.Core.Common;
-using Entry_Data_Processing.Core.Data;
+using Entry_Data_Processing.Core.Configuration;
 using Entry_Data_Processing.Core.Security;
 using Entry_Data_Processing.Core.Session;
 using Entry_Data_Processing.Features.Auth.Models;
@@ -10,13 +11,14 @@ namespace Entry_Data_Processing.Features.Auth.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly AppConfig _config;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUserSession _userSession;
 
-        public AuthService(IDbConnectionFactory connectionFactory, IPasswordHasher passwordHasher, IUserSession userSession)
+        // Login selalu pakai MySQL — tabel `user` ada di MySQL, bukan Access
+        public AuthService(AppConfig config, IPasswordHasher passwordHasher, IUserSession userSession)
         {
-            _connectionFactory = connectionFactory;
+            _config = config;
             _passwordHasher = passwordHasher;
             _userSession = userSession;
         }
@@ -25,9 +27,10 @@ namespace Entry_Data_Processing.Features.Auth.Services
         {
             try
             {
-                using var connection = _connectionFactory.CreateConnection();
-                var query = "SELECT * FROM user WHERE nip = @Nip LIMIT 1";
+                using var connection = new MySqlConnection(_config.ConnectionStrings.WambDatabase);
+                const string query = "SELECT * FROM user WHERE nip = @Nip LIMIT 1";
                 var userRecord = await connection.QueryFirstOrDefaultAsync<UserRecord>(query, new { Nip = request.Nip.Trim() });
+
                 if (userRecord == null)
                 {
                     return Result<UserRecord>.Failure("Pengguna dengan NIP tersebut tidak ditemukan.");

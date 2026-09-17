@@ -18,6 +18,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
             _connectionFactory = connectionFactory;
         }
 
+        private string AdaptSql(string sql) => SqlDialect.Adapt(sql, _connectionFactory.Provider);
+
         public async Task<IEnumerable<ReqEdpKodeRecord>> GetRequestsAsync(ReqEdpFilter filter)
         {
             using var connection = _connectionFactory.CreateConnection();
@@ -141,6 +143,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
             
             sql += " ORDER BY r.created_at DESC, r.id DESC";
 
+            sql = AdaptSql(sql);
             var list = (await connection.QueryAsync<ReqEdpKodeRecord>(sql, param)).AsList();
             for (int i = 0; i < list.Count; i++)
             {
@@ -200,6 +203,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 {whereClause};
             ";
 
+            sql = AdaptSql(sql);
             return await connection.QueryFirstOrDefaultAsync<StatusCountsDto>(sql, param) ?? new StatusCountsDto();
         }
 
@@ -224,6 +228,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 LEFT JOIN user u_acc ON CONVERT(r.acc_by USING utf8mb4) = CONVERT(u_acc.nip USING utf8mb4)
                 WHERE r.id = @Id;
             ";
+            sql = AdaptSql(sql);
             return await connection.QueryFirstOrDefaultAsync<ReqEdpKodeRecord>(sql, new { Id = id });
         }
 
@@ -375,6 +380,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 LIMIT 50;
             ";
             var q = query?.Trim() ?? string.Empty;
+            sql = AdaptSql(sql);
             return await connection.QueryAsync<ProductDataDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
         }
 
@@ -475,6 +481,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 ORDER BY id_hrg ASC 
                 LIMIT 1;
             ";
+            sql = AdaptSql(sql);
             return await connection.QueryFirstOrDefaultAsync<PriceDataDto>(sql, new { BrPrdKd = brPrdKd.Trim() });
         }
 

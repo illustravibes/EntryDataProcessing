@@ -20,28 +20,32 @@
                      Icon="{ui:ImageIcon 'pack://application:,,,/Assets/logo.png'}" 
                      CloseWindowByDoubleClickOnIcon="False" />
 
-        <ui:SnackbarPresenter Grid.Row="1" x:Name="RootSnackbar"
-                              HorizontalAlignment="Right"
-                              VerticalAlignment="Bottom"
-                              Margin="0,0,24,24"
-                              MaxWidth="380"
-                              Panel.ZIndex="99999" />
+        <!-- Content wrapper with proper overlay support -->
+        <Grid Grid.Row="1">
+            <!-- Login Form Body -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Margin="0,-20,0,0">
+                <Image Source="/Assets/logo.png" Height="84" HorizontalAlignment="Center" Margin="0,0,0,18" />
+                <ui:TextBlock Text="EDP Portal" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
+                <ui:TextBlock Text="Silakan login untuk melanjutkan" FontSize="13.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,26" />
+                
+                <ui:TextBlock Text="NIP" Margin="0,0,0,5" FontWeight="Medium" />
+                <ui:TextBox Text="{Binding Nip, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan NIP..." Margin="0,0,0,15" />
+                
+                <ui:TextBlock Text="Password" Margin="0,0,0,5" FontWeight="Medium" />
+                <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan password..." Margin="0,0,0,24" />
+                
+                <ui:Button Content="Login" Appearance="Primary" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" IsDefault="True" Padding="0,8" />
+                
+                <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,18,0,0" Width="28" Height="28" />
+            </StackPanel>
 
-        <!-- Login Form Body -->
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Margin="0,-20,0,0">
-            <Image Source="/Assets/logo.png" Height="84" HorizontalAlignment="Center" Margin="0,0,0,18" />
-            <ui:TextBlock Text="EDP Portal" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
-            <ui:TextBlock Text="Silakan login untuk melanjutkan" FontSize="13.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,26" />
-            
-            <ui:TextBlock Text="NIP" Margin="0,0,0,5" FontWeight="Medium" />
-            <ui:TextBox Text="{Binding Nip, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan NIP..." Margin="0,0,0,15" />
-            
-            <ui:TextBlock Text="Password" Margin="0,0,0,5" FontWeight="Medium" />
-            <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan password..." Margin="0,0,0,24" />
-            
-            <ui:Button Content="Login" Appearance="Primary" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" IsDefault="True" Padding="0,8" />
-            
-            <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,18,0,0" Width="28" Height="28" />
-        </StackPanel>
+            <!-- Snackbar overlay — harus di dalam Grid yang sama agar ZIndex bekerja -->
+            <ui:SnackbarPresenter x:Name="RootSnackbar"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Bottom"
+                                  Margin="0,0,16,16"
+                                  MaxWidth="380"
+                                  Panel.ZIndex="99999" />
+        </Grid>
     </Grid>
 </ui:FluentWindow>
