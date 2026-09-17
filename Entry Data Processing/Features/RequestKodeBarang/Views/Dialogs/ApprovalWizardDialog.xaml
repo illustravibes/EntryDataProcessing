@@ -243,7 +243,35 @@
 
                 <!-- 2. Scrollable Body Content -->
                 <ui:DynamicScrollViewer Grid.Row="1" MaxHeight="520" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="24,16" Background="#FFFFFF">
-                    <Grid>
+                    <StackPanel>
+                        <!-- In-Line Validation Warning Banner -->
+                        <Border Background="#FEF2F2" 
+                                BorderBrush="#FECACA" 
+                                BorderThickness="1" 
+                                CornerRadius="8" 
+                                Padding="12,10" 
+                                Margin="0,0,0,14"
+                                Visibility="{Binding HasValidationWarning, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="32" Height="32" CornerRadius="8" Background="#FEE2E2" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <ui:SymbolIcon Symbol="Warning24" FontSize="18" Foreground="#DC2626" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <ui:TextBlock Text="{Binding ValidationWarningTitle}" FontWeight="Bold" FontSize="12.5" Foreground="#991B1B" />
+                                    <ui:TextBlock Text="{Binding ValidationWarningMessage}" FontSize="11.5" Foreground="#B91C1C" TextWrapping="Wrap" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <ui:Button Grid.Column="2" Appearance="Transparent" Padding="4" VerticalAlignment="Top" Command="{Binding ClearValidationWarningCommand}">
+                                    <ui:SymbolIcon Symbol="Dismiss16" FontSize="12" Foreground="#991B1B" />
+                                </ui:Button>
+                            </Grid>
+                        </Border>
+
+                        <Grid>
                         <!-- STEP 1: Data Produk -->
                         <StackPanel>
                             <StackPanel.Style>
@@ -885,7 +913,8 @@
                             </StackPanel>
                         </StackPanel>
                     </Grid>
-                </ui:DynamicScrollViewer>
+                </StackPanel>
+            </ui:DynamicScrollViewer>
 
                 <!-- 3. Rounded Footer Bar -->
                 <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="24,14" CornerRadius="0,0,16,16">

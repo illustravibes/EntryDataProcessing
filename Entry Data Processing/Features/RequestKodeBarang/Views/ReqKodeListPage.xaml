@@ -1140,6 +1140,7 @@
                                                     <DataTrigger Binding="{Binding NormalizedStatus}" Value="Ditolak">
                                                         <Setter Property="Background" Value="#FEE2E2" />
                                                         <Setter Property="BorderBrush" Value="#FECACA" />
+                                                        <Setter Property="ToolTip" Value="{Binding KeteranganTolak}" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding NormalizedStatus}" Value="Draft">
                                                         <Setter Property="Background" Value="#EEF2FF" />

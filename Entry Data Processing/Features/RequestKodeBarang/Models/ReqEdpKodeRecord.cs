@@ -49,7 +49,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public DateTime? AccAt { get; set; }
         public string? CreatedBy { get; set; }
         public string? CreatedByName { get; set; }
-        public string? KeteranganTolak { get; set; }
+        public string? KetTolak { get; set; }
+        public string? KeteranganTolak
+        {
+            get => KetTolak;
+            set => KetTolak = value;
+        }
         
         // Virtual Display Properties
         public string PengajuDisplay => !string.IsNullOrWhiteSpace(CreatedByName) 

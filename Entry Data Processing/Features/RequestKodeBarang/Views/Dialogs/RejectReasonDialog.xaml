@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
-        Width="460"
+        Width="480"
         SizeToContent="Height"
         KeyDown="OnWindowKeyDown">
 
@@ -17,16 +17,15 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
-    <!-- Dim overlay -->
-    <Grid>
-        <Rectangle Fill="#50000000" />
-
+    <!-- Outer Shadow Layer -->
+    <Grid Margin="18">
         <!-- Card -->
         <Border Background="#FFFFFF"
-                CornerRadius="12"
-                Margin="36,36">
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
+                CornerRadius="16">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.2" Color="#000000" Direction="270" />
+                <DropShadowEffect BlurRadius="30" Direction="270" ShadowDepth="8" Opacity="0.1" Color="#0F172A" />
             </Border.Effect>
 
             <Grid>

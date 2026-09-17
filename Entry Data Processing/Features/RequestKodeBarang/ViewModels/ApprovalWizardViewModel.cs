@@ -224,6 +224,32 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private bool _hasSelectedProduct = false;
 
+        [ObservableProperty]
+        private bool _hasValidationWarning = false;
+
+        [ObservableProperty]
+        private string _validationWarningTitle = string.Empty;
+
+        [ObservableProperty]
+        private string _validationWarningMessage = string.Empty;
+
+        [RelayCommand]
+        public void ClearValidationWarning()
+        {
+            HasValidationWarning = false;
+            ValidationWarningTitle = string.Empty;
+            ValidationWarningMessage = string.Empty;
+        }
+
+        public void SetValidationWarning(string title, string message)
+        {
+            ValidationWarningTitle = title;
+            ValidationWarningMessage = message;
+            HasValidationWarning = true;
+
+            _snackbarService.Show(title, message, ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+        }
+
         public ApprovalWizardViewModel(
             IReqEdpKodeService service,
             IUserSession userSession,
@@ -572,6 +598,39 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             _ = SearchProductTypesAsync();
         }
 
+        partial void OnSelectedFactoryChanged(FactoryDto? value)
+        {
+            ClearValidationWarning();
+            ProductData.BrPrdFacKd = value?.BrPrdFacKd ?? string.Empty;
+            ProductData.BrPrdFacNm = value?.BrPrdFacNm ?? string.Empty;
+        }
+
+        partial void OnSelectedProductTypeChanged(ProductTypeDto? value)
+        {
+            ClearValidationWarning();
+            ProductData.BrJnsKd = value?.BrJnsKd ?? string.Empty;
+            ProductData.BrJnsNm = value?.BrJnsNm ?? string.Empty;
+        }
+
+        partial void OnSelectedProductChanged(ProductDataDto? value)
+        {
+            ClearValidationWarning();
+        }
+
+        partial void OnSelectedPriceGroupChanged(string value)
+        {
+            ClearValidationWarning();
+            PriceData.BrHrgGol = value?.Trim() ?? string.Empty;
+            _ = CheckPriceCombinationStatusAsync();
+        }
+
+        partial void OnSelectedUnitChanged(UnitDto? value)
+        {
+            ClearValidationWarning();
+            PriceData.SatKd = value?.SatKd?.Trim() ?? string.Empty;
+            _ = CheckPriceCombinationStatusAsync();
+        }
+
         // Price Group Selection Commands
         partial void OnPriceGroupSearchQueryChanged(string value)
         {
@@ -801,28 +860,35 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             {
                 if (!IsNewProductMode)
                 {
-                    // Strict Segment 1: Must choose an existing registered product
+                    // Segment 1: Pilih Produk Terdaftar
                     if (!HasSelectedProduct || SelectedProduct == null || string.IsNullOrWhiteSpace(ProductData.BrPrdKd))
                     {
-                        _snackbarService.Show("Validasi", "Silakan pilih salah satu produk terdaftar terlebih dahulu.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                        SetValidationWarning("Master Produk Belum Dipilih", "Silakan cari dan klik tombol 'Pilih' pada salah satu produk terdaftar di bawah sebelum melanjutkan.");
                         return false;
                     }
                     ProductData.IsNewProduct = false;
+                    ClearValidationWarning();
                     return true;
                 }
                 else
                 {
-                    // Strict Segment 2: Must create new product, code must NOT duplicate existing products
+                    // Segment 2: Buat Master Produk Baru
                     var kd = NewProductCode?.Trim();
                     if (string.IsNullOrWhiteSpace(kd))
                     {
-                        _snackbarService.Show("Validasi", "Kode Produk baru wajib diisi.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                        SetValidationWarning("Kode Produk Wajib Diisi", "Silakan masukkan kode produk baru (maksimal 5 karakter) untuk master produk.");
+                        return false;
+                    }
+
+                    if (IsCheckingProductCode)
+                    {
+                        SetValidationWarning("Memeriksa Kode Produk", "Sistem sedang memeriksa ketersediaan kode produk di database, harap tunggu sebentar.");
                         return false;
                     }
 
                     if (IsProductCodeValid == false)
                     {
-                        _snackbarService.Show("Kode Produk Duplikat", $"Kode Produk '{kd}' sudah terdaftar di database! Tidak boleh sama saat membuat master produk baru.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                        SetValidationWarning("Kode Produk Sudah Terdaftar", $"Kode produk '{kd}' sudah terdaftar di master produk database! Silakan tentukan kode produk lain yang unik.");
                         return false;
                     }
 
@@ -832,18 +898,31 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                     {
                         IsProductCodeValid = false;
                         ProductCodeValidationMessage = $"Kode '{kd}' sudah digunakan di master produk.";
-                        _snackbarService.Show("Kode Produk Duplikat", $"Kode Produk '{kd}' sudah terdaftar di database! Tidak boleh sama saat membuat master produk baru.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                        SetValidationWarning("Kode Produk Sudah Terdaftar", $"Kode produk '{kd}' sudah terdaftar di database! Tidak boleh sama saat membuat master produk baru.");
                         return false;
                     }
 
                     if (string.IsNullOrWhiteSpace(ProductData.BrPrdNm))
                     {
-                        _snackbarService.Show("Validasi", "Nama Produk baru wajib diisi.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                        SetValidationWarning("Nama Produk Wajib Diisi", "Silakan masukkan nama produk baru yang sesuai dengan permohonan.");
+                        return false;
+                    }
+
+                    if (SelectedFactory == null && string.IsNullOrWhiteSpace(ProductData.BrPrdFacKd))
+                    {
+                        SetValidationWarning("Pabrik Wajib Dipilih", "Silakan pilih pabrik produsen untuk produk baru ini dari daftar pilihan pabrik.");
+                        return false;
+                    }
+
+                    if (SelectedProductType == null && string.IsNullOrWhiteSpace(ProductData.BrJnsKd))
+                    {
+                        SetValidationWarning("Jenis Barang Wajib Dipilih", "Silakan pilih kategori/jenis barang untuk produk baru ini.");
                         return false;
                     }
 
                     ProductData.BrPrdKd = kd;
                     ProductData.IsNewProduct = true;
+                    ClearValidationWarning();
                     return true;
                 }
             }
@@ -858,9 +937,21 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                     PriceData.SatKd = SelectedUnit.SatKd.Trim();
                 }
 
-                if (string.IsNullOrWhiteSpace(PriceData.BrHrgGol) || string.IsNullOrWhiteSpace(PriceData.SatKd))
+                if (string.IsNullOrWhiteSpace(PriceData.BrHrgGol) && string.IsNullOrWhiteSpace(PriceData.SatKd))
                 {
-                    _snackbarService.Show("Validasi", "Golongan Harga dan Satuan wajib diisi", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                    SetValidationWarning("Golongan Harga & Satuan Belum Dipilih", "Silakan pilih Golongan Harga dan Satuan barang untuk menentukan master harga jual.");
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(PriceData.BrHrgGol))
+                {
+                    SetValidationWarning("Golongan Harga Wajib Dipilih", "Silakan pilih Golongan Harga (misal: 01, 02, dst.) dari pilihan yang tersedia.");
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(PriceData.SatKd))
+                {
+                    SetValidationWarning("Satuan Barang Wajib Dipilih", "Silakan pilih Satuan barang (misal: PCS, BTL, CAN, dst.) dari daftar satuan.");
                     return false;
                 }
 
@@ -869,14 +960,14 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 {
                     if (string.IsNullOrWhiteSpace(NewIdHrgText) || !short.TryParse(NewIdHrgText.Trim(), out var manualId) || manualId <= 0)
                     {
-                        _snackbarService.Show("Validasi", "ID Harga (id_hrg) wajib diisi dengan angka yang valid (1 - 32767).", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                        SetValidationWarning("ID Harga Wajib Diisi", "Kombinasi harga ini belum terdaftar di master harga. Silakan masukkan ID Harga baru dengan angka valid (1 - 32767).");
                         return false;
                     }
 
                     var idExists = await _service.CheckIdHrgExistsAsync(manualId);
                     if (idExists)
                     {
-                        _snackbarService.Show("ID Harga Duplikat", $"ID Harga '{manualId}' sudah terdaftar di master harga (tmabrhrgjl). Masukkan ID Harga lain.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                        SetValidationWarning("ID Harga Sudah Digunakan", $"ID Harga '{manualId}' sudah terdaftar di master harga (tmabrhrgjl). Masukkan ID Harga lain yang belum terpakai.");
                         return false;
                     }
 
@@ -887,8 +978,10 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 {
                     ItemData.BrNm = ProductData.BrPrdNm;
                 }
+                ClearValidationWarning();
                 return true;
             }
+            ClearValidationWarning();
             return true;
         }
 
@@ -901,15 +994,21 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var kdNo = ItemData?.BrKdNo?.Trim() ?? string.Empty;
             var brNm = ItemData?.BrNm?.Trim() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(kdNo) || string.IsNullOrWhiteSpace(brNm))
+            if (string.IsNullOrWhiteSpace(kdNo))
             {
-                _snackbarService.Show("Validasi", "No Kode Barang dan Nama Barang wajib diisi", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                SetValidationWarning("No. Kode Barang Wajib Diisi", "Silakan masukkan penomoran kode barang (bagian akhir) untuk melengkapi format kode barang unik.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(brNm))
+            {
+                SetValidationWarning("Nama Barang Wajib Diisi", "Nama barang tidak boleh kosong. Pastikan nama barang sudah terisi sesuai permohonan.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(prdKd) || string.IsNullOrWhiteSpace(satKd))
             {
-                _snackbarService.Show("Validasi", "Kode Produk dan Satuan belum lengkap. Silakan periksa kembali Step 1 dan Step 2.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                SetValidationWarning("Data Approval Belum Lengkap", "Kode Produk dan Satuan belum lengkap. Silakan periksa kembali Step 1 dan Step 2.");
                 return false;
             }
 
@@ -917,9 +1016,11 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var itemExists = await _service.CheckItemExistsAsync(brKdFormatted);
             if (itemExists)
             {
-                _snackbarService.Show("Kode Barang Duplikat", $"Kode Barang '{brKdFormatted}' sudah ada di database. Silakan gunakan No Kode Barang yang berbeda.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                SetValidationWarning("Kode Barang Sudah Terdaftar", $"Kode Barang '{brKdFormatted}' sudah ada di database. Silakan gunakan No. Kode Barang yang berbeda.");
                 return false;
             }
+
+            ClearValidationWarning();
 
             IsLoading = true;
             

@@ -267,7 +267,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Terjadi kesalahan saat memproses approval: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                _viewModel.SetValidationWarning("Terjadi Kesalahan", $"Gagal memproses approval: {ex.Message}");
             }
         }
     }
