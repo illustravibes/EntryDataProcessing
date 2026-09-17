@@ -53,10 +53,17 @@
 
             <ui:NavigationView.ContentOverlay>
                 <Grid>
-                    <ui:SnackbarPresenter x:Name="RootSnackbar" />
                     <ContentPresenter x:Name="RootContentDialog" />
                 </Grid>
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
+
+        <!-- Global Toast Alert: Absolute Top Layer, Bottom-Right, Compact -->
+        <ui:SnackbarPresenter x:Name="RootSnackbar"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Bottom"
+                              Margin="0,0,24,24"
+                              MaxWidth="380"
+                              Panel.ZIndex="99999" />
     </Grid>
 </ui:FluentWindow>

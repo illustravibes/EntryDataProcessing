@@ -941,5 +941,13 @@
                 </Border>
             </Grid>
         </Border>
+
+        <!-- Modal Toast Alert: Absolute top layer of wizard modal, bottom-right, compact -->
+        <ui:SnackbarPresenter x:Name="DialogSnackbar"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Bottom"
+                              Margin="0,0,16,16"
+                              MaxWidth="360"
+                              Panel.ZIndex="99999" />
     </Grid>
 </Window>

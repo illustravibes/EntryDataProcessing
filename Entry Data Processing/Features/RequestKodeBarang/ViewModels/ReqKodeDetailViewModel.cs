@@ -108,7 +108,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
                 if (result.IsSuccess)
                 {
-                    _snackbarService.Show("Sukses", "Permohonan berhasil ditolak", ControlAppearance.Success, null, System.TimeSpan.FromSeconds(3));
+                    _snackbarService.Show("Ditolak", "Permohonan berhasil ditolak", ControlAppearance.Caution, null, System.TimeSpan.FromSeconds(3));
                     LoadRequest(RequestDetail.Id);
                 }
                 else

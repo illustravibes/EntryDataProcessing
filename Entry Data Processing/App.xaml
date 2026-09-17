@@ -16,6 +16,49 @@
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+
+            <!-- Global Compact Bottom-Right Floating Toast / Alert Style -->
+            <Style TargetType="{x:Type ui:Snackbar}" BasedOn="{StaticResource {x:Type ui:Snackbar}}">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+                <Setter Property="MaxWidth" Value="380" />
+                <Setter Property="MinHeight" Value="50" />
+                <Setter Property="Margin" Value="0,0,24,24" />
+                <Setter Property="Padding" Value="14,10" />
+                <Style.Triggers>
+                    <Trigger Property="Appearance" Value="Danger">
+                        <Setter Property="Background" Value="#C42B1C" />
+                        <Setter Property="Foreground" Value="#FFFFFF" />
+                        <Setter Property="ContentForeground" Value="#E6FFFFFF" />
+                    </Trigger>
+                    <Trigger Property="Appearance" Value="Success">
+                        <Setter Property="Background" Value="#0F7B0F" />
+                        <Setter Property="Foreground" Value="#FFFFFF" />
+                        <Setter Property="ContentForeground" Value="#E6FFFFFF" />
+                    </Trigger>
+                    <Trigger Property="Appearance" Value="Caution">
+                        <Setter Property="Background" Value="#C25100" />
+                        <Setter Property="Foreground" Value="#FFFFFF" />
+                        <Setter Property="ContentForeground" Value="#E6FFFFFF" />
+                    </Trigger>
+                    <Trigger Property="Appearance" Value="Info">
+                        <Setter Property="Background" Value="#0F6CBD" />
+                        <Setter Property="Foreground" Value="#FFFFFF" />
+                        <Setter Property="ContentForeground" Value="#E6FFFFFF" />
+                    </Trigger>
+                    <Trigger Property="Appearance" Value="Primary">
+                        <Setter Property="Background" Value="#0F6CBD" />
+                        <Setter Property="Foreground" Value="#FFFFFF" />
+                        <Setter Property="ContentForeground" Value="#E6FFFFFF" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="{x:Type ui:SnackbarPresenter}">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+                <Setter Property="Panel.ZIndex" Value="99999" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
