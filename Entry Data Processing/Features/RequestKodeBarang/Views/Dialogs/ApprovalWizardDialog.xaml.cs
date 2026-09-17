@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Entry_Data_Processing.Features.RequestKodeBarang.Models;
@@ -53,10 +54,66 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
         private void SearchableComboBox_Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is not ComboBox cb) return;
+            SetupSearchableComboBox(cb);
+        }
 
+        private void SetupSearchableComboBox(ComboBox cb)
+        {
             cb.ApplyTemplate();
             var textBox = cb.Template?.FindName("PART_EditableTextBox", cb) as System.Windows.Controls.TextBox ?? FindVisualChild<System.Windows.Controls.TextBox>(cb);
-            if (textBox == null) return;
+
+            if (textBox == null)
+            {
+                // When ComboBox is initially inside a Collapsed panel/tab, attach once it becomes visible
+                DependencyPropertyChangedEventHandler? handler = null;
+                handler = (s, args) =>
+                {
+                    if (cb.IsVisible)
+                    {
+                        cb.IsVisibleChanged -= handler;
+                        cb.Dispatcher.BeginInvoke(new Action(() => SetupSearchableComboBox(cb)), System.Windows.Threading.DispatcherPriority.Loaded);
+                    }
+                };
+                cb.IsVisibleChanged += handler;
+                return;
+            }
+
+            // Reliable VisualBrush Watermark / Placeholder
+            if (cb.Tag is string placeholder && !string.IsNullOrWhiteSpace(placeholder))
+            {
+                void UpdateWatermark()
+                {
+                    bool show = string.IsNullOrEmpty(textBox.Text) && cb.SelectedItem == null;
+                    if (show)
+                    {
+                        var textBlock = new System.Windows.Controls.TextBlock
+                        {
+                            Text = placeholder,
+                            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8")),
+                            FontSize = 12.5,
+                            Margin = new Thickness(6, 0, 0, 0),
+                            VerticalAlignment = VerticalAlignment.Center
+                        };
+                        textBox.Background = new VisualBrush(textBlock)
+                        {
+                            Stretch = Stretch.None,
+                            AlignmentX = AlignmentX.Left,
+                            AlignmentY = AlignmentY.Center
+                        };
+                    }
+                    else
+                    {
+                        textBox.Background = Brushes.Transparent;
+                    }
+                }
+
+                textBox.TextChanged += (s, args) => UpdateWatermark();
+                cb.SelectionChanged += (s, args) => UpdateWatermark();
+                textBox.GotFocus += (s, args) => UpdateWatermark();
+                textBox.LostFocus += (s, args) => UpdateWatermark();
+                cb.IsVisibleChanged += (s, args) => UpdateWatermark();
+                UpdateWatermark();
+            }
 
             bool isUpdating = false;
 
@@ -79,9 +136,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
                     {
                         if (item == null) return false;
                         string str = item.ToString() ?? string.Empty;
-                        if (item is FactoryDto f) str = f.BrPrdFacNm;
-                        else if (item is ProductTypeDto p) str = p.BrJnsNm;
-                        else if (item is UnitDto u) str = u.SatNm;
+                        if (item is FactoryDto f) str = f.DisplayText;
+                        else if (item is ProductTypeDto p) str = p.DisplayText;
+                        else if (item is UnitDto u) str = u.DisplayText;
                         return str.IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0;
                     };
                 }
@@ -94,7 +151,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
 
             cb.DropDownOpened += (s, args) =>
             {
-                if (cb.SelectedItem != null && textBox.Text == cb.SelectedItem.ToString())
+                if (cb.SelectedItem != null && !string.IsNullOrWhiteSpace(textBox.Text) && textBox.Text == cb.SelectedItem.ToString())
                 {
                     var view = CollectionViewSource.GetDefaultView(cb.ItemsSource);
                     if (view != null)
@@ -113,6 +170,38 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
                     view.Filter = null;
                 }
                 isUpdating = false;
+            };
+
+            textBox.LostFocus += (s, args) =>
+            {
+                if (cb.SelectedItem == null && !string.IsNullOrWhiteSpace(textBox.Text) && cb.ItemsSource != null)
+                {
+                    var text = textBox.Text.Trim();
+                    foreach (var item in cb.ItemsSource)
+                    {
+                        if (item == null) continue;
+                        if (item is UnitDto u && (string.Equals(u.SatKd, text, StringComparison.OrdinalIgnoreCase) || string.Equals(u.SatNm, text, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            cb.SelectedItem = u;
+                            break;
+                        }
+                        else if (item is FactoryDto f && (string.Equals(f.BrPrdFacKd, text, StringComparison.OrdinalIgnoreCase) || string.Equals(f.BrPrdFacNm, text, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            cb.SelectedItem = f;
+                            break;
+                        }
+                        else if (item is ProductTypeDto p && (string.Equals(p.BrJnsKd, text, StringComparison.OrdinalIgnoreCase) || string.Equals(p.BrJnsNm, text, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            cb.SelectedItem = p;
+                            break;
+                        }
+                        else if (string.Equals(item.ToString(), text, StringComparison.OrdinalIgnoreCase))
+                        {
+                            cb.SelectedItem = item;
+                            break;
+                        }
+                    }
+                }
             };
         }
 
@@ -139,11 +228,18 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
 
         private async void Submit_Click(object sender, RoutedEventArgs e)
         {
-            var success = await _viewModel.SubmitApprovalAsync();
-            if (success)
+            try
             {
-                IsApproved = true;
-                Close();
+                var success = await _viewModel.SubmitApprovalAsync();
+                if (success)
+                {
+                    IsApproved = true;
+                    Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Terjadi kesalahan saat memproses approval: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }
     }

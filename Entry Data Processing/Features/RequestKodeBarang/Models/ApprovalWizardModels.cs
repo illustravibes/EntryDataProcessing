@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
 {
@@ -28,44 +29,59 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public override string ToString() => DisplayText;
     }
 
-    public class ProductDataDto
+    public partial class ProductDataDto : ObservableObject
     {
-        public bool IsNewProduct { get; set; }
+        [ObservableProperty]
+        private bool _isNewProduct;
         
-        [Required(ErrorMessage = "Kode Produk wajib diisi")]
-        [StringLength(5, ErrorMessage = "Maksimal 5 karakter")]
-        public string BrPrdKd { get; set; } = string.Empty;
+        [ObservableProperty]
+        private string _brPrdKd = string.Empty;
 
-        public string BrPrdNm { get; set; } = string.Empty;
-        public string BrPrdAcm { get; set; } = string.Empty;
-        public string BrPrdFacKd { get; set; } = string.Empty;
-        public string BrPrdFacNm { get; set; } = string.Empty;
-        public string Pencari { get; set; } = string.Empty;
-        public string BrJnsKd { get; set; } = string.Empty;
-        public string BrJnsNm { get; set; } = string.Empty;
+        [ObservableProperty]
+        private string _brPrdNm = string.Empty;
+
+        [ObservableProperty]
+        private string _brPrdAcm = string.Empty;
+
+        [ObservableProperty]
+        private string _brPrdFacKd = string.Empty;
+
+        [ObservableProperty]
+        private string _brPrdFacNm = string.Empty;
+
+        [ObservableProperty]
+        private string _pencari = string.Empty;
+
+        [ObservableProperty]
+        private string _brJnsKd = string.Empty;
+
+        [ObservableProperty]
+        private string _brJnsNm = string.Empty;
 
         public string DisplayName => string.IsNullOrWhiteSpace(BrPrdKd) ? BrPrdNm : $"{BrPrdKd} - {BrPrdNm}";
         public override string ToString() => DisplayName;
     }
 
-    public class PriceDataDto
+    public partial class PriceDataDto : ObservableObject
     {
-        [Required(ErrorMessage = "Golongan Harga wajib diisi")]
-        public string BrHrgGol { get; set; } = string.Empty;
+        [ObservableProperty]
+        private short? _idHrg;
 
-        [Required(ErrorMessage = "Satuan wajib diisi")]
-        public string SatKd { get; set; } = string.Empty;
+        [ObservableProperty]
+        private string _brHrgGol = string.Empty;
+
+        [ObservableProperty]
+        private string _satKd = string.Empty;
     }
 
-    public class ItemDataDto
+    public partial class ItemDataDto : ObservableObject
     {
-        [Required(ErrorMessage = "No Kode Barang wajib diisi")]
-        [StringLength(10, ErrorMessage = "Maksimal 10 karakter")]
-        public string BrKdNo { get; set; } = string.Empty;
+        [ObservableProperty]
+        [property: StringLength(25, ErrorMessage = "Maksimal 25 karakter")]
+        private string _brKdNo = string.Empty;
 
-        [Required(ErrorMessage = "Nama Barang wajib diisi")]
-        [StringLength(35, ErrorMessage = "Maksimal 35 karakter")]
-        public string BrNm { get; set; } = string.Empty;
+        [ObservableProperty]
+        private string _brNm = string.Empty;
     }
 
     public class ApprovalWizardSubmitDto

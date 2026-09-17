@@ -56,9 +56,23 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
             ? CreatedByName 
             : (!string.IsNullOrWhiteSpace(CreatedBy) ? CreatedBy : "-");
         
-        public string AccByDisplay => !string.IsNullOrWhiteSpace(AccByName) 
-            ? AccByName 
-            : (!string.IsNullOrWhiteSpace(AccBy) ? AccBy : "-");
+        public string AccByDisplay
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(AccByName) && !string.IsNullOrWhiteSpace(AccBy))
+                    return $"{AccBy} - {AccByName}";
+                if (!string.IsNullOrWhiteSpace(AccByName))
+                    return AccByName;
+                if (!string.IsNullOrWhiteSpace(AccBy))
+                    return AccBy;
+                return "-";
+            }
+        }
+
+        public bool HasAccAt => AccAt.HasValue && AccAt.Value != DateTime.MinValue;
+        public string FormattedTglAcc => HasAccAt ? AccAt!.Value.ToString("dd/MM/yyyy HH:mm") : "-";
+        public string FormattedTglAccFull => HasAccAt ? AccAt!.Value.ToString("dd/MM/yyyy HH:mm:ss") : "-";
 
         public bool IsNewSupplier => string.IsNullOrWhiteSpace(KdSupp) && string.IsNullOrWhiteSpace(NmSupplier);
         public string FormattedTglRequest => CreatedAt.HasValue && CreatedAt.Value != DateTime.MinValue ? CreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "-";
@@ -82,6 +96,31 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
             ? $"{Supplier} - {NmSupplier}"
             : (!string.IsNullOrWhiteSpace(Supplier) ? Supplier : "-");
 
+        public string SupplierKodeDisplay
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(KdSuppAcc)) return KdSuppAcc;
+                if (!string.IsNullOrWhiteSpace(KdSupp)) return KdSupp;
+                if (!string.IsNullOrWhiteSpace(NmSupplier) && !string.IsNullOrWhiteSpace(Supplier)) return Supplier;
+                return "-";
+            }
+        }
+
+        public string SupplierNamaDisplay
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(SupplierAcc)) return SupplierAcc;
+                if (!string.IsNullOrWhiteSpace(NmSupplier)) return NmSupplier.Trim();
+                if (!string.IsNullOrWhiteSpace(Supplier)) return Supplier.Trim();
+                return "-";
+            }
+        }
+
+        public bool HasKdBrg => !string.IsNullOrWhiteSpace(KdBrg);
+        public bool HasKdPrd => !string.IsNullOrWhiteSpace(KdPrd);
+
         // Prices & Discount
         public string FormattedPricelist => Pricelist > 0 ? Pricelist.ToString("N0", new System.Globalization.CultureInfo("id-ID")) : "0";
         public string FormattedDisc => Disc > 0 ? $"{Disc:N0}%" : "0%";
@@ -96,16 +135,32 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public string RmBadgeText => !string.IsNullOrWhiteSpace(ReadyOrMix) ? ReadyOrMix.ToUpper() : "READY";
         public bool IsMix => RmBadgeText.Contains("MIX");
         
-        public string StatusBadgeText => AccTidak switch
+        // Status resolution prioritizing the explicit Status column
+        public string NormalizedStatus
         {
-            1 => "Disetujui",
-            2 => "Ditolak",
-            0 => "Pending",
-            3 => "Draft",
-            _ => !string.IsNullOrWhiteSpace(Status) ? Status.ToUpper() : "Draft"
-        };
+            get
+            {
+                var s = Status?.Trim().ToLowerInvariant() ?? string.Empty;
+                if (s == "pending") return "Pending";
+                if (s == "approve" || s == "approved") return "Disetujui";
+                if (s == "reject" || s == "rejected") return "Ditolak";
+                if (s == "draft") return "Draft";
+
+                return AccTidak switch
+                {
+                    1 => "Disetujui",
+                    2 => "Ditolak",
+                    3 => "Draft",
+                    _ => "Pending"
+                };
+            }
+        }
+
+        public string StatusBadgeText => NormalizedStatus;
         public string StatusLabel => StatusBadgeText;
-        public bool IsRejected => AccTidak == 2 || string.Equals(Status, "reject", StringComparison.OrdinalIgnoreCase);
-        public bool CanApproveOrReject => AccTidak == 0 || Status == "pending";
+        public bool IsRejected => NormalizedStatus == "Ditolak";
+        public bool IsApproved => NormalizedStatus == "Disetujui";
+        public bool IsPending => NormalizedStatus == "Pending";
+        public bool CanApproveOrReject => IsPending;
     }
 }

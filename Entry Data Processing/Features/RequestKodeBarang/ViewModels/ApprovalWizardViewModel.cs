@@ -39,6 +39,83 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private ProductDataDto? _selectedProduct;
 
+        // Live validation for New Product Mode
+        [ObservableProperty]
+        private string _newProductCode = string.Empty;
+
+        [ObservableProperty]
+        private bool _isCheckingProductCode = false;
+
+        [ObservableProperty]
+        private bool? _isProductCodeValid = null;
+
+        [ObservableProperty]
+        private string _productCodeValidationMessage = string.Empty;
+
+        private System.Threading.CancellationTokenSource? _productCodeCts;
+
+        partial void OnNewProductCodeChanged(string value)
+        {
+            var kd = value?.Trim().ToUpper() ?? string.Empty;
+            ProductData.BrPrdKd = kd;
+
+            _productCodeCts?.Cancel();
+            _productCodeCts?.Dispose();
+            _productCodeCts = new System.Threading.CancellationTokenSource();
+            var token = _productCodeCts.Token;
+
+            if (string.IsNullOrWhiteSpace(kd))
+            {
+                IsCheckingProductCode = false;
+                IsProductCodeValid = null;
+                ProductCodeValidationMessage = "Masukkan kode produk (maks. 5 karakter)";
+                return;
+            }
+
+            _ = ValidateProductCodeLiveAsync(kd, token);
+        }
+
+        private async System.Threading.Tasks.Task ValidateProductCodeLiveAsync(string code, System.Threading.CancellationToken token)
+        {
+            try
+            {
+                IsCheckingProductCode = true;
+                ProductCodeValidationMessage = "Memeriksa ketersediaan kode...";
+
+                await System.Threading.Tasks.Task.Delay(350, token);
+                if (token.IsCancellationRequested) return;
+
+                var exists = await _service.CheckProductExistsAsync(code);
+                if (token.IsCancellationRequested) return;
+
+                if (exists)
+                {
+                    IsProductCodeValid = false;
+                    ProductCodeValidationMessage = $"Kode '{code}' sudah digunakan di master produk. Gunakan kode lain.";
+                }
+                else
+                {
+                    IsProductCodeValid = true;
+                    ProductCodeValidationMessage = $"Kode '{code}' tersedia dan dapat digunakan.";
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
+            catch (System.Exception ex)
+            {
+                IsProductCodeValid = null;
+                ProductCodeValidationMessage = "Gagal memverifikasi kode: " + ex.Message;
+            }
+            finally
+            {
+                if (!token.IsCancellationRequested)
+                {
+                    IsCheckingProductCode = false;
+                }
+            }
+        }
+
         // Factory Search for New Product Mode
         [ObservableProperty]
         private string _factorySearchQuery = string.Empty;
@@ -100,10 +177,46 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CanGoNext))]
+        [NotifyPropertyChangedFor(nameof(IsNotLastStep))]
         private bool _isLastStep = false;
 
         public bool CanGoPrevious => !IsFirstStep && !IsLoading;
         public bool CanGoNext => !IsLoading;
+        public bool IsNotLastStep => !IsLastStep;
+
+        public bool IsStep1Done => CurrentStepIndex > 0;
+        public bool IsStep2Done => CurrentStepIndex > 1;
+
+        [ObservableProperty]
+        private bool? _isPriceCombinationExisting = null;
+
+        [ObservableProperty]
+        private string _newIdHrgText = string.Empty;
+
+        partial void OnNewIdHrgTextChanged(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                PriceData.IdHrg = null;
+                return;
+            }
+
+            var digits = new string(value.Where(char.IsDigit).ToArray());
+            if (digits != value)
+            {
+                NewIdHrgText = digits;
+                return;
+            }
+
+            if (short.TryParse(digits, out var parsed))
+            {
+                PriceData.IdHrg = parsed;
+            }
+            else
+            {
+                PriceData.IdHrg = null;
+            }
+        }
 
         [ObservableProperty]
         private bool _isNewProductMode = false;
@@ -134,6 +247,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             SelectedProductType = null;
             SelectedUnit = null;
             SelectedPriceGroup = string.Empty;
+            NewIdHrgText = string.Empty;
+            PriceData.IdHrg = null;
             UpdateStepState();
             
             IsLoading = true;
@@ -175,6 +290,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 SelectedProduct = null;
                 HasSelectedProduct = false;
                 ProductData.BrPrdKd = string.Empty;
+                SelectedPriceGroup = string.Empty;
+                PriceData.BrHrgGol = string.Empty;
+                SelectedUnit = null;
+                PriceData.SatKd = string.Empty;
+                IsPriceCombinationExisting = null;
+                NewIdHrgText = string.Empty;
+                PriceData.IdHrg = null;
                 if (string.IsNullOrWhiteSpace(ProductData.BrPrdNm))
                 {
                     ProductData.BrPrdNm = ItemData.BrNm;
@@ -191,11 +313,19 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                     ProductData.BrPrdFacNm = SelectedProduct.BrPrdFacNm;
                     ProductData.BrJnsKd = SelectedProduct.BrJnsKd;
                     ProductData.BrJnsNm = SelectedProduct.BrJnsNm;
+                    _ = LoadDefaultPriceCombinationAsync(SelectedProduct.BrPrdKd);
                 }
                 else
                 {
                     HasSelectedProduct = false;
                     ProductData.BrPrdKd = string.Empty;
+                    SelectedPriceGroup = string.Empty;
+                    PriceData.BrHrgGol = string.Empty;
+                    SelectedUnit = null;
+                    PriceData.SatKd = string.Empty;
+                    IsPriceCombinationExisting = null;
+                    NewIdHrgText = string.Empty;
+                    PriceData.IdHrg = null;
                 }
             }
         }
@@ -255,6 +385,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             };
             HasSelectedProduct = true;
             IsNewProductMode = false;
+
+            _ = LoadDefaultPriceCombinationAsync(product.BrPrdKd);
         }
 
         [RelayCommand]
@@ -263,6 +395,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             SelectedProduct = null;
             HasSelectedProduct = false;
             ProductData.BrPrdKd = string.Empty;
+            SelectedPriceGroup = string.Empty;
+            PriceData.BrHrgGol = string.Empty;
+            SelectedUnit = null;
+            PriceData.SatKd = string.Empty;
+            IsPriceCombinationExisting = null;
+            NewIdHrgText = string.Empty;
+            PriceData.IdHrg = null;
         }
 
         // Factory Selection Commands
@@ -297,6 +436,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         partial void OnSelectedPriceGroupChanged(string value)
         {
             PriceData.BrHrgGol = value ?? string.Empty;
+            _ = CheckPriceCombinationStatusAsync();
         }
 
         partial void OnSelectedUnitChanged(UnitDto? value)
@@ -308,6 +448,42 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             else
             {
                 PriceData.SatKd = string.Empty;
+            }
+            _ = CheckPriceCombinationStatusAsync();
+        }
+
+        public async Task CheckPriceCombinationStatusAsync()
+        {
+            var prdKd = ProductData.BrPrdKd?.Trim() ?? string.Empty;
+            var gol = PriceData.BrHrgGol?.Trim() ?? string.Empty;
+            var sat = PriceData.SatKd?.Trim() ?? string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(prdKd) && 
+                !string.IsNullOrWhiteSpace(gol) && 
+                !string.IsNullOrWhiteSpace(sat))
+            {
+                var exists = await _service.CheckPriceCombinationExistsAsync(prdKd, gol, sat);
+                IsPriceCombinationExisting = exists;
+                if (exists)
+                {
+                    NewIdHrgText = string.Empty;
+                    PriceData.IdHrg = null;
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(NewIdHrgText))
+                    {
+                        var nextId = await _service.GetNextIdHrgAsync();
+                        NewIdHrgText = nextId.ToString();
+                        PriceData.IdHrg = nextId;
+                    }
+                }
+            }
+            else
+            {
+                IsPriceCombinationExisting = null;
+                NewIdHrgText = string.Empty;
+                PriceData.IdHrg = null;
             }
         }
 
@@ -483,6 +659,22 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private void PrepareNewProduct()
         {
             IsNewProductMode = true;
+            NewProductCode = string.Empty;
+            IsProductCodeValid = null;
+            ProductCodeValidationMessage = "Ketik kode produk di atas untuk memeriksa ketersediaan.";
+            ProductData = new ProductDataDto
+            {
+                IsNewProduct = true
+            };
+        }
+
+        [RelayCommand]
+        private void CancelNewProduct()
+        {
+            IsNewProductMode = false;
+            NewProductCode = string.Empty;
+            IsProductCodeValid = null;
+            ProductCodeValidationMessage = string.Empty;
         }
 
         [RelayCommand]
@@ -512,6 +704,95 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         {
             IsFirstStep = CurrentStepIndex == 0;
             IsLastStep = CurrentStepIndex == 2;
+            OnPropertyChanged(nameof(IsStep1Done));
+            OnPropertyChanged(nameof(IsStep2Done));
+            if (CurrentStepIndex == 1)
+            {
+                if (!IsNewProductMode && !string.IsNullOrWhiteSpace(ProductData.BrPrdKd))
+                {
+                    _ = LoadDefaultPriceCombinationAsync(ProductData.BrPrdKd);
+                }
+                else
+                {
+                    _ = CheckPriceCombinationStatusAsync();
+                }
+            }
+            else if (CurrentStepIndex == 2)
+            {
+                if (!string.IsNullOrWhiteSpace(SelectedPriceGroup))
+                {
+                    PriceData.BrHrgGol = SelectedPriceGroup.Trim();
+                }
+                if (SelectedUnit != null)
+                {
+                    PriceData.SatKd = SelectedUnit.SatKd.Trim();
+                }
+                if (string.IsNullOrWhiteSpace(ItemData.BrNm))
+                {
+                    ItemData.BrNm = ProductData.BrPrdNm;
+                }
+
+                OnPropertyChanged(nameof(PriceData));
+                OnPropertyChanged(nameof(ProductData));
+                OnPropertyChanged(nameof(ItemData));
+            }
+        }
+
+        public async Task LoadDefaultPriceCombinationAsync(string brPrdKd)
+        {
+            if (string.IsNullOrWhiteSpace(brPrdKd)) return;
+
+            try
+            {
+                var existingPrice = await _service.GetDefaultPriceCombinationForProductAsync(brPrdKd);
+                if (existingPrice != null)
+                {
+                    void ApplyPrice()
+                    {
+                        if (!string.IsNullOrWhiteSpace(existingPrice.BrHrgGol))
+                        {
+                            SelectedPriceGroup = existingPrice.BrHrgGol;
+                            PriceData.BrHrgGol = existingPrice.BrHrgGol;
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(existingPrice.SatKd))
+                        {
+                            PriceData.SatKd = existingPrice.SatKd;
+                            var unit = UnitSearchResults.FirstOrDefault(u => 
+                                string.Equals(u.SatKd, existingPrice.SatKd, StringComparison.OrdinalIgnoreCase));
+                            if (unit != null)
+                            {
+                                SelectedUnit = unit;
+                            }
+                            else
+                            {
+                                var newUnit = new UnitDto { SatKd = existingPrice.SatKd, SatNm = existingPrice.SatKd };
+                                UnitSearchResults.Add(newUnit);
+                                SelectedUnit = newUnit;
+                            }
+                        }
+                    }
+
+                    if (System.Windows.Application.Current?.Dispatcher != null)
+                    {
+                        await System.Windows.Application.Current.Dispatcher.InvokeAsync(ApplyPrice);
+                    }
+                    else
+                    {
+                        ApplyPrice();
+                    }
+
+                    await CheckPriceCombinationStatusAsync();
+                }
+                else
+                {
+                    await CheckPriceCombinationStatusAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[LoadDefaultPriceCombinationAsync] Error: {ex.Message}");
+            }
         }
 
         private async Task<bool> ValidateCurrentStepAsync()
@@ -532,23 +813,32 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 else
                 {
                     // Strict Segment 2: Must create new product, code must NOT duplicate existing products
-                    var kd = ProductData.BrPrdKd?.Trim();
+                    var kd = NewProductCode?.Trim();
                     if (string.IsNullOrWhiteSpace(kd))
                     {
                         _snackbarService.Show("Validasi", "Kode Produk baru wajib diisi.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
                         return false;
                     }
-                    if (string.IsNullOrWhiteSpace(ProductData.BrPrdNm))
+
+                    if (IsProductCodeValid == false)
                     {
-                        _snackbarService.Show("Validasi", "Nama Produk baru wajib diisi.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                        _snackbarService.Show("Kode Produk Duplikat", $"Kode Produk '{kd}' sudah terdaftar di database! Tidak boleh sama saat membuat master produk baru.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
                         return false;
                     }
 
-                    // Check if code already exists in tmabrprd
+                    // Final safety check against tmabrprd
                     var exists = await _service.CheckProductExistsAsync(kd);
                     if (exists)
                     {
+                        IsProductCodeValid = false;
+                        ProductCodeValidationMessage = $"Kode '{kd}' sudah digunakan di master produk.";
                         _snackbarService.Show("Kode Produk Duplikat", $"Kode Produk '{kd}' sudah terdaftar di database! Tidak boleh sama saat membuat master produk baru.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                        return false;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(ProductData.BrPrdNm))
+                    {
+                        _snackbarService.Show("Validasi", "Nama Produk baru wajib diisi.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
                         return false;
                     }
 
@@ -559,10 +849,43 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             }
             if (CurrentStepIndex == 1)
             {
+                if (!string.IsNullOrWhiteSpace(SelectedPriceGroup))
+                {
+                    PriceData.BrHrgGol = SelectedPriceGroup.Trim();
+                }
+                if (SelectedUnit != null)
+                {
+                    PriceData.SatKd = SelectedUnit.SatKd.Trim();
+                }
+
                 if (string.IsNullOrWhiteSpace(PriceData.BrHrgGol) || string.IsNullOrWhiteSpace(PriceData.SatKd))
                 {
                     _snackbarService.Show("Validasi", "Golongan Harga dan Satuan wajib diisi", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
                     return false;
+                }
+
+                // If price combination does not exist in tmabrhrgjl, ID Harga is required and must be valid & unique
+                if (IsPriceCombinationExisting == false)
+                {
+                    if (string.IsNullOrWhiteSpace(NewIdHrgText) || !short.TryParse(NewIdHrgText.Trim(), out var manualId) || manualId <= 0)
+                    {
+                        _snackbarService.Show("Validasi", "ID Harga (id_hrg) wajib diisi dengan angka yang valid (1 - 32767).", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                        return false;
+                    }
+
+                    var idExists = await _service.CheckIdHrgExistsAsync(manualId);
+                    if (idExists)
+                    {
+                        _snackbarService.Show("ID Harga Duplikat", $"ID Harga '{manualId}' sudah terdaftar di master harga (tmabrhrgjl). Masukkan ID Harga lain.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                        return false;
+                    }
+
+                    PriceData.IdHrg = manualId;
+                }
+
+                if (string.IsNullOrWhiteSpace(ItemData.BrNm))
+                {
+                    ItemData.BrNm = ProductData.BrPrdNm;
                 }
                 return true;
             }
@@ -573,13 +896,24 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         {
             if (!await ValidateCurrentStepAsync()) return false;
 
-            if (string.IsNullOrWhiteSpace(ItemData.BrKdNo) || string.IsNullOrWhiteSpace(ItemData.BrNm))
+            var prdKd = ProductData?.BrPrdKd?.Trim() ?? string.Empty;
+            var satKd = PriceData?.SatKd?.Trim() ?? string.Empty;
+            var kdNo = ItemData?.BrKdNo?.Trim() ?? string.Empty;
+            var brNm = ItemData?.BrNm?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(kdNo) || string.IsNullOrWhiteSpace(brNm))
             {
                 _snackbarService.Show("Validasi", "No Kode Barang dan Nama Barang wajib diisi", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
                 return false;
             }
 
-            var brKdFormatted = $"{ProductData.BrPrdKd.Trim()}.{PriceData.SatKd.Trim()}.{ItemData.BrKdNo.Trim()}";
+            if (string.IsNullOrWhiteSpace(prdKd) || string.IsNullOrWhiteSpace(satKd))
+            {
+                _snackbarService.Show("Validasi", "Kode Produk dan Satuan belum lengkap. Silakan periksa kembali Step 1 dan Step 2.", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                return false;
+            }
+
+            var brKdFormatted = $"{prdKd}.{satKd}.{kdNo}";
             var itemExists = await _service.CheckItemExistsAsync(brKdFormatted);
             if (itemExists)
             {

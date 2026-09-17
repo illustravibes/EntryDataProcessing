@@ -27,6 +27,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         Task<IEnumerable<string>> SearchPriceGroupsAsync(string query);
         Task<IEnumerable<UnitDto>> SearchUnitsAsync(string query);
         Task<bool> CheckPriceCombinationExistsAsync(string brPrdKd, string brHrgGol, string satKd);
+        Task<PriceDataDto?> GetDefaultPriceCombinationForProductAsync(string brPrdKd);
+        Task<short> GetNextIdHrgAsync();
+        Task<bool> CheckIdHrgExistsAsync(short idHrg);
         Task<Result<bool>> ProcessWizardApprovalAsync(ApprovalWizardSubmitDto data);
     }
 }

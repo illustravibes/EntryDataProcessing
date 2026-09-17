@@ -452,6 +452,34 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
             return count > 0;
         }
 
+        public async Task<PriceDataDto?> GetDefaultPriceCombinationForProductAsync(string brPrdKd)
+        {
+            if (string.IsNullOrWhiteSpace(brPrdKd)) return null;
+            using var connection = _connectionFactory.CreateConnection();
+            var sql = @"
+                SELECT BrHrgGol, SatKd 
+                FROM tmabrhrgjl 
+                WHERE BrPrdKd = @BrPrdKd 
+                ORDER BY id_hrg ASC 
+                LIMIT 1;
+            ";
+            return await connection.QueryFirstOrDefaultAsync<PriceDataDto>(sql, new { BrPrdKd = brPrdKd.Trim() });
+        }
+
+        public async Task<short> GetNextIdHrgAsync()
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var max = await connection.ExecuteScalarAsync<short?>("SELECT MAX(id_hrg) FROM tmabrhrgjl");
+            return (short)((max ?? 0) + 1);
+        }
+
+        public async Task<bool> CheckIdHrgExistsAsync(short idHrg)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            var count = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM tmabrhrgjl WHERE id_hrg = @IdHrg", new { IdHrg = idHrg });
+            return count > 0;
+        }
+
         public async Task<Result<bool>> ProcessWizardApprovalAsync(ApprovalWizardSubmitDto data)
         {
             try
@@ -459,88 +487,148 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 using var connection = _connectionFactory.CreateConnection();
                 connection.Open();
                 using var transaction = connection.BeginTransaction();
-                
+
                 try
                 {
-                    // 1. Handle tmabrprd
-                    if (data.ProductData.IsNewProduct)
+                    var prdKd = data.ProductData?.BrPrdKd?.Trim() ?? string.Empty;
+                    var prdNm = data.ProductData?.BrPrdNm?.Trim() ?? string.Empty;
+                    var satKd = data.PriceData?.SatKd?.Trim() ?? string.Empty;
+                    var gol = data.PriceData?.BrHrgGol?.Trim() ?? string.Empty;
+                    var kdNo = data.ItemData?.BrKdNo?.Trim() ?? string.Empty;
+                    var brNm = data.ItemData?.BrNm?.Trim() ?? string.Empty;
+                    var approverNip = string.IsNullOrWhiteSpace(data.ApproverNip) ? "SYSTEM" : data.ApproverNip;
+
+                    if (string.IsNullOrWhiteSpace(prdKd) || string.IsNullOrWhiteSpace(satKd) || string.IsNullOrWhiteSpace(kdNo))
                     {
-                        var checkSql = "SELECT COUNT(*) FROM tmabrprd WHERE BrPrdKd = @BrPrdKd";
-                        var prodCount = await connection.ExecuteScalarAsync<int>(checkSql, new { BrPrdKd = data.ProductData.BrPrdKd }, transaction);
-                        if (prodCount == 0)
-                        {
-                            var insProd = @"
-                                INSERT INTO tmabrprd (BrPrdKd, BrPrdNm, BrPrdAcm, BrPrdFacKd, Pencari, BrJnsKd, Aktif) 
-                                VALUES (@BrPrdKd, @BrPrdNm, @BrPrdAcm, @BrPrdFacKd, @Pencari, @BrJnsKd, 1);";
-                            await connection.ExecuteAsync(insProd, data.ProductData, transaction);
-                        }
+                        return Result<bool>.Failure("Data approval tidak lengkap (Kode Produk, Satuan, atau No. Kode Barang kosong).");
                     }
 
-                    // 2. Handle tmabrhrgjl
+                    if (data.ProductData?.IsNewProduct == true)
+                    {
+                        var checkSql = "SELECT COUNT(*) FROM tmabrprd WHERE BrPrdKd = @BrPrdKd";
+                        var prodCount = await connection.ExecuteScalarAsync<int>(checkSql, new { BrPrdKd = prdKd }, transaction);
+                        if (prodCount > 0)
+                        {
+                            throw new InvalidOperationException($"Kode Produk '{prdKd}' sudah terdaftar di master produk (tmabrprd).");
+                        }
+
+                        var insProd = @"
+                            INSERT INTO tmabrprd (BrPrdKd, BrPrdNm, BrPrdAcm, BrPrdFacKd, Pencari, BrJnsKd, Aktif) 
+                            VALUES (@BrPrdKd, @BrPrdNm, @BrPrdAcm, @BrPrdFacKd, @Pencari, @BrJnsKd, 1);";
+                        await connection.ExecuteAsync(insProd, new
+                        {
+                            BrPrdKd = prdKd,
+                            BrPrdNm = data.ProductData?.BrPrdNm?.Trim() ?? string.Empty,
+                            BrPrdAcm = data.ProductData?.BrPrdAcm?.Trim() ?? string.Empty,
+                            BrPrdFacKd = data.ProductData?.BrPrdFacKd?.Trim() ?? string.Empty,
+                            Pencari = data.ProductData?.Pencari?.Trim() ?? string.Empty,
+                            BrJnsKd = data.ProductData?.BrJnsKd?.Trim() ?? string.Empty
+                        }, transaction);
+                    }
+
                     var checkPriceSql = "SELECT id_hrg FROM tmabrhrgjl WHERE BrPrdKd = @BrPrdKd AND BrHrgGol = @BrHrgGol AND SatKd = @SatKd";
                     var existingIdHrg = await connection.QueryFirstOrDefaultAsync<short?>(checkPriceSql, new 
                     { 
-                        BrPrdKd = data.ProductData.BrPrdKd,
-                        BrHrgGol = data.PriceData.BrHrgGol,
-                        SatKd = data.PriceData.SatKd
+                        BrPrdKd = prdKd,
+                        BrHrgGol = gol,
+                        SatKd = satKd
                     }, transaction);
+
+                    short finalIdHrg;
 
                     if (!existingIdHrg.HasValue)
                     {
-                        var insPrice = "INSERT INTO tmabrhrgjl (BrPrdKd, BrHrgGol, SatKd) VALUES (@BrPrdKd, @BrHrgGol, @SatKd); SELECT LAST_INSERT_ID();";
-                        var newIdHrg = await connection.ExecuteScalarAsync<short>(insPrice, new 
+                        var manualId = data.PriceData?.IdHrg;
+                        if (!manualId.HasValue || manualId.Value <= 0)
+                        {
+                            throw new InvalidOperationException("ID Harga (id_hrg) wajib diisi untuk kombinasi harga baru.");
+                        }
+
+                        var checkIdSql = "SELECT COUNT(*) FROM tmabrhrgjl WHERE id_hrg = @IdHrg";
+                        var countId = await connection.ExecuteScalarAsync<int>(checkIdSql, new { IdHrg = manualId.Value }, transaction);
+                        if (countId > 0)
+                        {
+                            throw new InvalidOperationException($"ID Harga '{manualId.Value}' sudah digunakan di database. Silakan gunakan ID Harga lain.");
+                        }
+
+                        finalIdHrg = manualId.Value;
+
+                        var insPrice = "INSERT INTO tmabrhrgjl (id_hrg, BrPrdKd, BrHrgGol, SatKd) VALUES (@IdHrg, @BrPrdKd, @BrHrgGol, @SatKd);";
+                        await connection.ExecuteAsync(insPrice, new 
                         { 
-                            BrPrdKd = data.ProductData.BrPrdKd,
-                            BrHrgGol = data.PriceData.BrHrgGol,
-                            SatKd = data.PriceData.SatKd
+                            IdHrg = finalIdHrg,
+                            BrPrdKd = prdKd,
+                            BrHrgGol = gol,
+                            SatKd = satKd
                         }, transaction);
-                        
-                        // Insert into thrgjual for all active areas
+
                         var areasSql = "SELECT id_area FROM harga_area WHERE aktif = 1";
                         var areas = await connection.QueryAsync<int>(areasSql, null, transaction);
-                        
+
                         if (areas.Any())
                         {
                             var insHrgJualSql = "INSERT INTO thrgjual (id_hrg, id_area) VALUES (@IdHrg, @IdArea)";
                             foreach (var areaId in areas)
                             {
-                                await connection.ExecuteAsync(insHrgJualSql, new { IdHrg = newIdHrg, IdArea = areaId }, transaction);
+                                await connection.ExecuteAsync(insHrgJualSql, new { IdHrg = finalIdHrg, IdArea = areaId }, transaction);
                             }
                         }
                     }
+                    else
+                    {
+                        finalIdHrg = existingIdHrg.Value;
+                    }
 
                     // 3. Handle tmabrg
-                    var brKdFormatted = $"{data.ProductData.BrPrdKd}.{data.PriceData.SatKd}.{data.ItemData.BrKdNo}";
+                    var brKdFormatted = $"{prdKd}.{satKd}.{kdNo}";
                     var checkItemSql = "SELECT COUNT(*) FROM tmabrg WHERE BrKd = @BrKd";
                     var itemCount = await connection.ExecuteScalarAsync<int>(checkItemSql, new { BrKd = brKdFormatted }, transaction);
                     
-                    if (itemCount == 0)
+                    if (itemCount > 0)
                     {
-                        var insItem = @"
-                            INSERT INTO tmabrg (BrKd, SatKd, BrPrdKd, BrKdNo, BrNm, BrHrgGol, Aktif) 
-                            VALUES (@BrKd, @SatKd, @BrPrdKd, @BrKdNo, @BrNm, @BrHrgGol, 1);";
-                        await connection.ExecuteAsync(insItem, new 
-                        {
-                            BrKd = brKdFormatted,
-                            SatKd = data.PriceData.SatKd,
-                            BrPrdKd = data.ProductData.BrPrdKd,
-                            BrKdNo = data.ItemData.BrKdNo,
-                            BrNm = data.ItemData.BrNm,
-                            BrHrgGol = data.PriceData.BrHrgGol
-                        }, transaction);
+                        throw new InvalidOperationException($"Kode Barang '{brKdFormatted}' sudah terdaftar di master barang (tmabrg). Silakan gunakan No. Kode Barang yang berbeda.");
                     }
 
-                    // 4. Update request status
+                    var insItem = @"
+                        INSERT INTO tmabrg (BrKd, SatKd, BrPrdKd, BrKdNo, BrNm, BrHrgGol, Aktif) 
+                        VALUES (@BrKd, @SatKd, @BrPrdKd, @BrKdNo, @BrNm, @BrHrgGol, 1);";
+                    await connection.ExecuteAsync(insItem, new 
+                    {
+                        BrKd = brKdFormatted,
+                        SatKd = satKd,
+                        BrPrdKd = prdKd,
+                        BrKdNo = kdNo,
+                        BrNm = brNm,
+                        BrHrgGol = gol
+                    }, transaction);
+
+                    // 4. Update request status & hasil barang jadi
                     var updateReqSql = @"
                         UPDATE req_edp_kode 
-                        SET acc_tidak = 1,
+                        SET kd_prd = @KdPrd,
+                            nm_prd_acc = @NmPrdAcc,
+                            kd_brg = @KdBrg,
+                            nm_brg_acc = @NmBrgAcc,
+                            gol = @Gol,
+                            sat = @Sat,
+                            acc_tidak = 1,
                             acc_by = @ApproverNip,
                             acc_at = NOW(),
                             status = 'approve',
                             updated_at = NOW()
                         WHERE id = @RequestId;
                     ";
-                    await connection.ExecuteAsync(updateReqSql, new { ApproverNip = data.ApproverNip, RequestId = data.RequestId }, transaction);
+                    await connection.ExecuteAsync(updateReqSql, new 
+                    { 
+                        KdPrd = prdKd,
+                        NmPrdAcc = prdNm,
+                        KdBrg = brKdFormatted,
+                        NmBrgAcc = brNm,
+                        Gol = gol,
+                        Sat = satKd,
+                        ApproverNip = approverNip, 
+                        RequestId = data.RequestId 
+                    }, transaction);
 
                     transaction.Commit();
                     return Result<bool>.Success(true);

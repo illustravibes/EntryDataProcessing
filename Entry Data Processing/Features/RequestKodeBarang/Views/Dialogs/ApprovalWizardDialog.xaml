@@ -14,7 +14,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
-        Width="680"
+        Width="720"
         SizeToContent="Height"
         MaxHeight="820"
         KeyDown="OnWindowKeyDown">
@@ -22,9 +22,9 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         
-        <Style x:Key="FormLabelStyle" TargetType="TextBlock">
+        <Style x:Key="FormLabelStyle" TargetType="ui:TextBlock">
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="#64748B" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
@@ -40,7 +40,7 @@
                 <DropShadowEffect BlurRadius="30" Direction="270" ShadowDepth="8" Opacity="0.22" Color="#0F172A" />
             </Border.Effect>
 
-            <Grid Background="#FFFFFF">
+            <Grid Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/> <!-- Header & Stepper -->
                     <RowDefinition Height="*"/>    <!-- Content Body -->
@@ -56,11 +56,8 @@
                         CornerRadius="16,16,0,0"
                         MouseLeftButtonDown="OnHeaderMouseDown">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Symbol="CheckmarkStarburst24" FontSize="20" Foreground="#0284C7" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Approval Wizard Kode Barang" FontSize="16" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TextBlock Text="Lengkapi master data produk, harga jual, dan item barang sebelum menyetujui request" FontSize="11.5" Foreground="#64748B" Margin="28,2,0,0"/>
+                        <ui:TextBlock Text="Persetujuan &amp; Penerbitan Kode Barang" FontSize="16" FontWeight="Bold" Foreground="#0F172A"/>
+                        <ui:TextBlock Text="Verifikasi master produk, penetapan kelompok harga, dan registrasi kode barang baru." FontSize="11.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,3,0,0"/>
 
                         <!-- Stepper Indicator Pills -->
                         <Grid Margin="0,16,0,0">
@@ -74,10 +71,17 @@
                             <Border Grid.Column="0" Margin="0,0,4,0" Padding="10,8" CornerRadius="8">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="#F1F5F9"/>
+                                        <Setter Property="Background" Value="#F8FAFC"/>
+                                        <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
                                         <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep1Done}" Value="True">
+                                                <Setter Property="Background" Value="#DCFCE7"/>
+                                                <Setter Property="BorderBrush" Value="#86EFAC"/>
+                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding CurrentStepIndex}" Value="0">
                                                 <Setter Property="Background" Value="#0284C7"/>
+                                                <Setter Property="BorderBrush" Value="#0284C7"/>
                                                 <Setter Property="Effect">
                                                     <Setter.Value>
                                                         <DropShadowEffect Color="#0284C7" Direction="270" ShadowDepth="1" BlurRadius="6" Opacity="0.3"/>
@@ -87,28 +91,58 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <TextBlock Text="1. Master Produk" FontWeight="Bold" FontSize="11.5" HorizontalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#64748B"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding CurrentStepIndex}" Value="0">
-                                                    <Setter Property="Foreground" Value="#FFFFFF"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ui:SymbolIcon FontSize="14" Margin="0,0,6,0">
+                                        <ui:SymbolIcon.Style>
+                                            <Style TargetType="ui:SymbolIcon">
+                                                <Setter Property="Symbol" Value="Box24"/>
+                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsStep1Done}" Value="True">
+                                                        <Setter Property="Symbol" Value="Checkmark24"/>
+                                                        <Setter Property="Foreground" Value="#15803D"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CurrentStepIndex}" Value="0">
+                                                        <Setter Property="Symbol" Value="Box24"/>
+                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:SymbolIcon.Style>
+                                    </ui:SymbolIcon>
+                                    <ui:TextBlock Text="1. Master Produk" FontWeight="Bold" FontSize="11.5">
+                                        <ui:TextBlock.Style>
+                                            <Style TargetType="ui:TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsStep1Done}" Value="True">
+                                                        <Setter Property="Foreground" Value="#15803D"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CurrentStepIndex}" Value="0">
+                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:TextBlock.Style>
+                                    </ui:TextBlock>
+                                </StackPanel>
                             </Border>
 
                             <!-- Step 2 Tab -->
                             <Border Grid.Column="1" Margin="4,0,4,0" Padding="10,8" CornerRadius="8">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="#F1F5F9"/>
+                                        <Setter Property="Background" Value="#F8FAFC"/>
+                                        <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
                                         <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsStep2Done}" Value="True">
+                                                <Setter Property="Background" Value="#DCFCE7"/>
+                                                <Setter Property="BorderBrush" Value="#86EFAC"/>
+                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding CurrentStepIndex}" Value="1">
                                                 <Setter Property="Background" Value="#0284C7"/>
+                                                <Setter Property="BorderBrush" Value="#0284C7"/>
                                                 <Setter Property="Effect">
                                                     <Setter.Value>
                                                         <DropShadowEffect Color="#0284C7" Direction="270" ShadowDepth="1" BlurRadius="6" Opacity="0.3"/>
@@ -118,28 +152,54 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <TextBlock Text="2. Harga Jual" FontWeight="Bold" FontSize="11.5" HorizontalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#64748B"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding CurrentStepIndex}" Value="1">
-                                                    <Setter Property="Foreground" Value="#FFFFFF"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ui:SymbolIcon FontSize="14" Margin="0,0,6,0">
+                                        <ui:SymbolIcon.Style>
+                                            <Style TargetType="ui:SymbolIcon">
+                                                <Setter Property="Symbol" Value="Tag24"/>
+                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsStep2Done}" Value="True">
+                                                        <Setter Property="Symbol" Value="Checkmark24"/>
+                                                        <Setter Property="Foreground" Value="#15803D"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CurrentStepIndex}" Value="1">
+                                                        <Setter Property="Symbol" Value="Tag24"/>
+                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:SymbolIcon.Style>
+                                    </ui:SymbolIcon>
+                                    <ui:TextBlock Text="2. Harga Jual" FontWeight="Bold" FontSize="11.5">
+                                        <ui:TextBlock.Style>
+                                            <Style TargetType="ui:TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsStep2Done}" Value="True">
+                                                        <Setter Property="Foreground" Value="#15803D"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding CurrentStepIndex}" Value="1">
+                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:TextBlock.Style>
+                                    </ui:TextBlock>
+                                </StackPanel>
                             </Border>
 
                             <!-- Step 3 Tab -->
                             <Border Grid.Column="2" Margin="4,0,0,0" Padding="10,8" CornerRadius="8">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="#F1F5F9"/>
+                                        <Setter Property="Background" Value="#F8FAFC"/>
+                                        <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding CurrentStepIndex}" Value="2">
                                                 <Setter Property="Background" Value="#0284C7"/>
+                                                <Setter Property="BorderBrush" Value="#0284C7"/>
                                                 <Setter Property="Effect">
                                                     <Setter.Value>
                                                         <DropShadowEffect Color="#0284C7" Direction="270" ShadowDepth="1" BlurRadius="6" Opacity="0.3"/>
@@ -149,25 +209,40 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <TextBlock Text="3. Item Barang" FontWeight="Bold" FontSize="11.5" HorizontalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#64748B"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding CurrentStepIndex}" Value="2">
-                                                    <Setter Property="Foreground" Value="#FFFFFF"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ui:SymbolIcon FontSize="14" Margin="0,0,6,0">
+                                        <ui:SymbolIcon.Style>
+                                            <Style TargetType="ui:SymbolIcon">
+                                                <Setter Property="Symbol" Value="BarcodeScanner24"/>
+                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CurrentStepIndex}" Value="2">
+                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:SymbolIcon.Style>
+                                    </ui:SymbolIcon>
+                                    <ui:TextBlock Text="3. Item Barang" FontWeight="Bold" FontSize="11.5">
+                                        <ui:TextBlock.Style>
+                                            <Style TargetType="ui:TextBlock">
+                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CurrentStepIndex}" Value="2">
+                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ui:TextBlock.Style>
+                                    </ui:TextBlock>
+                                </StackPanel>
                             </Border>
                         </Grid>
                     </StackPanel>
                 </Border>
 
                 <!-- 2. Scrollable Body Content -->
-                <ScrollViewer Grid.Row="1" MaxHeight="520" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="24,16" Background="#FFFFFF">
+                <ui:DynamicScrollViewer Grid.Row="1" MaxHeight="520" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="24,16" Background="#FFFFFF">
                     <Grid>
                         <!-- STEP 1: Data Produk -->
                         <StackPanel>
@@ -228,9 +303,9 @@
                                                     </Style>
                                                 </ui:SymbolIcon.Style>
                                             </ui:SymbolIcon>
-                                            <TextBlock Text="Pilih Produk Terdaftar" FontSize="12.5">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
+                                            <ui:TextBlock Text="Pilih Produk Terdaftar" FontSize="12.5">
+                                                <ui:TextBlock.Style>
+                                                    <Style TargetType="ui:TextBlock">
                                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                                         <Setter Property="Foreground" Value="#64748B"/>
                                                         <Style.Triggers>
@@ -240,8 +315,8 @@
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
+                                                </ui:TextBlock.Style>
+                                            </ui:TextBlock>
                                         </StackPanel>
                                     </Border>
 
@@ -283,9 +358,9 @@
                                                     </Style>
                                                 </ui:SymbolIcon.Style>
                                             </ui:SymbolIcon>
-                                            <TextBlock Text="Buat Master Produk Baru" FontSize="12.5">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
+                                            <ui:TextBlock Text="Buat Master Produk Baru" FontSize="12.5">
+                                                <ui:TextBlock.Style>
+                                                    <Style TargetType="ui:TextBlock">
                                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                                         <Setter Property="Foreground" Value="#64748B"/>
                                                         <Style.Triggers>
@@ -295,8 +370,8 @@
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
+                                                </ui:TextBlock.Style>
+                                            </ui:TextBlock>
                                         </StackPanel>
                                     </Border>
                                 </Grid>
@@ -316,14 +391,13 @@
                                 </StackPanel.Style>
 
                                 <!-- Selected Product Card (When chosen) -->
-                                <Border Background="#F0FDF4" 
-                                        BorderBrush="#86EFAC" 
-                                        BorderThickness="1.5" 
-                                        CornerRadius="10" 
-                                        Padding="14,12" 
-                                        Margin="0,0,0,12">
-                                    <Border.Style>
-                                        <Style TargetType="Border">
+                                <ui:Card Background="#F0FDF4" 
+                                         BorderBrush="#86EFAC" 
+                                         BorderThickness="1.5" 
+                                         Padding="14,12" 
+                                         Margin="0,0,0,12">
+                                    <ui:Card.Style>
+                                        <Style TargetType="ui:Card">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding HasSelectedProduct}" Value="True">
@@ -331,7 +405,7 @@
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </Border.Style>
+                                    </ui:Card.Style>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -340,74 +414,88 @@
                                         <StackPanel Grid.Column="0" VerticalAlignment="Center">
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                                 <Border Background="#16A34A" CornerRadius="4" Padding="6,2" Margin="0,0,8,0">
-                                                    <TextBlock Text="PRODUK TERPILIH" FontSize="9.5" FontWeight="Bold" Foreground="#FFFFFF"/>
+                                                    <ui:TextBlock Text="PRODUK TERPILIH" FontSize="9.5" FontWeight="Bold" Foreground="#FFFFFF"/>
                                                 </Border>
-                                                <TextBlock Text="{Binding ProductData.BrPrdKd}" FontSize="14" FontWeight="Bold" Foreground="#15803D"/>
-                                                <TextBlock Text=" - " FontSize="14" FontWeight="Bold" Foreground="#15803D"/>
-                                                <TextBlock Text="{Binding ProductData.BrPrdNm}" FontSize="14" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ui:TextBlock Text="{Binding ProductData.BrPrdKd}" FontSize="14" FontWeight="Bold" Foreground="#15803D"/>
+                                                <ui:TextBlock Text=" - " FontSize="14" FontWeight="Bold" Foreground="#15803D"/>
+                                                <ui:TextBlock Text="{Binding ProductData.BrPrdNm}" FontSize="14" FontWeight="Bold" Foreground="#0F172A"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding ProductData.BrPrdAcm, StringFormat='Akronim: {0}'}" FontSize="11.5" Foreground="#64748B" Margin="0,0,12,0"/>
-                                                <TextBlock Text="{Binding ProductData.BrPrdFacNm, StringFormat='Pabrik: {0}'}" FontSize="11.5" Foreground="#64748B" Margin="0,0,12,0"/>
-                                                <TextBlock Text="{Binding ProductData.BrJnsNm, StringFormat='Jenis: {0}'}" FontSize="11.5" Foreground="#64748B"/>
+                                                <ui:TextBlock Text="{Binding ProductData.BrPrdAcm, StringFormat='Akronim: {0}'}" FontSize="11.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,12,0"/>
+                                                <ui:TextBlock Text="{Binding ProductData.BrPrdFacNm, StringFormat='Pabrik: {0}'}" FontSize="11.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,12,0"/>
+                                                <ui:TextBlock Text="{Binding ProductData.BrJnsNm, StringFormat='Jenis: {0}'}" FontSize="11.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                             </StackPanel>
                                         </StackPanel>
                                         <ui:Button Grid.Column="1" Content="Ganti Produk" Command="{Binding ClearSelectedProductCommand}" Appearance="Secondary" VerticalAlignment="Center" Padding="12,5"/>
                                     </Grid>
-                                </Border>
+                                </ui:Card>
 
-                                <!-- Search Box -->
-                                <TextBlock Text="Ketik Kode atau Nama Produk" Style="{StaticResource FormLabelStyle}"/>
-                                <ui:TextBox Text="{Binding ProductSearchQuery, UpdateSourceTrigger=PropertyChanged}" 
-                                            PlaceholderText="Cari kode (cth: 3RHTM) atau nama produk..." 
-                                            Icon="{ui:SymbolIcon Search24}"
-                                            Margin="0,0,0,10"/>
+                                <!-- Search Box and Results (Collapsed once product is selected) -->
+                                <StackPanel>
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasSelectedProduct}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
 
-                                <!-- Search Results List -->
-                                <TextBlock Text="Hasil Pencarian Produk:" FontSize="11" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,6"/>
-                                <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" MaxHeight="220">
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                        <ItemsControl ItemsSource="{Binding ProductSearchResults}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="#F1F5F9" BorderThickness="0,0,0,1" Padding="10,8" Background="Transparent">
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                            </Grid.ColumnDefinitions>
+                                    <!-- Search Box -->
+                                    <ui:TextBlock Text="Cari Produk" Style="{StaticResource FormLabelStyle}"/>
+                                    <ui:TextBox Text="{Binding ProductSearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                                                PlaceholderText="cari produk ..." 
+                                                Icon="{ui:SymbolIcon Search24}"
+                                                Margin="0,0,0,10"/>
 
-                                                            <!-- Kode Badge -->
-                                                            <Border Grid.Column="0" Background="#E0F2FE" BorderBrush="#BAE6FD" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" VerticalAlignment="Center">
-                                                                <TextBlock Text="{Binding BrPrdKd}" FontSize="11.5" FontWeight="Bold" Foreground="#0369A1"/>
-                                                            </Border>
+                                    <!-- Search Results List -->
+                                    <ui:TextBlock Text="Hasil Pencarian Produk:" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                    <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" MaxHeight="220">
+                                        <ui:DynamicScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl ItemsSource="{Binding ProductSearchResults}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="#F1F5F9" BorderThickness="0,0,0,1" Padding="10,8" Background="Transparent">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                </Grid.ColumnDefinitions>
 
-                                                            <!-- Nama & Detail -->
-                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                                <TextBlock Text="{Binding BrPrdNm}" FontSize="12.5" FontWeight="SemiBold" Foreground="#0F172A"/>
-                                                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                                                                    <TextBlock Text="{Binding BrPrdAcm, StringFormat='Acm: {0}'}" FontSize="11" Foreground="#64748B" Margin="0,0,10,0"/>
-                                                                    <TextBlock Text="{Binding BrPrdFacNm, StringFormat='Pabrik: {0}'}" FontSize="11" Foreground="#64748B" Margin="0,0,10,0"/>
-                                                                    <TextBlock Text="{Binding BrJnsNm, StringFormat='Jenis: {0}'}" FontSize="11" Foreground="#64748B"/>
+                                                                <!-- Kode Badge -->
+                                                                <Border Grid.Column="0" Background="#E0F2FE" BorderBrush="#BAE6FD" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" VerticalAlignment="Center">
+                                                                    <ui:TextBlock Text="{Binding BrPrdKd}" FontSize="11.5" FontWeight="Bold" Foreground="#0369A1"/>
+                                                                </Border>
+
+                                                                <!-- Nama & Detail -->
+                                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                                    <ui:TextBlock Text="{Binding BrPrdNm}" FontSize="12.5" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                                                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                                        <ui:TextBlock Text="{Binding BrPrdAcm, StringFormat='Acm: {0}'}" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,10,0"/>
+                                                                        <ui:TextBlock Text="{Binding BrPrdFacNm, StringFormat='Pabrik: {0}'}" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,10,0"/>
+                                                                        <ui:TextBlock Text="{Binding BrJnsNm, StringFormat='Jenis: {0}'}" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                    </StackPanel>
                                                                 </StackPanel>
-                                                            </StackPanel>
 
-                                                            <!-- Select Button -->
-                                                            <ui:Button Grid.Column="2" 
-                                                                       Content="Pilih" 
-                                                                       Appearance="Primary" 
-                                                                       Padding="14,4" 
-                                                                       VerticalAlignment="Center"
-                                                                       Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                       CommandParameter="{Binding}"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </ScrollViewer>
-                                </Border>
+                                                                <!-- Select Button -->
+                                                                <ui:Button Grid.Column="2" 
+                                                                           Content="Pilih" 
+                                                                           Appearance="Primary" 
+                                                                           Padding="14,4" 
+                                                                           VerticalAlignment="Center"
+                                                                           Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                           CommandParameter="{Binding}"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ui:DynamicScrollViewer>
+                                    </Border>
+                                </StackPanel>
                             </StackPanel>
 
                             <!-- MODE B: CREATE NEW PRODUCT FORM -->
@@ -422,58 +510,142 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Style>
-                                
-                                <Border Background="#FEF3C7" BorderBrush="#FDE68A" BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,14">
-                                    <TextBlock Text="Isi data master produk baru:" FontSize="11.5" FontWeight="SemiBold" Foreground="#B45309"/>
+                                <!-- 1. Kode Produk Field & Live Validation -->
+                                <ui:TextBlock Text="Kode Produk" Style="{StaticResource FormLabelStyle}"/>
+                                <ui:TextBox Text="{Binding NewProductCode, UpdateSourceTrigger=PropertyChanged}" 
+                                            MaxLength="5" 
+                                            PlaceholderText="kode produk ..." 
+                                            CharacterCasing="Upper"
+                                            FontSize="13" 
+                                            FontWeight="SemiBold"
+                                            Margin="0,0,0,4"/>
+
+                                <!-- Live Validation Indicator -->
+                                <Border Margin="0,0,0,14">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <!-- Spinner when checking -->
+                                        <ui:ProgressRing Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center">
+                                            <ui:ProgressRing.Style>
+                                                <Style TargetType="ui:ProgressRing">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCheckingProductCode}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:ProgressRing.Style>
+                                        </ui:ProgressRing>
+
+                                        <!-- Success Icon -->
+                                        <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="15" Foreground="#16A34A" Margin="0,0,5,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon.Style>
+                                                <Style TargetType="ui:SymbolIcon">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsProductCodeValid}" Value="True"/>
+                                                                <Condition Binding="{Binding IsCheckingProductCode}" Value="False"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:SymbolIcon.Style>
+                                        </ui:SymbolIcon>
+
+                                        <!-- Error Icon -->
+                                        <ui:SymbolIcon Symbol="DismissCircle24" FontSize="15" Foreground="#DC2626" Margin="0,0,5,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon.Style>
+                                                <Style TargetType="ui:SymbolIcon">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsProductCodeValid}" Value="False"/>
+                                                                <Condition Binding="{Binding IsCheckingProductCode}" Value="False"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:SymbolIcon.Style>
+                                        </ui:SymbolIcon>
+
+                                        <!-- Message -->
+                                        <ui:TextBlock Text="{Binding ProductCodeValidationMessage}" FontSize="11" VerticalAlignment="Center">
+                                            <ui:TextBlock.Style>
+                                                <Style TargetType="ui:TextBlock">
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsProductCodeValid}" Value="True">
+                                                            <Setter Property="Foreground" Value="#15803D"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsProductCodeValid}" Value="False">
+                                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ui:TextBlock.Style>
+                                        </ui:TextBlock>
+                                    </StackPanel>
                                 </Border>
 
-                                <TextBlock Text="Nama Produk" Style="{StaticResource FormLabelStyle}"/>
-                                <ui:TextBox Text="{Binding ProductData.BrPrdNm, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
+                                <!-- 2. Detail Data Produk (Enabled once code is checked / available) -->
+                                <StackPanel IsEnabled="{Binding IsProductCodeValid}">
+                                    <!-- Row 1: Nama Produk & Akronim -->
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                            <ui:TextBlock Text="Nama Produk" Style="{StaticResource FormLabelStyle}"/>
+                                            <ui:TextBox Text="{Binding ProductData.BrPrdNm, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="nama produk ..."/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                            <ui:TextBlock Text="Akronim" Style="{StaticResource FormLabelStyle}"/>
+                                            <ui:TextBox Text="{Binding ProductData.BrPrdAcm, UpdateSourceTrigger=PropertyChanged}" MaxLength="18" PlaceholderText="akronim ..."/>
+                                        </StackPanel>
+                                    </Grid>
 
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0" Margin="0,0,6,0">
-                                        <TextBlock Text="Kode Produk" Style="{StaticResource FormLabelStyle}"/>
-                                        <ui:TextBox Text="{Binding ProductData.BrPrdKd, UpdateSourceTrigger=PropertyChanged}" MaxLength="5" PlaceholderText="Maks. 5 karakter"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" Margin="6,0,0,0">
-                                        <TextBlock Text="Akronim" Style="{StaticResource FormLabelStyle}"/>
-                                        <ui:TextBox Text="{Binding ProductData.BrPrdAcm, UpdateSourceTrigger=PropertyChanged}" MaxLength="18"/>
-                                    </StackPanel>
-                                </Grid>
+                                    <!-- Row 2: Pabrik & Jenis Barang -->
+                                    <Grid Margin="0,0,0,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                            <ui:TextBlock Text="Pabrik" Style="{StaticResource FormLabelStyle}"/>
+                                            <ComboBox ItemsSource="{Binding FactorySearchResults}" 
+                                                      SelectedItem="{Binding SelectedFactory}" 
+                                                      DisplayMemberPath="DisplayText" 
+                                                      Tag="Pilih Pabrik"
+                                                      IsEditable="True" 
+                                                      IsTextSearchEnabled="True" 
+                                                      TextSearch.TextPath="DisplayText"
+                                                      Loaded="SearchableComboBox_Loaded"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                            <ui:TextBlock Text="Jenis" Style="{StaticResource FormLabelStyle}"/>
+                                            <ComboBox ItemsSource="{Binding ProductTypeSearchResults}" 
+                                                      SelectedItem="{Binding SelectedProductType}" 
+                                                      DisplayMemberPath="DisplayText" 
+                                                      Tag="Pilih Jenis"
+                                                      IsEditable="True" 
+                                                      IsTextSearchEnabled="True" 
+                                                      TextSearch.TextPath="DisplayText"
+                                                      Loaded="SearchableComboBox_Loaded"/>
+                                        </StackPanel>
+                                    </Grid>
 
-                                <Grid Margin="0,0,0,12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0" Margin="0,0,6,0">
-                                        <TextBlock Text="Pabrik" Style="{StaticResource FormLabelStyle}"/>
-                                        <ComboBox ItemsSource="{Binding FactorySearchResults}" 
-                                                  SelectedItem="{Binding SelectedFactory}" 
-                                                  DisplayMemberPath="DisplayText"
-                                                  IsEditable="True" 
-                                                  IsTextSearchEnabled="True" 
-                                                  TextSearch.TextPath="DisplayText"
-                                                  Loaded="SearchableComboBox_Loaded"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" Margin="6,0,0,0">
-                                        <TextBlock Text="Jenis" Style="{StaticResource FormLabelStyle}"/>
-                                        <ComboBox ItemsSource="{Binding ProductTypeSearchResults}" 
-                                                  SelectedItem="{Binding SelectedProductType}" 
-                                                  DisplayMemberPath="DisplayText"
-                                                  IsEditable="True" 
-                                                  IsTextSearchEnabled="True" 
-                                                  TextSearch.TextPath="DisplayText"
-                                                  Loaded="SearchableComboBox_Loaded"/>
-                                    </StackPanel>
-                                </Grid>
-
-                                <TextBlock Text="Pencari" Style="{StaticResource FormLabelStyle}"/>
-                                <ui:TextBox Text="{Binding ProductData.Pencari, UpdateSourceTrigger=PropertyChanged}" MaxLength="15" Margin="0,0,0,12"/>
+                                    <!-- Row 3: Pencari -->
+                                    <ui:TextBlock Text="Pencari" Style="{StaticResource FormLabelStyle}"/>
+                                    <ui:TextBox Text="{Binding ProductData.Pencari, UpdateSourceTrigger=PropertyChanged}" MaxLength="15" PlaceholderText="pencari ..." Margin="0,0,0,12"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
 
@@ -490,28 +662,146 @@
                                 </Style>
                             </StackPanel.Style>
 
-                            <TextBlock Text="Kode Produk Terpilih" Style="{StaticResource FormLabelStyle}"/>
-                            <ui:TextBox Text="{Binding ProductData.BrPrdKd}" IsReadOnly="True" Margin="0,0,0,14" Background="#F8FAFC" FontWeight="Bold" Foreground="#0284C7"/>
+                            <!-- Header Produk Terpilih -->
+                            <ui:Card Background="#F0F9FF" BorderBrush="#BAE6FD" Padding="14,10" Margin="0,0,0,16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Background="#0284C7" CornerRadius="6" Padding="8,4" Margin="0,0,12,0" VerticalAlignment="Center">
+                                        <ui:TextBlock Text="{Binding ProductData.BrPrdKd}" FontSize="12.5" FontWeight="Bold" Foreground="#FFFFFF"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <ui:TextBlock Text="{Binding ProductData.BrPrdNm}" FontSize="13.5" FontWeight="Bold" Foreground="#0F172A"/>
+                                        <ui:TextBlock Text="Master produk yang akan ditentukan konfigurasi harga jualnya" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </ui:Card>
 
                             <!-- Golongan Harga Searchable ComboBox -->
-                            <TextBlock Text="Golongan Harga" Style="{StaticResource FormLabelStyle}"/>
+                            <ui:TextBlock Text="Golongan Harga" Style="{StaticResource FormLabelStyle}"/>
                             <ComboBox ItemsSource="{Binding PriceGroupSearchResults}" 
                                       SelectedItem="{Binding SelectedPriceGroup}" 
+                                      Text="{Binding SelectedPriceGroup, UpdateSourceTrigger=PropertyChanged}"
+                                      Tag="Pilih Golongan Harga"
                                       IsEditable="True" 
                                       IsTextSearchEnabled="True"
                                       Loaded="SearchableComboBox_Loaded"
                                       Margin="0,0,0,14"/>
 
                             <!-- Satuan Searchable ComboBox -->
-                            <TextBlock Text="Satuan" Style="{StaticResource FormLabelStyle}"/>
+                            <ui:TextBlock Text="Satuan" Style="{StaticResource FormLabelStyle}"/>
                             <ComboBox ItemsSource="{Binding UnitSearchResults}" 
                                       SelectedItem="{Binding SelectedUnit}" 
-                                      DisplayMemberPath="DisplayText"
+                                      DisplayMemberPath="DisplayText" 
+                                      Tag="Pilih Satuan"
                                       IsEditable="True" 
                                       IsTextSearchEnabled="True" 
                                       TextSearch.TextPath="DisplayText"
                                       Loaded="SearchableComboBox_Loaded"
                                       Margin="0,0,0,14"/>
+
+                            <!-- Status Kombinasi Master Harga Jual (tmabrhrgjl & thrgjual) -->
+                            <ui:Card Padding="14,10" Margin="0,2,0,8">
+                                <ui:Card.Style>
+                                    <Style TargetType="ui:Card">
+                                        <Setter Property="Background" Value="#F8FAFC"/>
+                                        <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="True">
+                                                <Setter Property="Background" Value="#F0FDF4"/>
+                                                <Setter Property="BorderBrush" Value="#86EFAC"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="False">
+                                                <Setter Property="Background" Value="#EFF6FF"/>
+                                                <Setter Property="BorderBrush" Value="#BAE6FD"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ui:Card.Style>
+                                <Grid>
+                                    <!-- Case 1: Sudah Ada -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="20" Foreground="#16A34A" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <StackPanel>
+                                            <ui:TextBlock Text="Kombinasi Master Harga Sudah Terdaftar (tmabrhrgjl)" FontWeight="Bold" FontSize="11.5" Foreground="#15803D"/>
+                                            <ui:TextBlock Text="Kombinasi produk, golongan, dan satuan ini sudah ada. Sistem akan langsung menggunakannya." FontSize="10.5" Foreground="#166534"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Case 2: Belum Ada (Auto-Create) -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="False">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <ui:SymbolIcon Symbol="Info24" FontSize="20" Foreground="#0284C7" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                        <StackPanel>
+                                            <ui:TextBlock Text="Kombinasi Harga Baru (Belum Terdaftar di tmabrhrgjl)" FontWeight="Bold" FontSize="11.5" Foreground="#0369A1"/>
+                                            <ui:TextBlock Text="Kombinasi ini belum terdaftar. Masukkan ID Harga baru di bawah ini untuk pendaftaran." FontSize="10.5" Foreground="#0284C7"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Case 3: Belum Dipilih Lengkap -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <ui:SymbolIcon Symbol="Lightbulb24" FontSize="18" Foreground="#94A3B8" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <ui:TextBlock Text="Pilih Golongan Harga dan Satuan di atas untuk mengecek status kombinasi harga jual." FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                            </ui:Card>
+
+                            <!-- Field Manual Input ID Harga (Hanya Muncul Jika Belum Ada di Master tmabrhrgjl) -->
+                            <StackPanel Margin="0,4,0,0">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <ui:TextBlock Text="ID Harga" Style="{StaticResource FormLabelStyle}"/>
+                                <ui:TextBox Text="{Binding NewIdHrgText, UpdateSourceTrigger=PropertyChanged}" 
+                                            PlaceholderText="id harga ..." 
+                                            MaxLength="5" 
+                                            FontSize="13" 
+                                            FontWeight="SemiBold" 
+                                            Margin="0,0,0,4"/>
+                                <ui:TextBlock Text="* Masukkan ID Harga (id_hrg) baru untuk pendaftaran ke tabel tmabrhrgjl." 
+                                              FontSize="10.5" 
+                                              Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                              Margin="0,0,0,8"/>
+                            </StackPanel>
                         </StackPanel>
 
                         <!-- STEP 3: Data Item Barang -->
@@ -527,33 +817,75 @@
                                 </Style>
                             </StackPanel.Style>
                             
-                            <TextBlock Text="No. Kode Barang" Style="{StaticResource FormLabelStyle}"/>
-                            <ui:TextBox Text="{Binding ItemData.BrKdNo, UpdateSourceTrigger=PropertyChanged}" MaxLength="10" Margin="0,0,0,14" PlaceholderText="Cth: 01"/>
-
-                            <TextBlock Text="Nama Item Barang" Style="{StaticResource FormLabelStyle}"/>
-                            <ui:TextBox Text="{Binding ItemData.BrNm, UpdateSourceTrigger=PropertyChanged}" MaxLength="35" Margin="0,0,0,14"/>
-                            
-                            <!-- Live Preview Card -->
-                            <Border Background="#F0FDF4" 
-                                    BorderBrush="#BBF7D0" 
-                                    BorderThickness="1" 
-                                    CornerRadius="10" 
-                                    Padding="14,10" 
-                                    Margin="0,4,0,8">
-                                <StackPanel>
-                                    <TextBlock Text="Preview Kode Barang:" FontWeight="Bold" FontSize="11" Foreground="#15803D" Margin="0,0,0,4"/>
-                                    <TextBlock FontSize="16" FontWeight="Bold" Foreground="#166534">
+                            <!-- Prominent Live Preview Card on Top -->
+                            <ui:Card Background="#F0FDF4" 
+                                     BorderBrush="#86EFAC" 
+                                     BorderThickness="1.5" 
+                                     Padding="16,14" 
+                                     Margin="0,0,0,16">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
+                                        <ui:SymbolIcon Symbol="BarcodeScanner24" FontSize="16" Foreground="#15803D" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <ui:TextBlock Text="PREVIEW KODE BARANG AKHIR YANG AKAN DI-GENERATE:" FontWeight="Bold" FontSize="11" Foreground="#15803D" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <ui:TextBlock FontSize="22" FontWeight="ExtraBold" Foreground="#166534" HorizontalAlignment="Center">
                                         <Run Text="{Binding ProductData.BrPrdKd}" />
                                         <Run Text="." />
                                         <Run Text="{Binding PriceData.SatKd}" />
                                         <Run Text="." />
                                         <Run Text="{Binding ItemData.BrKdNo}" />
-                                    </TextBlock>
+                                    </ui:TextBlock>
+                                    <ui:TextBlock Text="Format: {Kode Produk}.{Satuan}.{No. Kode Barang}" FontSize="10.5" Foreground="#15803D" HorizontalAlignment="Center" Margin="0,4,0,0" Opacity="0.85"/>
                                 </StackPanel>
-                            </Border>
+                            </ui:Card>
+
+                            <!-- Input No Kode Barang -->
+                            <ui:TextBlock Text="No. Kode Barang" Style="{StaticResource FormLabelStyle}"/>
+                            <ui:TextBox Text="{Binding ItemData.BrKdNo, UpdateSourceTrigger=PropertyChanged}" MaxLength="25" Margin="0,0,0,4" PlaceholderText="no. kode barang ..." FontSize="13" FontWeight="SemiBold"/>
+                            <ui:TextBlock Text="* Tentukan kode penomoran barang manual sesuai formula/aturan internal EDP." FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,14"/>
+
+                            <!-- Read-only Summary Fields -->
+                            <ui:TextBlock Text="Nama Barang" Style="{StaticResource FormLabelStyle}"/>
+                            <ui:TextBox Text="{Binding ItemData.BrNm}" IsReadOnly="True" Background="#F8FAFC" Margin="0,0,0,12"/>
+
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                    <ui:TextBlock Text="Golongan Harga" Style="{StaticResource FormLabelStyle}"/>
+                                    <ui:TextBox Text="{Binding PriceData.BrHrgGol}" IsReadOnly="True" Background="#F8FAFC"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="4,0,4,0">
+                                    <ui:TextBlock Text="Satuan" Style="{StaticResource FormLabelStyle}"/>
+                                    <ui:TextBox Text="{Binding PriceData.SatKd}" IsReadOnly="True" Background="#F8FAFC"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                                    <ui:TextBlock Text="Status" Style="{StaticResource FormLabelStyle}"/>
+                                    <ui:TextBox Text="Aktif" IsReadOnly="True" Background="#F0FDF4" Foreground="#15803D" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Summary ID Harga Baru jika baru didaftarkan -->
+                            <StackPanel Margin="0,0,0,12">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPriceCombinationExisting}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <ui:TextBlock Text="ID Harga (Baru)" Style="{StaticResource FormLabelStyle}"/>
+                                <ui:TextBox Text="{Binding PriceData.IdHrg}" IsReadOnly="True" Background="#F8FAFC" FontWeight="SemiBold"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
-                </ScrollViewer>
+                </ui:DynamicScrollViewer>
 
                 <!-- 3. Rounded Footer Bar -->
                 <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="24,14" CornerRadius="0,0,16,16">
@@ -569,49 +901,43 @@
                         <!-- Right: Stepper Navigation Buttons -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <ui:Button Content="Kembali" 
+                                       Icon="{ui:SymbolIcon ArrowLeft20}"
                                        Command="{Binding PreviousStepCommand}" 
                                        IsEnabled="{Binding CanGoPrevious}" 
+                                       Appearance="Secondary"
                                        Margin="0,0,8,0" 
                                        Padding="16,6" />
                             
-                            <!-- Lanjut Button -->
+                            <!-- Lanjut Button (WPF UI Primary Button) -->
                             <ui:Button Content="Lanjut" 
+                                       Icon="{ui:SymbolIcon ArrowRight20}"
                                        Command="{Binding NextStepCommand}" 
                                        IsEnabled="{Binding CanGoNext}" 
                                        Appearance="Primary" 
-                                       Padding="18,6">
-                                <ui:Button.Style>
-                                    <Style TargetType="ui:Button">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsLastStep}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ui:Button.Style>
-                            </ui:Button>
+                                       Padding="18,6"
+                                       Visibility="{Binding IsNotLastStep, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                            <!-- Selesai & Setujui Button -->
+                            <!-- Selesai & Setujui Button (WPF UI Primary/Success Button) -->
                             <ui:Button Content="Selesai &amp; Setujui" 
+                                       Icon="{ui:SymbolIcon Checkmark20}"
                                        Click="Submit_Click" 
                                        Appearance="Primary" 
-                                       Padding="18,6">
-                                <ui:Button.Style>
-                                    <Style TargetType="ui:Button">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Setter Property="Background" Value="#16A34A"/>
-                                        <Setter Property="BorderBrush" Value="#15803D"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsLastStep}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ui:Button.Style>
-                            </ui:Button>
+                                       Padding="18,6"
+                                       Visibility="{Binding IsLastStep, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </StackPanel>
                     </Grid>
+                </Border>
+
+                <!-- 4. Loading Overlay (WPF UI ProgressRing) -->
+                <Border Grid.Row="0" 
+                        Grid.RowSpan="3" 
+                        Background="#66000000" 
+                        CornerRadius="16"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ui:ProgressRing IsIndeterminate="True" Width="42" Height="42" Foreground="#FFFFFF" Margin="0,0,0,12"/>
+                        <ui:TextBlock Text="Memproses data, harap tunggu..." FontSize="13" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Border>
