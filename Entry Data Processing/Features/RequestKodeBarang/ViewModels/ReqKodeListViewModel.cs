@@ -527,10 +527,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var selectedIds = Requests.Where(x => x.IsSelected).Select(x => x.Id).ToList();
             if (!selectedIds.Any()) return;
 
-            var dialog = new Views.Dialogs.RejectReasonDialog(_contentDialogService.GetDialogHost());
-            var result = await dialog.ShowAsync();
+            var dialog = new Views.Dialogs.RejectReasonDialog
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            dialog.ShowDialog();
 
-            if (result == Wpf.Ui.Controls.ContentDialogResult.Primary)
+            if (dialog.IsConfirmed)
             {
                 var nip = _userSession.CurrentUser?.Nip ?? "SYSTEM";
                 var res = await _service.RejectBulkAsync(selectedIds, nip, dialog.RejectReason);
@@ -669,10 +672,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var target = record ?? SelectedRequest;
             if (target == null) return;
 
-            var dialog = new Views.Dialogs.RejectReasonDialog(_contentDialogService.GetDialogHost());
-            var result = await dialog.ShowAsync();
+            var dialog = new Views.Dialogs.RejectReasonDialog
+            {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            dialog.ShowDialog();
 
-            if (result == Wpf.Ui.Controls.ContentDialogResult.Primary)
+            if (dialog.IsConfirmed)
             {
                 var dto = new ApprovalActionDto
                 {

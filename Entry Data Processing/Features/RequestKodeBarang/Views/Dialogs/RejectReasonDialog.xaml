@@ -1,13 +1,222 @@
-<ui:ContentDialog x:Class="Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs.RejectReasonDialog"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                  Title="Tolak Permohonan"
-                  PrimaryButtonText="Tolak"
-                  CloseButtonText="Batal">
-    <StackPanel Width="350">
-        <ui:TextBlock Text="Berikan alasan mengapa permohonan ini ditolak:" Margin="0,0,0,10" TextWrapping="Wrap" />
-        <ui:TextBox x:Name="ReasonTextBox" PlaceholderText="Contoh: Barang sudah ada dengan kode X..." 
-                    TextWrapping="Wrap" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto" />
-    </StackPanel>
-</ui:ContentDialog>
+<Window x:Class="Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs.RejectReasonDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="Tolak Permohonan"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Width="460"
+        SizeToContent="Height"
+        KeyDown="OnWindowKeyDown">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <!-- Dim overlay -->
+    <Grid>
+        <Rectangle Fill="#50000000" />
+
+        <!-- Card -->
+        <Border Background="#FFFFFF"
+                CornerRadius="12"
+                Margin="36,36">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.2" Color="#000000" Direction="270" />
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Grid Grid.Row="0" Margin="22,18,16,18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            Width="38" Height="38"
+                            CornerRadius="9"
+                            Background="#FEE2E2"
+                            Margin="0,0,12,0"
+                            VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="DismissCircle24"
+                                       FontSize="20"
+                                       Foreground="#DC2626"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Tolak Permohonan"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="#0F172A" />
+                        <TextBlock Text="Berikan alasan penolakan yang jelas untuk pemohon"
+                                   FontSize="11.5"
+                                   Foreground="#64748B"
+                                   Margin="0,2,0,0" />
+                    </StackPanel>
+
+                    <Button Grid.Column="2"
+                            x:Name="BtnClose"
+                            Width="28" Height="28"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            VerticalAlignment="Top"
+                            Click="OnCloseClicked">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd" Background="Transparent" CornerRadius="5" Padding="4">
+                                    <ui:SymbolIcon Symbol="Dismiss20" FontSize="14" Foreground="#94A3B8" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#F1F5F9" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <!-- Divider -->
+                <Rectangle Grid.Row="1" Height="1" Fill="#E2E8F0" />
+
+                <!-- Body -->
+                <StackPanel Grid.Row="2" Margin="22,18,22,18">
+                    <TextBlock Text="Alasan Penolakan *"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="#334155"
+                               Margin="0,0,0,7" />
+
+                    <ui:TextBox x:Name="ReasonTextBox"
+                                PlaceholderText="Contoh: Barang sudah ada dengan kode X-001, atau spesifikasi tidak sesuai SOP..."
+                                TextWrapping="Wrap"
+                                AcceptsReturn="True"
+                                Height="110"
+                                VerticalScrollBarVisibility="Auto"
+                                FontSize="12.5" />
+
+                    <Border Background="#FFF7ED"
+                            BorderBrush="#FED7AA"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="10,8"
+                            Margin="0,12,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Warning20" FontSize="13" Foreground="#C2410C" Margin="0,0,7,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Alasan penolakan akan dicatat dan dapat dilihat oleh pemohon."
+                                       FontSize="11.5"
+                                       Foreground="#92400E"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Divider -->
+                <Rectangle Grid.Row="3" Height="1" Fill="#E2E8F0" />
+
+                <!-- Footer -->
+                <Grid Grid.Row="4" Margin="22,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock x:Name="CharCountLabel"
+                               Grid.Column="0"
+                               Text="0 karakter"
+                               FontSize="11"
+                               Foreground="#94A3B8"
+                               VerticalAlignment="Center" />
+
+                    <!-- Batal -->
+                    <Button Grid.Column="1"
+                            Content="Batal"
+                            Click="OnCancelClicked"
+                            Margin="0,0,8,0"
+                            Height="34"
+                            Padding="16,0"
+                            FontSize="12.5"
+                            FontWeight="SemiBold"
+                            Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd"
+                                        Background="#F1F5F9"
+                                        BorderBrush="#CBD5E1"
+                                        BorderThickness="1"
+                                        CornerRadius="7"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#E2E8F0" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#CBD5E1" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Tolak -->
+                    <Button Grid.Column="2"
+                            x:Name="BtnConfirm"
+                            Click="OnConfirmClicked"
+                            Height="34"
+                            Padding="16,0"
+                            FontSize="12.5"
+                            FontWeight="Bold"
+                            IsEnabled="False"
+                            Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd"
+                                        CornerRadius="7"
+                                        Padding="{TemplateBinding Padding}">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#DC2626" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Button}}" Value="False">
+                                                    <Setter Property="Background" Value="#FECACA" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                                                    <Setter Property="Background" Value="#B91C1C" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <ui:SymbolIcon Symbol="DismissCircle20" FontSize="14" Foreground="White" Margin="0,0,6,0" />
+                                        <TextBlock Text="Tolak Permohonan" Foreground="White" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

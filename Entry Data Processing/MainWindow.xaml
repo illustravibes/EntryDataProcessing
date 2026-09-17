@@ -50,13 +50,10 @@
                                        Content="Logout"
                                        Icon="{ui:SymbolIcon ArrowExit20}" />
             </ui:NavigationView.FooterMenuItems>
-
-            <ui:NavigationView.ContentOverlay>
-                <Grid>
-                    <ContentPresenter x:Name="RootContentDialog" />
-                </Grid>
-            </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
+
+        <!-- Dialog Host: Full-Window Modal Wrapper for ContentDialogs (covers nav pane & title bar) -->
+        <ui:ContentDialogHost x:Name="RootContentDialog" Panel.ZIndex="90000" />
 
         <!-- Global Toast Alert: Absolute Top Layer, Bottom-Right, Compact -->
         <ui:SnackbarPresenter x:Name="RootSnackbar"

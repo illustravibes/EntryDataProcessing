@@ -55,6 +55,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                     r.kd_supp_acc,
                     r.acc_tidak,
                     r.status,
+                    r.ket_tolak,
                     r.changed_by,
                     r.changed_at,
                     r.acc_by,
@@ -268,6 +269,11 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         {
             try
             {
+                if (action == null || string.IsNullOrWhiteSpace(action.Alasan))
+                {
+                    return Result<bool>.Failure("Alasan penolakan wajib diisi sebelum menolak permohonan.");
+                }
+
                 using var connection = _connectionFactory.CreateConnection();
                 var sql = @"
                     UPDATE req_edp_kode 
@@ -275,6 +281,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                         acc_by = @ApproverNip,
                         acc_at = NOW(),
                         status = 'reject',
+                        ket_tolak = @Alasan,
                         updated_at = NOW()
                     WHERE id = @Id;
                 ";
@@ -319,6 +326,10 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         {
             var idList = ids.ToList();
             if (!idList.Any()) return Result<int>.Failure("Tidak ada data yang dipilih.");
+            if (string.IsNullOrWhiteSpace(alasan))
+            {
+                return Result<int>.Failure("Alasan penolakan wajib diisi sebelum menolak permohonan.");
+            }
 
             try
             {
@@ -329,11 +340,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                         acc_by = @ApproverNip,
                         acc_at = NOW(),
                         status = 'reject',
+                        ket_tolak = @Alasan,
                         updated_at = NOW()
                     WHERE id IN @Ids;
                 ";
 
-                var rows = await connection.ExecuteAsync(sql, new { ApproverNip = approverNip, Ids = idList });
+                var rows = await connection.ExecuteAsync(sql, new { ApproverNip = approverNip, Alasan = alasan.Trim(), Ids = idList });
                 return Result<int>.Success(rows);
             }
             catch (Exception ex)

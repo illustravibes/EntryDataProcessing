@@ -90,11 +90,15 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             // For now, we'll just create a mock reason or expect it to be passed.
             // A more robust implementation would use a DialogService to show the RejectReasonDialog
             
-            var dialog = new Views.Dialogs.RejectReasonDialog(_contentDialogService.GetDialogHost());
-            var dialogResult = await dialog.ShowAsync();
-            
-            if (dialogResult == ContentDialogResult.Primary && !string.IsNullOrWhiteSpace(dialog.RejectReason))
+            var dialog = new Views.Dialogs.RejectReasonDialog
             {
+                Owner = System.Windows.Application.Current.MainWindow
+            };
+            dialog.ShowDialog();
+
+            if (dialog.IsConfirmed)
+            {
+
                 IsLoading = true;
                 var action = new ApprovalActionDto
                 {
