@@ -1,4 +1,4 @@
-﻿# AGENTS.md — EDP (Entry Data Processing) Development Standards
+# AGENTS.md — EDP (Entry Data Processing) Development Standards
 
 Dokumen ini adalah **standar wajib** bagi semua developer dan AI agent yang bekerja di proyek ini.
 Semua kontribusi kode harus mematuhi panduan di bawah ini tanpa pengecualian.
@@ -38,7 +38,9 @@ Entry Data Processing/
 │   ├── Configuration/             # AppConfig binding dari appsettings.json
 │   ├── Data/
 │   │   ├── IDbConnectionFactory.cs
-│   │   └── MySqlConnectionFactory.cs
+│   │   ├── AccessConnectionFactory.cs
+│   │   ├── MySqlConnectionFactory.cs
+│   │   └── SqlDialect.cs          # SQL dialect adapter (Access OleDb <-> MySQL)
 │   ├── Navigation/                # INavigationService, PageService
 │   ├── Security/                  # IPasswordHasher, BcryptPasswordHasher
 │   └── Session/                   # IUserSession, UserSession
@@ -166,6 +168,23 @@ public MyViewModel(IMyService service, ISnackbarService snackbar, IUserSession s
 
 ## 🗄️ Service & Data Access
 
+### Database Provider Switching (Multi-DB)
+Aplikasi mendukung dual database provider (**MS Access / OleDb** dan **MySQL**) yang dikonfigurasi melalui `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "Provider": "Access", // atau "MySql" (Case-Insensitive)
+    "WambDatabase": "Server=...;Database=db_wamb;...",
+    "AccessDatabase": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=...;Jet OLEDB:Database Password=...;"
+  }
+}
+```
+
+- **Pemeriksaan Provider**: Bersifat **case-insensitive** (`StringComparison.OrdinalIgnoreCase`). Nilai `"Access"`, `"access"`, `"ACCESS"` mengaktifkan `AccessConnectionFactory`, sedangkan nilai lainnya (misal `"MySql"`, `"mysql"`) mengaktifkan `MySqlConnectionFactory`.
+- **Adaptasi Query (`SqlDialect.Adapt`)**: Semua query SQL yang dijalankan melalui service **wajib** dibungkus dengan `SqlDialect.Adapt(sql, _connectionFactory.Provider)` untuk menangani perbedaan sintaks Access vs MySQL (seperti `LIMIT` $\rightarrow$ `TOP`, escaping tabel `[user]`, fungsi `Nz` vs `COALESCE`, dll).
+- **Tabel User & Autentikasi**: Tabel `user` sudah terhubung (linked) di MS Access database maupun MySQL. Autentikasi di `AuthService` menggunakan `IDbConnectionFactory` sehingga otomatis mengikuti provider yang aktif.
+
 ### Interface Wajib
 Setiap fitur **harus** memiliki interface service:
 ```
@@ -176,14 +195,14 @@ Features/{Feature}/Services/{Feature}Service.cs
 ### Pola Query (Dapper)
 - Gunakan `IDbConnectionFactory` untuk membuka koneksi.
 - Gunakan `Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true` (sudah diset di App startup).
+- Gunakan `SqlDialect.Adapt()` untuk query portabel.
 - **Selalu** tutup koneksi (`using` statement).
 - **Selalu** gunakan parameterized query, **jangan** string interpolation SQL.
 
 ```csharp
 using var conn = _dbFactory.CreateConnection();
-var result = await conn.QueryAsync<MyModel>(
-    "SELECT * FROM tabel WHERE id = @Id",
-    new { Id = id });
+var sql = SqlDialect.Adapt("SELECT * FROM user WHERE nip = @Nip LIMIT 1", _dbFactory.Provider);
+var result = await conn.QueryFirstOrDefaultAsync<MyModel>(sql, new { Nip = nip });
 ```
 
 ### Result Pattern
@@ -203,6 +222,7 @@ if (res.IsSuccess)
     _snackbar.Show("Sukses", "...", ControlAppearance.Success, null, TimeSpan.FromSeconds(2.5));
 else
     _snackbar.Show("Gagal", res.ErrorMessage!, ControlAppearance.Danger, null, TimeSpan.FromSeconds(3));
+}
 ```
 
 ---
