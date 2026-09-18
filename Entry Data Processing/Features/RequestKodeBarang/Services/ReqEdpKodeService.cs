@@ -24,7 +24,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         {
             using var connection = _connectionFactory.CreateConnection();
             
-            var sql = @"
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT r.*
+                FROM req_edp_kode AS r
+                WHERE 1=1
+            "
+                : @"
                 SELECT 
                     r.id,
                     r.created_at,
@@ -137,7 +143,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
             
             if (!string.IsNullOrWhiteSpace(filter.Keyword))
             {
-                sql += " AND (r.nm_brg LIKE @Kw OR r.supplier LIKE @Kw OR ts.namaPT LIKE @Kw OR r.tkkd LIKE @Kw OR s.store_call LIKE @Kw OR r.id_area LIKE @Kw OR j.BrJnsNm LIKE @Kw)";
+                sql += _connectionFactory.Provider == DatabaseProvider.Access
+                    ? " AND (r.nm_brg LIKE @Kw OR r.supplier LIKE @Kw OR r.tkkd LIKE @Kw OR r.id_area LIKE @Kw OR r.kd_prd LIKE @Kw OR r.kd_brg LIKE @Kw)"
+                    : " AND (r.nm_brg LIKE @Kw OR r.supplier LIKE @Kw OR ts.namaPT LIKE @Kw OR r.tkkd LIKE @Kw OR s.store_call LIKE @Kw OR r.id_area LIKE @Kw OR j.BrJnsNm LIKE @Kw)";
                 param.Add("Kw", $"%{filter.Keyword.Trim()}%");
             }
             
@@ -210,7 +218,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         public async Task<ReqEdpKodeRecord?> GetRequestByIdAsync(int id)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var sql = @"
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT r.*
+                FROM req_edp_kode AS r
+                WHERE r.id = @Id;
+            "
+                : @"
                 SELECT 
                     r.*,
                     j.BrJnsNm AS nm_jns,
@@ -362,7 +376,34 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         public async Task<IEnumerable<ProductDataDto>> SearchProductsAsync(string query)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var sql = @"
+            var q = query?.Trim() ?? string.Empty;
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access && string.IsNullOrWhiteSpace(q)
+                ? @"
+                SELECT
+                    p.BrPrdKd,
+                    p.BrPrdNm,
+                    p.BrPrdAcm,
+                    p.BrPrdFacKd,
+                    p.Pencari,
+                    p.BrJnsKd
+                FROM tmabrprd AS p
+                ORDER BY p.BrPrdKd
+                ;
+            "
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT
+                    p.BrPrdKd,
+                    p.BrPrdNm,
+                    p.BrPrdAcm,
+                    p.BrPrdFacKd,
+                    p.Pencari,
+                    p.BrJnsKd
+                FROM tmabrprd AS p
+                WHERE InStr(p.BrPrdKd & ' ' & p.BrPrdNm, @Query, 1) > 0
+                ORDER BY p.BrPrdKd;
+            "
+                : @"
                 SELECT 
                     p.BrPrdKd, 
                     p.BrPrdNm, 
@@ -379,9 +420,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                 ORDER BY p.BrPrdKd
                 LIMIT 50;
             ";
-            var q = query?.Trim() ?? string.Empty;
             sql = AdaptSql(sql);
-            return await connection.QueryAsync<ProductDataDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+            return await connection.QueryAsync<ProductDataDto>(sql, _connectionFactory.Provider == DatabaseProvider.Access && !string.IsNullOrWhiteSpace(q)
+                ? new { Query = q }
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                    ? null
+                    : new { Query = q, QueryPattern = $"%{q}%" });
         }
 
         public async Task<bool> CheckProductExistsAsync(string brPrdKd)
@@ -405,27 +449,61 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         public async Task<IEnumerable<FactoryDto>> SearchFactoriesAsync(string query)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var sql = @"
+            var q = query?.Trim() ?? string.Empty;
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access && string.IsNullOrWhiteSpace(q)
+                ? @"
+                SELECT brprdfac AS BrPrdFacKd, BrprdfacNm
+                FROM tmabrfac
+                ORDER BY BrprdfacNm ASC;
+            "
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT brprdfac AS BrPrdFacKd, BrprdfacNm
+                FROM tmabrfac
+                WHERE InStr(brprdfac & ' ' & BrprdfacNm, @Query, 1) > 0
+                ORDER BY BrprdfacNm ASC;
+            "
+                : @"
                 SELECT brprdfac AS BrPrdFacKd, BrprdfacNm
                 FROM tmabrfac
                 WHERE (@Query = '' OR brprdfac LIKE @QueryPattern OR BrprdfacNm LIKE @QueryPattern)
                 ORDER BY BrprdfacNm ASC;
             ";
-            var q = query?.Trim() ?? string.Empty;
-            return await connection.QueryAsync<FactoryDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+            return await connection.QueryAsync<FactoryDto>(sql, _connectionFactory.Provider == DatabaseProvider.Access && !string.IsNullOrWhiteSpace(q)
+                ? new { Query = q }
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                    ? null
+                    : new { Query = q, QueryPattern = $"%{q}%" });
         }
 
         public async Task<IEnumerable<ProductTypeDto>> SearchProductTypesAsync(string query)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var sql = @"
+            var q = query?.Trim() ?? string.Empty;
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access && string.IsNullOrWhiteSpace(q)
+                ? @"
+                SELECT BrJnsKd, BrJnsNm
+                FROM tmabrgjns
+                ORDER BY BrJnsNm ASC;
+            "
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT BrJnsKd, BrJnsNm
+                FROM tmabrgjns
+                WHERE InStr(BrJnsKd & ' ' & BrJnsNm, @Query, 1) > 0
+                ORDER BY BrJnsNm ASC;
+            "
+                : @"
                 SELECT BrJnsKd, BrJnsNm
                 FROM tmabrgjns
                 WHERE (@Query = '' OR BrJnsKd LIKE @QueryPattern OR BrJnsNm LIKE @QueryPattern)
                 ORDER BY BrJnsNm ASC;
             ";
-            var q = query?.Trim() ?? string.Empty;
-            return await connection.QueryAsync<ProductTypeDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+            return await connection.QueryAsync<ProductTypeDto>(sql, _connectionFactory.Provider == DatabaseProvider.Access && !string.IsNullOrWhiteSpace(q)
+                ? new { Query = q }
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                    ? null
+                    : new { Query = q, QueryPattern = $"%{q}%" });
         }
 
         public async Task<IEnumerable<string>> GetPriceGroupsAsync()
@@ -438,28 +516,64 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         public async Task<IEnumerable<string>> SearchPriceGroupsAsync(string query)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var sql = @"
+            var q = query?.Trim() ?? string.Empty;
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access && string.IsNullOrWhiteSpace(q)
+                ? @"
+                SELECT DISTINCT BrHrgGol
+                FROM tmabrhrgjl
+                WHERE BrHrgGol IS NOT NULL AND BrHrgGol <> ''
+                ORDER BY BrHrgGol ASC;
+            "
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT DISTINCT BrHrgGol
+                FROM tmabrhrgjl
+                WHERE BrHrgGol IS NOT NULL AND BrHrgGol <> ''
+                  AND InStr(BrHrgGol, @Query, 1) > 0
+                ORDER BY BrHrgGol ASC;
+            "
+                : @"
                 SELECT DISTINCT BrHrgGol 
                 FROM tmabrhrgjl 
                 WHERE BrHrgGol IS NOT NULL AND BrHrgGol != '' 
                   AND (@Query = '' OR BrHrgGol LIKE @QueryPattern)
                 ORDER BY BrHrgGol ASC;
             ";
-            var q = query?.Trim() ?? string.Empty;
-            return await connection.QueryAsync<string>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+            return await connection.QueryAsync<string>(sql, _connectionFactory.Provider == DatabaseProvider.Access && !string.IsNullOrWhiteSpace(q)
+                ? new { Query = q }
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                    ? null
+                    : new { Query = q, QueryPattern = $"%{q}%" });
         }
 
         public async Task<IEnumerable<UnitDto>> SearchUnitsAsync(string query)
         {
             using var connection = _connectionFactory.CreateConnection();
-            var sql = @"
+            var q = query?.Trim() ?? string.Empty;
+            var sql = _connectionFactory.Provider == DatabaseProvider.Access && string.IsNullOrWhiteSpace(q)
+                ? @"
+                SELECT satkd AS SatKd, satnm AS SatNm
+                FROM tmabrsat
+                ORDER BY satnm ASC;
+            "
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                ? @"
+                SELECT satkd AS SatKd, satnm AS SatNm
+                FROM tmabrsat
+                WHERE InStr(satkd & ' ' & satnm, @Query, 1) > 0
+                ORDER BY satnm ASC;
+            "
+                : @"
                 SELECT satkd AS SatKd, satnm AS SatNm 
                 FROM tmabrsat 
                 WHERE (@Query = '' OR satkd LIKE @QueryPattern OR satnm LIKE @QueryPattern) 
                 ORDER BY satnm ASC;
             ";
-            var q = query?.Trim() ?? string.Empty;
-            return await connection.QueryAsync<UnitDto>(sql, new { Query = q, QueryPattern = $"%{q}%" });
+            return await connection.QueryAsync<UnitDto>(sql, _connectionFactory.Provider == DatabaseProvider.Access && !string.IsNullOrWhiteSpace(q)
+                ? new { Query = q }
+                : _connectionFactory.Provider == DatabaseProvider.Access
+                    ? null
+                    : new { Query = q, QueryPattern = $"%{q}%" });
         }
 
         public async Task<bool> CheckPriceCombinationExistsAsync(string brPrdKd, string brHrgGol, string satKd)
@@ -618,6 +732,44 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                         BrKdNo = kdNo,
                         BrNm = brNm,
                         BrHrgGol = gol
+                    }, transaction);
+
+                    var missingAreaSql = @"
+                        SELECT COUNT(*)
+                        FROM tmatk AS tk
+                        LEFT JOIN T_Area AS ar ON tk.ID_area = ar.id_area
+                        WHERE tk.TkTgTutup IS NULL
+                          AND ar.id_area IS NULL;
+                    ";
+                    var missingAreaCount = await connection.ExecuteScalarAsync<int>(missingAreaSql, null, transaction);
+                    if (missingAreaCount > 0)
+                    {
+                        throw new InvalidOperationException("Terdapat data tmatk aktif yang tidak memiliki relasi pada T_Area.");
+                    }
+
+                    var insertAveragePriceSql = @"
+                        INSERT INTO brghrgrata
+                            (Tgl, Tkkd, brkd, SaldoAwal, SaldoAkhir, HrgRata, HrgRataSample, Id_area, areaPO, otomotif, id_areaHR)
+                        SELECT
+                            @Tgl,
+                            tk.TkKd,
+                            @BrKd,
+                            0,
+                            0,
+                            0,
+                            0,
+                            tk.ID_area,
+                            tk.AreaPO,
+                            0,
+                            ar.id_areaHR
+                        FROM tmatk AS tk
+                        INNER JOIN T_Area AS ar ON tk.ID_area = ar.id_area
+                        WHERE tk.TkTgTutup IS NULL;
+                    ";
+                    await connection.ExecuteAsync(insertAveragePriceSql, new
+                    {
+                        Tgl = DateTime.Today,
+                        BrKd = brKdFormatted
                     }, transaction);
 
                     var updateReqSql = @"

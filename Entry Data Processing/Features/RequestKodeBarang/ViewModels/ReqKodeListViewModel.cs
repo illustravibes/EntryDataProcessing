@@ -401,9 +401,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         {
             IEnumerable<ReqEdpKodeRecord> filtered = SelectedTab switch
             {
-                "Pending" => _rawLoadedRequests.Where(x => x.AccTidak == 0 || x.Status == "pending"),
-                "Approved" => _rawLoadedRequests.Where(x => x.AccTidak == 1 || x.Status == "approve"),
-                "Rejected" => _rawLoadedRequests.Where(x => x.AccTidak == 2 || x.Status == "reject"),
+                "Pending" => _rawLoadedRequests.Where(x => x.IsPending),
+                "Approved" => _rawLoadedRequests.Where(x => x.IsApproved),
+                "Rejected" => _rawLoadedRequests.Where(x => x.IsRejected),
                 _ => _rawLoadedRequests
             };
 
@@ -442,12 +442,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             {
                 var data = (await Task.Run(() => _service.GetRequestsAsync(filter))).ToList();
 
-                _rawLoadedRequests = data.Where(x => x.AccTidak != 3 && x.Status != "draft").ToList();
+                _rawLoadedRequests = data.Where(x => x.NormalizedStatus != "Draft").ToList();
 
                 CountAll = _rawLoadedRequests.Count;
-                CountPending = _rawLoadedRequests.Count(x => x.AccTidak == 0 || x.Status == "pending");
-                CountApproved = _rawLoadedRequests.Count(x => x.AccTidak == 1 || x.Status == "approve");
-                CountRejected = _rawLoadedRequests.Count(x => x.AccTidak == 2 || x.Status == "reject");
+                CountPending = _rawLoadedRequests.Count(x => x.IsPending);
+                CountApproved = _rawLoadedRequests.Count(x => x.IsApproved);
+                CountRejected = _rawLoadedRequests.Count(x => x.IsRejected);
                 TotalPendingCount = CountPending;
 
                 ApplyTabFilter();

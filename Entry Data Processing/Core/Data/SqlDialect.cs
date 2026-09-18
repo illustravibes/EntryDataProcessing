@@ -24,7 +24,7 @@ namespace Entry_Data_Processing.Core.Data
                 "Nz(Sum(IIf($1, 1, 0)), 0)",
                 RegexOptions.IgnoreCase);
             accessSql = Regex.Replace(accessSql, @"`([^`]+)`", "[$1]");
-            accessSql = Regex.Replace(accessSql, @"\bFROM\s+user\b", "FROM [user]", RegexOptions.IgnoreCase);
+            accessSql = Regex.Replace(accessSql, @"\b(FROM|JOIN)\s+user\b", "$1 [user]", RegexOptions.IgnoreCase);
             accessSql = ReplaceLimitWithTop(accessSql);
 
             return accessSql;
