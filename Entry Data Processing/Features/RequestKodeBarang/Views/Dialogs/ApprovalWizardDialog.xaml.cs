@@ -15,41 +15,34 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
     {
         public bool IsApproved { get; private set; }
         private readonly ApprovalWizardViewModel _viewModel;
-        private readonly Wpf.Ui.ISnackbarService? _snackbarService;
+        private readonly Wpf.Ui.ISnackbarService _snackbarService;
         private readonly Wpf.Ui.Controls.SnackbarPresenter? _previousPresenter;
 
-        public ApprovalWizardDialog(ApprovalWizardViewModel viewModel)
+        public ApprovalWizardDialog(ApprovalWizardViewModel viewModel, Wpf.Ui.ISnackbarService snackbarService)
         {
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = viewModel;
             Owner = Application.Current.MainWindow;
 
-            try
+            _snackbarService = snackbarService;
+            if (Application.Current.MainWindow is MainWindow mainWin)
             {
-                _snackbarService = App.GetService<Wpf.Ui.ISnackbarService>();
-                if (Application.Current.MainWindow is MainWindow mainWin)
+                _previousPresenter = mainWin.RootSnackbar;
+            }
+
+            Loaded += (s, e) =>
+            {
+                _snackbarService.SetSnackbarPresenter(DialogSnackbar);
+            };
+
+            Closed += (s, e) =>
+            {
+                if (_previousPresenter != null)
                 {
-                    _previousPresenter = mainWin.RootSnackbar;
+                    _snackbarService.SetSnackbarPresenter(_previousPresenter);
                 }
-
-                Loaded += (s, e) =>
-                {
-                    _snackbarService?.SetSnackbarPresenter(DialogSnackbar);
-                };
-
-                Closed += (s, e) =>
-                {
-                    if (_previousPresenter != null)
-                    {
-                        _snackbarService?.SetSnackbarPresenter(_previousPresenter);
-                    }
-                };
-            }
-            catch
-            {
-                // Fallback
-            }
+            };
         }
 
         private void OnHeaderMouseDown(object sender, MouseButtonEventArgs e)

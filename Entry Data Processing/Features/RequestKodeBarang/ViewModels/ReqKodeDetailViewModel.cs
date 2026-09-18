@@ -70,7 +70,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var wizardVm = new ApprovalWizardViewModel(_service, _userSession, _snackbarService, _contentDialogService);
             await wizardVm.InitializeAsync(RequestDetail.Id);
 
-            var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm);
+            var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm, _snackbarService);
             dialog.ShowDialog();
 
             if (dialog.IsApproved)

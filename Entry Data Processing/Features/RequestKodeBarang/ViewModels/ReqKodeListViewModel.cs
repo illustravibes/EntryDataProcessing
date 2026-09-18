@@ -632,7 +632,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 // Fallback to currently selected item
             }
 
-            var dialog = new Views.Dialogs.ReqKodeDetailDialog(target)
+            var dialog = new Views.Dialogs.ReqKodeDetailDialog(target, _snackbarService)
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
@@ -657,7 +657,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var wizardVm = new ApprovalWizardViewModel(_service, _userSession, _snackbarService, _contentDialogService);
             await wizardVm.InitializeAsync(target.Id);
 
-            var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm);
+            var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm, _snackbarService);
             dialog.ShowDialog();
 
             if (dialog.IsApproved)
