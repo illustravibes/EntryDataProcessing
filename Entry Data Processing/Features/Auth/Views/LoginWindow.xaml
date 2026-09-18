@@ -20,9 +20,7 @@
                      Icon="{ui:ImageIcon 'pack://application:,,,/Assets/logo.png'}" 
                      CloseWindowByDoubleClickOnIcon="False" />
 
-        <!-- Content wrapper with proper overlay support -->
         <Grid Grid.Row="1">
-            <!-- Login Form Body -->
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300" Margin="0,-20,0,0">
                 <Image Source="/Assets/logo.png" Height="84" HorizontalAlignment="Center" Margin="0,0,0,18" />
                 <ui:TextBlock Text="EDP Portal" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5" />
@@ -39,7 +37,6 @@
                 <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,18,0,0" Width="28" Height="28" />
             </StackPanel>
 
-            <!-- Snackbar overlay — harus di dalam Grid yang sama agar ZIndex bekerja -->
             <ui:SnackbarPresenter x:Name="RootSnackbar"
                                   HorizontalAlignment="Right"
                                   VerticalAlignment="Bottom"
