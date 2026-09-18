@@ -21,6 +21,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
             _viewModel = viewModel;
             DataContext = viewModel;
             Owner = Application.Current.MainWindow;
+            _viewModel.ApprovalSubmitted += OnApprovalSubmitted;
+            _viewModel.CancelRequested += OnCancelRequested;
 
             _snackbarService = snackbarService;
             if (Application.Current.MainWindow is MainWindow mainWin)
@@ -238,39 +240,16 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
             return null;
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private void OnApprovalSubmitted(object? sender, EventArgs e)
         {
-            IsApproved = false;
+            IsApproved = true;
             Close();
         }
 
-        private async void NextStep_Click(object sender, RoutedEventArgs e)
+        private void OnCancelRequested(object? sender, EventArgs e)
         {
-            try
-            {
-                await _viewModel.NextStepAsync();
-            }
-            catch (Exception ex)
-            {
-                _viewModel.SetValidationWarning("Terjadi Kesalahan", $"Gagal memvalidasi data: {ex.Message}");
-            }
-        }
-
-        private async void Submit_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var success = await _viewModel.SubmitApprovalAsync();
-                if (success)
-                {
-                    IsApproved = true;
-                    Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                _viewModel.SetValidationWarning("Terjadi Kesalahan", $"Gagal memproses approval: {ex.Message}");
-            }
+            IsApproved = false;
+            Close();
         }
     }
 }

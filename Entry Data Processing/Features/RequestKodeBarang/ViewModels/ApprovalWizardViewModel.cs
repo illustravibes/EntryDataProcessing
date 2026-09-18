@@ -17,6 +17,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly IReqEdpKodeService _service;
         private readonly IUserSession _userSession;
         private readonly ISnackbarService _snackbarService;
+
+        public event EventHandler? ApprovalSubmitted;
+        public event EventHandler? CancelRequested;
         
         public int RequestId { get; set; }
 
@@ -760,14 +763,24 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [RelayCommand]
         public async Task NextStepAsync()
         {
-            if (await ValidateCurrentStepAsync())
+            try
             {
-                if (CurrentStepIndex < 2)
+                if (await ValidateCurrentStepAsync() && CurrentStepIndex < 2)
                 {
                     CurrentStepIndex++;
                     UpdateStepState();
                 }
             }
+            catch (Exception ex)
+            {
+                SetValidationWarning("Terjadi Kesalahan", $"Gagal memvalidasi data: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void Cancel()
+        {
+            CancelRequested?.Invoke(this, EventArgs.Empty);
         }
 
         [RelayCommand]
@@ -1129,6 +1142,22 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             {
                 _snackbarService.Show("Error", result.ErrorMessage ?? "Gagal menyimpan", ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
                 return false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task SubmitAsync()
+        {
+            try
+            {
+                if (await SubmitApprovalAsync())
+                {
+                    ApprovalSubmitted?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                SetValidationWarning("Terjadi Kesalahan", $"Gagal memproses approval: {ex.Message}");
             }
         }
     }

@@ -949,7 +949,7 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Left: Cancel Button -->
-                        <ui:Button Grid.Column="0" Content="Batal" Click="Cancel_Click" HorizontalAlignment="Left" Appearance="Secondary" Padding="16,6" />
+                        <ui:Button Grid.Column="0" Content="Batal" Command="{Binding CancelCommand}" HorizontalAlignment="Left" Appearance="Secondary" Padding="16,6" />
 
                         <!-- Right: Stepper Navigation Buttons -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -964,7 +964,7 @@
                             <!-- Lanjut Button (WPF UI Primary Button) -->
                             <ui:Button Content="Lanjut" 
                                        Icon="{ui:SymbolIcon ArrowRight20}"
-                                       Click="NextStep_Click"
+                                       Command="{Binding NextStepCommand}"
                                        IsEnabled="{Binding CanGoNext}" 
                                        Appearance="Primary" 
                                        Padding="18,6"
@@ -973,7 +973,7 @@
                             <!-- Selesai & Setujui Button (WPF UI Primary/Success Button) -->
                             <ui:Button Content="Selesai &amp; Setujui" 
                                        Icon="{ui:SymbolIcon Checkmark20}"
-                                       Click="Submit_Click" 
+                                        Command="{Binding SubmitCommand}" 
                                        Appearance="Primary" 
                                        Padding="18,6"
                                        Visibility="{Binding IsLastStep, Converter={StaticResource BooleanToVisibilityConverter}}" />
