@@ -70,7 +70,7 @@
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RequestDetail.Disc}" Margin="0,5" />
                     </Grid>
                 </ui:CardControl>
-                
+
                 <ui:CardControl Header="Status &amp; Keterangan">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -104,7 +104,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Actions -->
+
         <Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" Margin="0,15,0,0" Padding="0,15,0,0"
                 Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

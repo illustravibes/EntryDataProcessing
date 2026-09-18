@@ -18,7 +18,6 @@ namespace Entry_Data_Processing.Features.Dashboard.Services
         {
             using var connection = _connectionFactory.CreateConnection();
             
-            // 0 = Pending, 3 = Draft
             var pendingCount = await connection.ExecuteScalarAsync<int>(
                 "SELECT COUNT(*) FROM req_edp_kode WHERE acc_tidak IN (0, 3) OR status IN ('draft', 'pending')"
             );

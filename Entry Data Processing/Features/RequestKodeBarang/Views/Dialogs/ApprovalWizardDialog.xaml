@@ -21,7 +21,7 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        
+
         <Style x:Key="FormLabelStyle" TargetType="ui:TextBlock">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
@@ -42,11 +42,11 @@
         </Style>
     </Window.Resources>
 
-    <!-- Outer Shadow Layer -->
+
     <Grid Margin="18">
-        <Border Background="#FFFFFF" 
-                BorderBrush="#CBD5E1" 
-                BorderThickness="1" 
+        <Border Background="#FFFFFF"
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
                 CornerRadius="16">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Direction="270" ShadowDepth="8" Opacity="0.22" Color="#0F172A" />
@@ -54,24 +54,24 @@
 
             <Grid Background="Transparent">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> <!-- Header & Stepper -->
-                    <RowDefinition Height="*"/>    <!-- Content Body -->
-                    <RowDefinition Height="Auto"/> <!-- Footer Controls -->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- 1. Header Bar with Stepper Indicator -->
-                <Border Grid.Row="0" 
-                        Background="#FFFFFF" 
-                        BorderBrush="#F1F5F9" 
-                        BorderThickness="0,0,0,1" 
-                        Padding="24,18,24,14" 
+
+                <Border Grid.Row="0"
+                        Background="#FFFFFF"
+                        BorderBrush="#F1F5F9"
+                        BorderThickness="0,0,0,1"
+                        Padding="24,18,24,14"
                         CornerRadius="16,16,0,0"
                         MouseLeftButtonDown="OnHeaderMouseDown">
                     <StackPanel>
                         <ui:TextBlock Text="Persetujuan &amp; Penerbitan Kode Barang" FontSize="16" FontWeight="Bold" Foreground="#0F172A"/>
                         <ui:TextBlock Text="Verifikasi master produk, penetapan kelompok harga, dan registrasi kode barang baru." FontSize="11.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,3,0,0"/>
 
-                        <!-- Stepper Indicator Pills -->
+
                         <Grid Margin="0,16,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -79,7 +79,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Step 1 Tab -->
+
                             <Border Grid.Column="0" Margin="0,0,4,0" Padding="10,8" CornerRadius="8">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -140,7 +140,7 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Step 2 Tab -->
+
                             <Border Grid.Column="1" Margin="4,0,4,0" Padding="10,8" CornerRadius="8">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -201,7 +201,7 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Step 3 Tab -->
+
                             <Border Grid.Column="2" Margin="4,0,0,0" Padding="10,8" CornerRadius="8">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -253,15 +253,15 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 2. Scrollable Body Content -->
+
                 <ui:DynamicScrollViewer Grid.Row="1" MaxHeight="520" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="24,16" Background="#FFFFFF">
                     <StackPanel>
-                        <!-- In-Line Validation Warning Banner -->
-                        <Border Background="#FEF2F2" 
-                                BorderBrush="#FECACA" 
-                                BorderThickness="1" 
-                                CornerRadius="8" 
-                                Padding="12,10" 
+
+                        <Border Background="#FEF2F2"
+                                BorderBrush="#FECACA"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="12,10"
                                 Margin="0,0,0,14"
                                 Visibility="{Binding HasValidationWarning, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid>
@@ -284,7 +284,7 @@
                         </Border>
 
                         <Grid>
-                        <!-- STEP 1: Data Produk -->
+
                         <StackPanel>
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
@@ -297,7 +297,7 @@
                                 </Style>
                             </StackPanel.Style>
 
-                            <!-- Mode Selector Segmented Tab (Mutually Exclusive) -->
+
                             <Border Background="#F1F5F9" BorderBrush="#CBD5E1" BorderThickness="1.5" CornerRadius="12" Padding="4" Margin="0,0,0,18">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -305,10 +305,10 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Segment 1: Cari Produk Terdaftar -->
-                                    <Border Grid.Column="0" 
-                                            CornerRadius="9" 
-                                            Padding="14,10" 
+
+                                    <Border Grid.Column="0"
+                                            CornerRadius="9"
+                                            Padding="14,10"
                                             Cursor="Hand"
                                             Margin="0,0,3,0"
                                             >
@@ -363,10 +363,10 @@
                                         </StackPanel>
                                     </Border>
 
-                                    <!-- Segment 2: Buat Master Produk Baru -->
-                                    <Border Grid.Column="1" 
-                                            CornerRadius="9" 
-                                            Padding="14,10" 
+
+                                    <Border Grid.Column="1"
+                                            CornerRadius="9"
+                                            Padding="14,10"
                                             Cursor="Hand"
                                             Margin="3,0,0,0"
                                             >
@@ -423,7 +423,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- MODE A: SEARCH EXISTING PRODUCT -->
+
                             <StackPanel>
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
@@ -436,11 +436,11 @@
                                     </Style>
                                 </StackPanel.Style>
 
-                                <!-- Selected Product Card (When chosen) -->
-                                <ui:Card Background="#F0FDF4" 
-                                         BorderBrush="#86EFAC" 
-                                         BorderThickness="1.5" 
-                                         Padding="14,12" 
+
+                                <ui:Card Background="#F0FDF4"
+                                         BorderBrush="#86EFAC"
+                                         BorderThickness="1.5"
+                                         Padding="14,12"
                                          Margin="0,0,0,12">
                                     <ui:Card.Style>
                                         <Style TargetType="ui:Card">
@@ -476,7 +476,7 @@
                                     </Grid>
                                 </ui:Card>
 
-                                <!-- Search Box and Results (Collapsed once product is selected) -->
+
                                 <StackPanel>
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
@@ -489,15 +489,15 @@
                                         </Style>
                                     </StackPanel.Style>
 
-                                    <!-- Search Box -->
+
                                     <ui:TextBlock Text="Cari Produk" Style="{StaticResource FormLabelStyle}"/>
                                     <ui:TextBlock Text="{Binding ProductSelectionError}" Style="{StaticResource InlineValidationTextStyle}"/>
-                                    <ui:TextBox Text="{Binding ProductSearchQuery, UpdateSourceTrigger=PropertyChanged}" 
-                                                PlaceholderText="cari produk ..." 
+                                    <ui:TextBox Text="{Binding ProductSearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                                PlaceholderText="cari produk ..."
                                                 Icon="{ui:SymbolIcon Search24}"
                                                 Margin="0,0,0,10"/>
 
-                                    <!-- Search Results List -->
+
                                     <ui:TextBlock Text="Hasil Pencarian Produk:" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
                                     <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" MaxHeight="220">
                                         <ui:DynamicScrollViewer VerticalScrollBarVisibility="Auto">
@@ -512,12 +512,12 @@
                                                                     <ColumnDefinition Width="Auto"/>
                                                                 </Grid.ColumnDefinitions>
 
-                                                                <!-- Kode Badge -->
+
                                                                 <Border Grid.Column="0" Background="#E0F2FE" BorderBrush="#BAE6FD" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" VerticalAlignment="Center">
                                                                     <ui:TextBlock Text="{Binding BrPrdKd}" FontSize="11.5" FontWeight="Bold" Foreground="#0369A1"/>
                                                                 </Border>
 
-                                                                <!-- Nama & Detail -->
+
                                                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                                                     <ui:TextBlock Text="{Binding BrPrdNm}" FontSize="12.5" FontWeight="SemiBold" Foreground="#0F172A"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
@@ -527,11 +527,11 @@
                                                                     </StackPanel>
                                                                 </StackPanel>
 
-                                                                <!-- Select Button -->
-                                                                <ui:Button Grid.Column="2" 
-                                                                           Content="Pilih" 
-                                                                           Appearance="Primary" 
-                                                                           Padding="14,4" 
+
+                                                                <ui:Button Grid.Column="2"
+                                                                           Content="Pilih"
+                                                                           Appearance="Primary"
+                                                                           Padding="14,4"
                                                                            VerticalAlignment="Center"
                                                                            Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                            CommandParameter="{Binding}"/>
@@ -545,7 +545,7 @@
                                 </StackPanel>
                             </StackPanel>
 
-                            <!-- MODE B: CREATE NEW PRODUCT FORM -->
+
                             <StackPanel>
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
@@ -557,21 +557,21 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Style>
-                                <!-- 1. Kode Produk Field & Live Validation -->
+
                                 <ui:TextBlock Text="Kode Produk" Style="{StaticResource FormLabelStyle}"/>
-                                <ui:TextBox Text="{Binding NewProductCode, UpdateSourceTrigger=PropertyChanged}" 
-                                            MaxLength="5" 
-                                            PlaceholderText="kode produk ..." 
+                                <ui:TextBox Text="{Binding NewProductCode, UpdateSourceTrigger=PropertyChanged}"
+                                            MaxLength="5"
+                                            PlaceholderText="kode produk ..."
                                             CharacterCasing="Upper"
-                                            FontSize="13" 
+                                            FontSize="13"
                                             FontWeight="SemiBold"
                                             Margin="0,0,0,4"/>
                                 <ui:TextBlock Text="{Binding ProductCodeError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
-                                <!-- Live Validation Indicator -->
+
                                 <Border Margin="0,0,0,14">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <!-- Spinner when checking -->
+
                                         <ui:ProgressRing Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center">
                                             <ui:ProgressRing.Style>
                                                 <Style TargetType="ui:ProgressRing">
@@ -585,7 +585,7 @@
                                             </ui:ProgressRing.Style>
                                         </ui:ProgressRing>
 
-                                        <!-- Success Icon -->
+
                                         <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="15" Foreground="#16A34A" Margin="0,0,5,0" VerticalAlignment="Center">
                                             <ui:SymbolIcon.Style>
                                                 <Style TargetType="ui:SymbolIcon">
@@ -603,7 +603,7 @@
                                             </ui:SymbolIcon.Style>
                                         </ui:SymbolIcon>
 
-                                        <!-- Error Icon -->
+
                                         <ui:SymbolIcon Symbol="DismissCircle24" FontSize="15" Foreground="#DC2626" Margin="0,0,5,0" VerticalAlignment="Center">
                                             <ui:SymbolIcon.Style>
                                                 <Style TargetType="ui:SymbolIcon">
@@ -621,7 +621,7 @@
                                             </ui:SymbolIcon.Style>
                                         </ui:SymbolIcon>
 
-                                        <!-- Message -->
+
                                         <ui:TextBlock Text="{Binding ProductCodeValidationMessage}" FontSize="11" VerticalAlignment="Center">
                                             <ui:TextBlock.Style>
                                                 <Style TargetType="ui:TextBlock">
@@ -642,9 +642,9 @@
                                     </StackPanel>
                                 </Border>
 
-                                <!-- 2. Detail Data Produk (Enabled once code is checked / available) -->
+
                                 <StackPanel IsEnabled="{Binding IsProductCodeValid}">
-                                    <!-- Row 1: Nama Produk & Akronim -->
+
                                     <Grid Margin="0,0,0,12">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="2*"/>
@@ -662,7 +662,7 @@
                                         </StackPanel>
                                     </Grid>
 
-                                    <!-- Row 2: Pabrik & Jenis Barang -->
+
                                     <Grid Margin="0,0,0,12">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -670,31 +670,31 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0" Margin="0,0,8,0">
                                             <ui:TextBlock Text="Pabrik" Style="{StaticResource FormLabelStyle}"/>
-                                            <ComboBox ItemsSource="{Binding FactorySearchResults}" 
-                                                      SelectedItem="{Binding SelectedFactory}" 
-                                                      DisplayMemberPath="DisplayText" 
+                                            <ComboBox ItemsSource="{Binding FactorySearchResults}"
+                                                      SelectedItem="{Binding SelectedFactory}"
+                                                      DisplayMemberPath="DisplayText"
                                                       Tag="Pilih Pabrik"
-                                                      IsEditable="True" 
-                                                      IsTextSearchEnabled="True" 
+                                                      IsEditable="True"
+                                                      IsTextSearchEnabled="True"
                                                       TextSearch.TextPath="DisplayText"
                                                       Loaded="SearchableComboBox_Loaded"/>
                                             <ui:TextBlock Text="{Binding FactoryError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Margin="8,0,0,0">
                                             <ui:TextBlock Text="Jenis" Style="{StaticResource FormLabelStyle}"/>
-                                            <ComboBox ItemsSource="{Binding ProductTypeSearchResults}" 
-                                                      SelectedItem="{Binding SelectedProductType}" 
-                                                      DisplayMemberPath="DisplayText" 
+                                            <ComboBox ItemsSource="{Binding ProductTypeSearchResults}"
+                                                      SelectedItem="{Binding SelectedProductType}"
+                                                      DisplayMemberPath="DisplayText"
                                                       Tag="Pilih Jenis"
-                                                      IsEditable="True" 
-                                                      IsTextSearchEnabled="True" 
+                                                      IsEditable="True"
+                                                      IsTextSearchEnabled="True"
                                                       TextSearch.TextPath="DisplayText"
                                                       Loaded="SearchableComboBox_Loaded"/>
                                             <ui:TextBlock Text="{Binding ProductTypeError}" Style="{StaticResource InlineValidationTextStyle}"/>
                                         </StackPanel>
                                     </Grid>
 
-                                    <!-- Row 3: Pencari -->
+
                                     <ui:TextBlock Text="Pencari" Style="{StaticResource FormLabelStyle}"/>
                                     <ui:TextBox Text="{Binding ProductData.Pencari, UpdateSourceTrigger=PropertyChanged}" MaxLength="15" PlaceholderText="pencari ..." Margin="0,0,0,12"/>
                                     <ui:TextBlock Text="{Binding RequesterError}" Style="{StaticResource InlineValidationTextStyle}"/>
@@ -702,7 +702,7 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <!-- STEP 2: Data Harga Jual -->
+
                         <StackPanel>
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
@@ -715,7 +715,7 @@
                                 </Style>
                             </StackPanel.Style>
 
-                            <!-- Header Produk Terpilih -->
+
                             <ui:Card Background="#F0F9FF" BorderBrush="#BAE6FD" Padding="14,10" Margin="0,0,0,16">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -732,32 +732,32 @@
                                 </Grid>
                             </ui:Card>
 
-                            <!-- Golongan Harga Searchable ComboBox -->
+
                             <ui:TextBlock Text="Golongan Harga" Style="{StaticResource FormLabelStyle}"/>
-                            <ComboBox ItemsSource="{Binding PriceGroupSearchResults}" 
-                                      SelectedItem="{Binding SelectedPriceGroup}" 
+                            <ComboBox ItemsSource="{Binding PriceGroupSearchResults}"
+                                      SelectedItem="{Binding SelectedPriceGroup}"
                                       Text="{Binding SelectedPriceGroup, UpdateSourceTrigger=PropertyChanged}"
                                       Tag="Pilih Golongan Harga"
-                                      IsEditable="True" 
+                                      IsEditable="True"
                                       IsTextSearchEnabled="True"
                                       Loaded="SearchableComboBox_Loaded"
                                       Margin="0,0,0,14"/>
                             <ui:TextBlock Text="{Binding PriceGroupError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
-                            <!-- Satuan Searchable ComboBox -->
+
                             <ui:TextBlock Text="Satuan" Style="{StaticResource FormLabelStyle}"/>
-                            <ComboBox ItemsSource="{Binding UnitSearchResults}" 
-                                      SelectedItem="{Binding SelectedUnit}" 
-                                      DisplayMemberPath="DisplayText" 
+                            <ComboBox ItemsSource="{Binding UnitSearchResults}"
+                                      SelectedItem="{Binding SelectedUnit}"
+                                      DisplayMemberPath="DisplayText"
                                       Tag="Pilih Satuan"
-                                      IsEditable="True" 
-                                      IsTextSearchEnabled="True" 
+                                      IsEditable="True"
+                                      IsTextSearchEnabled="True"
                                       TextSearch.TextPath="DisplayText"
                                       Loaded="SearchableComboBox_Loaded"
                                       Margin="0,0,0,14"/>
                             <ui:TextBlock Text="{Binding UnitError}" Style="{StaticResource InlineValidationTextStyle}"/>
 
-                            <!-- Status Kombinasi Master Harga Jual (tmabrhrgjl & thrgjual) -->
+
                             <ui:Card Padding="14,10" Margin="0,2,0,8">
                                 <ui:Card.Style>
                                     <Style TargetType="ui:Card">
@@ -777,7 +777,7 @@
                                     </Style>
                                 </ui:Card.Style>
                                 <Grid>
-                                    <!-- Case 1: Sudah Ada -->
+
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
@@ -796,7 +796,7 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Case 2: Belum Ada (Auto-Create) -->
+
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
@@ -815,7 +815,7 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Case 3: Belum Dipilih Lengkap -->
+
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
@@ -833,7 +833,7 @@
                                 </Grid>
                             </ui:Card>
 
-                            <!-- Field Manual Input ID Harga (Hanya Muncul Jika Belum Ada di Master tmabrhrgjl) -->
+
                             <StackPanel Margin="0,4,0,0">
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
@@ -846,21 +846,21 @@
                                     </Style>
                                 </StackPanel.Style>
                                 <ui:TextBlock Text="ID Harga" Style="{StaticResource FormLabelStyle}"/>
-                                <ui:TextBox Text="{Binding NewIdHrgText, UpdateSourceTrigger=PropertyChanged}" 
-                                            PlaceholderText="id harga ..." 
-                                            MaxLength="5" 
-                                            FontSize="13" 
-                                            FontWeight="SemiBold" 
+                                <ui:TextBox Text="{Binding NewIdHrgText, UpdateSourceTrigger=PropertyChanged}"
+                                            PlaceholderText="id harga ..."
+                                            MaxLength="5"
+                                            FontSize="13"
+                                            FontWeight="SemiBold"
                                             Margin="0,0,0,4"/>
                                 <ui:TextBlock Text="{Binding PriceIdError}" Style="{StaticResource InlineValidationTextStyle}"/>
-                                <ui:TextBlock Text="* Masukkan ID Harga (id_hrg) baru untuk pendaftaran ke tabel tmabrhrgjl." 
-                                              FontSize="10.5" 
-                                              Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                <ui:TextBlock Text="* Masukkan ID Harga (id_hrg) baru untuk pendaftaran ke tabel tmabrhrgjl."
+                                              FontSize="10.5"
+                                              Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                               Margin="0,0,0,8"/>
                             </StackPanel>
                         </StackPanel>
 
-                        <!-- STEP 3: Data Item Barang -->
+
                         <StackPanel>
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
@@ -872,12 +872,12 @@
                                     </Style.Triggers>
                                 </Style>
                             </StackPanel.Style>
-                            
-                            <!-- Prominent Live Preview Card on Top -->
-                            <ui:Card Background="#F0FDF4" 
-                                     BorderBrush="#86EFAC" 
-                                     BorderThickness="1.5" 
-                                     Padding="16,14" 
+
+
+                            <ui:Card Background="#F0FDF4"
+                                     BorderBrush="#86EFAC"
+                                     BorderThickness="1.5"
+                                     Padding="16,14"
                                      Margin="0,0,0,16">
                                 <StackPanel HorizontalAlignment="Center">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
@@ -895,13 +895,13 @@
                                 </StackPanel>
                             </ui:Card>
 
-                            <!-- Input No Kode Barang -->
+
                             <ui:TextBlock Text="No. Kode Barang" Style="{StaticResource FormLabelStyle}"/>
                             <ui:TextBox Text="{Binding ItemData.BrKdNo, UpdateSourceTrigger=PropertyChanged}" MaxLength="25" Margin="0,0,0,4" PlaceholderText="no. kode barang ..." FontSize="13" FontWeight="SemiBold"/>
                             <ui:TextBlock Text="{Binding ItemCodeError}" Style="{StaticResource InlineValidationTextStyle}"/>
                             <ui:TextBlock Text="* Tentukan kode penomoran barang manual sesuai formula/aturan internal EDP." FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,14"/>
 
-                            <!-- Read-only Summary Fields -->
+
                             <ui:TextBlock Text="Nama Barang" Style="{StaticResource FormLabelStyle}"/>
                             <ui:TextBox Text="{Binding ItemData.BrNm}" IsReadOnly="True" Background="#F8FAFC" Margin="0,0,0,12"/>
                             <ui:TextBlock Text="{Binding ItemNameError}" Style="{StaticResource InlineValidationTextStyle}"/>
@@ -926,7 +926,7 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Summary ID Harga Baru jika baru didaftarkan -->
+
                             <StackPanel Margin="0,0,0,12">
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
@@ -946,7 +946,7 @@
                 </StackPanel>
             </ui:DynamicScrollViewer>
 
-                <!-- 3. Rounded Footer Bar -->
+
                 <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="24,14" CornerRadius="0,0,16,16">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -954,43 +954,43 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Left: Cancel Button -->
+
                         <ui:Button Grid.Column="0" Content="Batal" Command="{Binding CancelCommand}" HorizontalAlignment="Left" Appearance="Secondary" Padding="16,6" />
 
-                        <!-- Right: Stepper Navigation Buttons -->
+
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            <ui:Button Content="Kembali" 
+                            <ui:Button Content="Kembali"
                                        Icon="{ui:SymbolIcon ArrowLeft20}"
-                                       Command="{Binding PreviousStepCommand}" 
-                                       IsEnabled="{Binding CanGoPrevious}" 
+                                       Command="{Binding PreviousStepCommand}"
+                                       IsEnabled="{Binding CanGoPrevious}"
                                        Appearance="Secondary"
-                                       Margin="0,0,8,0" 
+                                       Margin="0,0,8,0"
                                        Padding="16,6" />
-                            
-                            <!-- Lanjut Button (WPF UI Primary Button) -->
-                            <ui:Button Content="Lanjut" 
+
+
+                            <ui:Button Content="Lanjut"
                                        Icon="{ui:SymbolIcon ArrowRight20}"
                                        Command="{Binding NextStepCommand}"
-                                       IsEnabled="{Binding CanGoNext}" 
-                                       Appearance="Primary" 
+                                       IsEnabled="{Binding CanGoNext}"
+                                       Appearance="Primary"
                                        Padding="18,6"
                                        Visibility="{Binding IsNotLastStep, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                            <!-- Selesai & Setujui Button (WPF UI Primary/Success Button) -->
-                            <ui:Button Content="Selesai &amp; Setujui" 
+
+                            <ui:Button Content="Selesai &amp; Setujui"
                                        Icon="{ui:SymbolIcon Checkmark20}"
-                                        Command="{Binding SubmitCommand}" 
-                                       Appearance="Primary" 
+                                       Command="{Binding SubmitCommand}"
+                                       Appearance="Primary"
                                        Padding="18,6"
                                        Visibility="{Binding IsLastStep, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- 4. Loading Overlay (WPF UI ProgressRing) -->
-                <Border Grid.Row="0" 
-                        Grid.RowSpan="3" 
-                        Background="#66000000" 
+
+                <Border Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Background="#66000000"
                         CornerRadius="16"
                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -1001,7 +1001,7 @@
             </Grid>
         </Border>
 
-        <!-- Modal Toast Alert: Absolute top layer of wizard modal, bottom-right, compact -->
+
         <ui:SnackbarPresenter x:Name="DialogSnackbar"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Bottom"

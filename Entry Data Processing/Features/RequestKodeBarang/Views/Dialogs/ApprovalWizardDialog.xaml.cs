@@ -74,7 +74,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
 
             if (textBox == null)
             {
-                // When ComboBox is initially inside a Collapsed panel/tab, attach once it becomes visible
                 DependencyPropertyChangedEventHandler? handler = null;
                 handler = (s, args) =>
                 {
@@ -88,7 +87,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
                 return;
             }
 
-            // Reliable VisualBrush Watermark / Placeholder
             if (cb.Tag is string placeholder && !string.IsNullOrWhiteSpace(placeholder))
             {
                 void UpdateWatermark()

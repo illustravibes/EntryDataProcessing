@@ -4,7 +4,7 @@
                   xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                   xmlns:dashboard="clr-namespace:Entry_Data_Processing.Features.Dashboard.Views"
                   xmlns:req="clr-namespace:Entry_Data_Processing.Features.RequestKodeBarang.Views"
-                  Title="EDP Portal" 
+                  Title="EDP Portal"
                   Height="820" Width="1280"
                   MinWidth="1100" MinHeight="700"
                   WindowStartupLocation="CenterScreen">
@@ -23,19 +23,19 @@
                              Icon="{ui:ImageIcon 'pack://application:,,,/Assets/logo.png'}"
                              FontWeight="Bold" />
             </ui:NavigationView.Header>
-            
+
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem x:Name="DashboardMenuItem"
                                        Content="Dashboard"
                                        Icon="{ui:SymbolIcon Home24}"
                                        TargetPageType="{x:Type dashboard:DashboardPage}" />
-                                       
+
                 <ui:NavigationViewItem x:Name="ReqKodeMenuItem"
                                        Content="Request Kode Barang"
                                        Icon="{ui:SymbolIcon Box24}"
                                        TargetPageType="{x:Type req:ReqKodeListPage}" />
             </ui:NavigationView.MenuItems>
-            
+
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem x:Name="ProfileMenuItem"
                                        Icon="{ui:SymbolIcon Person24}">
@@ -53,15 +53,16 @@
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
 
-        <!-- Dialog Host: Full-Window Modal Wrapper for ContentDialogs (covers nav pane & title bar) -->
+
         <ui:ContentDialogHost x:Name="RootContentDialog" Panel.ZIndex="90000" />
 
-        <!-- Global Toast Alert: Absolute Top Layer, Bottom-Right, Compact -->
+
         <ui:SnackbarPresenter x:Name="RootSnackbar"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Bottom"
+                              Width="380"
+                              Height="90"
                               Margin="0,0,24,24"
-                              MaxWidth="380"
                               Panel.ZIndex="99999" />
     </Grid>
 </ui:FluentWindow>

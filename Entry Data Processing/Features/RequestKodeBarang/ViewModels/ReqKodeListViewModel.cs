@@ -28,11 +28,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private System.Collections.Generic.List<ReqEdpKodeRecord> _rawLoadedRequests = new();
         private System.Collections.Generic.List<ReqEdpKodeRecord> _filteredRequests = new();
 
-        // Status Tabs: "Pending", "Approved", "Rejected", "Semua"
         [ObservableProperty]
         private string _selectedTab = "Pending";
 
-        // Tab Counts
         [ObservableProperty]
         private int _countAll;
 
@@ -45,7 +43,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private int _countRejected;
 
-        // Bulk Selection
         [ObservableProperty]
         private bool _isAllSelected;
 
@@ -57,7 +54,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         public bool IsBulkActionAvailable => SelectedTab == "Pending" || SelectedTab == "Semua";
 
-        // Filters
         public ObservableCollection<string> Areas { get; } = new() { "Semua Area" };
         
         [ObservableProperty]
@@ -68,7 +64,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private string _selectedToko = "Semua Toko";
 
-        // Single Field Date Filter Presets
         public ObservableCollection<string> PeriodOptions { get; } = new()
         {
             "Semua Periode",
@@ -98,12 +93,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private string _searchKeyword = string.Empty;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LoadDataCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SyncDataCommand))]
         private bool _isLoading;
 
         [ObservableProperty]
         private ReqEdpKodeRecord? _selectedRequest;
 
-        // Auto-filter debounce timer & reset flag
         private System.Threading.Timer? _debounceTimer;
         private bool _isResettingFilter;
 
@@ -168,7 +164,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                         EndDate = null;
                     }
                     break;
-                default: // "< Semua Periode >"
+                default:
                     StartDate = null;
                     EndDate = null;
                     break;
@@ -199,7 +195,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             }
         }
 
-        // Pagination
         [ObservableProperty]
         private int _currentPage = 1;
 
@@ -233,7 +228,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private int _totalPendingCount;
 
-        // Empty State Properties
         public bool IsEmpty => !IsLoading && TotalRecords == 0;
 
         public string EmptyStateTitle
@@ -270,7 +264,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             }
         }
 
-        // Status bar
         public string ServerInfo => "Terkoneksi (172.22.167.232)";
         public string UserInfo => $"User: {_userSession.CurrentUser?.Name ?? _userSession.CurrentUser?.Nama ?? "User"} (EDP Accounting)";
         public string CurrentDateTime => DateTime.Now.ToString("dd/MM/yyyy HH:mm");
@@ -386,7 +379,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             }
             catch
             {
-                // Ignored if lookup fails
             }
         }
 
@@ -429,14 +421,16 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             RefreshPagedView();
         }
 
-        [RelayCommand]
+        private bool CanLoadData() => !IsLoading;
+
+        [RelayCommand(CanExecute = nameof(CanLoadData))]
         public async Task LoadDataAsync()
         {
             IsLoading = true;
 
             var filter = new ReqEdpFilter
             {
-                TabStatus = "Semua", // Fetch all records matching the search criteria for instant tab switches
+                TabStatus = "Semua",
                 Area = SelectedArea,
                 Toko = SelectedToko,
                 Keyword = SearchKeyword,
@@ -448,10 +442,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             {
                 var data = (await Task.Run(() => _service.GetRequestsAsync(filter))).ToList();
 
-                // EDP only processes submitted / non-draft records
                 _rawLoadedRequests = data.Where(x => x.AccTidak != 3 && x.Status != "draft").ToList();
 
-                // Real-time tab counts computed from the dataset
                 CountAll = _rawLoadedRequests.Count;
                 CountPending = _rawLoadedRequests.Count(x => x.AccTidak == 0 || x.Status == "pending");
                 CountApproved = _rawLoadedRequests.Count(x => x.AccTidak == 1 || x.Status == "approve");
@@ -616,7 +608,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             _ = LoadDataAsync();
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanLoadData))]
         public async Task SyncDataAsync()
         {
             await LoadDataAsync();
@@ -639,7 +631,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             }
             catch
             {
-                // Fallback to currently selected item
             }
 
             var dialog = new Views.Dialogs.ReqKodeDetailDialog(target, _snackbarService)
@@ -672,9 +663,11 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
             if (dialog.IsApproved)
             {
+                _snackbarService.Show("Sukses", $"Permohonan '{target.NmBrg}' berhasil disetujui.", Wpf.Ui.Controls.ControlAppearance.Success, null, TimeSpan.FromSeconds(2.5));
                 await LoadDataAsync();
             }
         }
+
 
         [RelayCommand]
         public async Task Reject(ReqEdpKodeRecord? record = null)

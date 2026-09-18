@@ -1,31 +1,29 @@
 using System.Windows;
 using Wpf.Ui.Controls;
-using Wpf.Ui.Appearance;
 using Wpf.Ui;
-using Entry_Data_Processing.Core.Navigation;
-using Entry_Data_Processing.Core.Session;
 
 namespace Entry_Data_Processing
 {
     public partial class MainWindow : FluentWindow
     {
-        private readonly Wpf.Ui.INavigationService _wpfUiNavigationService;
-        private readonly Entry_Data_Processing.Core.Navigation.INavigationService _coreNavigationService;
+        private readonly INavigationService _wpfUiNavigationService;
+        private readonly Core.Navigation.INavigationService _coreNavigationService;
         private readonly ISnackbarService _snackbarService;
         private readonly IContentDialogService _contentDialogService;
         private readonly Wpf.Ui.Abstractions.INavigationViewPageProvider _pageProvider;
         private readonly MainWindowViewModel _viewModel;
 
         public MainWindow(
-            Wpf.Ui.INavigationService wpfUiNavigationService,
-            Entry_Data_Processing.Core.Navigation.INavigationService coreNavigationService,
+            INavigationService wpfUiNavigationService,
+            Core.Navigation.INavigationService coreNavigationService,
             Wpf.Ui.Abstractions.INavigationViewPageProvider pageProvider,
             ISnackbarService snackbarService,
             IContentDialogService contentDialogService,
             MainWindowViewModel viewModel)
         {
             InitializeComponent();
-            SystemThemeWatcher.Watch(this);
+            snackbarService.SetSnackbarPresenter(RootSnackbar);
+            contentDialogService.SetDialogHost(RootContentDialog);
             DataContext = _viewModel = viewModel;
             _wpfUiNavigationService = wpfUiNavigationService;
             _coreNavigationService = coreNavigationService;
@@ -34,7 +32,6 @@ namespace Entry_Data_Processing
             _contentDialogService = contentDialogService;
             _viewModel.LogoutRequested += OnLogoutRequested;
             Loaded += OnLoaded;
-            Closed += OnClosed;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -57,13 +54,9 @@ namespace Entry_Data_Processing
             Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             loginWindow.Show();
             Application.Current.MainWindow = loginWindow;
-            Close();
+            Hide();
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
         }
 
-        private void OnClosed(object? sender, EventArgs e)
-        {
-            SystemThemeWatcher.UnWatch(this);
-        }
     }
 }

@@ -11,16 +11,15 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public int Id { get; set; }
         public int RowNumber { get; set; }
         
-        // MySQL Columns
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string? NmBrg { get; set; }
         public string? JnsBrg { get; set; }
-        public string? NmJns { get; set; } // From tmabrgjns
+        public string? NmJns { get; set; }
         public string? ReadyOrMix { get; set; }
         public string? Supplier { get; set; }
         public string? KdSupp { get; set; }
-        public string? NmSupplier { get; set; } // From t_supplier
+        public string? NmSupplier { get; set; }
         public decimal Pricelist { get; set; }
         public decimal Disc { get; set; }
         public decimal HrgBeli { get; set; }
@@ -29,8 +28,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public string? LampiranFaktur { get; set; }
         public string? FotoBrg { get; set; }
         public string? Tkkd { get; set; }
-        public string? StoreCall { get; set; } // From store
-        public string? NamaToko { get; set; } // From store
+        public string? StoreCall { get; set; }
+        public string? NamaToko { get; set; }
         public string? IdArea { get; set; }
         public string? KdPrd { get; set; }
         public string? NmPrdAcc { get; set; }
@@ -40,8 +39,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public string? Sat { get; set; }
         public string? SupplierAcc { get; set; }
         public string? KdSuppAcc { get; set; }
-        public int AccTidak { get; set; } // 1 = Approve, 2 = Reject, 3 = Draft, 0 = Pending
-        public string? Status { get; set; } // draft, pending, approve, reject
+        public int AccTidak { get; set; }
+        public string? Status { get; set; }
         public string? ChangedBy { get; set; }
         public DateTime? ChangedAt { get; set; }
         public string? AccBy { get; set; }
@@ -56,7 +55,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
             set => KetTolak = value;
         }
         
-        // Virtual Display Properties
         public string PengajuDisplay => !string.IsNullOrWhiteSpace(CreatedByName) 
             ? CreatedByName 
             : (!string.IsNullOrWhiteSpace(CreatedBy) ? CreatedBy : "-");
@@ -82,7 +80,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public bool IsNewSupplier => string.IsNullOrWhiteSpace(KdSupp) && string.IsNullOrWhiteSpace(NmSupplier);
         public string FormattedTglRequest => CreatedAt.HasValue && CreatedAt.Value != DateTime.MinValue ? CreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "-";
         
-        // Toko: "01/01 - HEAD OFFICE"
         public string TokoNamaDisplay => !string.IsNullOrWhiteSpace(StoreCall) 
             ? StoreCall 
             : (!string.IsNullOrWhiteSpace(NamaToko) ? NamaToko : "HEAD OFFICE");
@@ -93,10 +90,8 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
 
         public string AreaBadge => !string.IsNullOrWhiteSpace(IdArea) ? IdArea : "JGJ";
 
-        // Jenis: "Cat Genteng" (fallback to JnsBrg)
         public string JenisDisplay => !string.IsNullOrWhiteSpace(NmJns) ? NmJns : (JnsBrg ?? "-");
 
-        // Supplier: "S00148 - AA"
         public string SupplierDisplay => !string.IsNullOrWhiteSpace(NmSupplier) && !string.IsNullOrWhiteSpace(Supplier)
             ? $"{Supplier} - {NmSupplier}"
             : (!string.IsNullOrWhiteSpace(Supplier) ? Supplier : "-");
@@ -126,7 +121,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public bool HasKdBrg => !string.IsNullOrWhiteSpace(KdBrg);
         public bool HasKdPrd => !string.IsNullOrWhiteSpace(KdPrd);
 
-        // Prices & Discount
         public string FormattedPricelist => Pricelist > 0 ? Pricelist.ToString("N0", new System.Globalization.CultureInfo("id-ID")) : "0";
         public string FormattedDisc => Disc > 0 ? $"{Disc:N0}%" : "0%";
         public bool HasDiscount => Disc > 0;
@@ -136,11 +130,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Models
         public string DiscBadgeForeground => HasDiscount ? "#0284C7" : "#94A3B8";
         public string FormattedHrgBeli => HrgBeli > 0 ? HrgBeli.ToString("N0", new System.Globalization.CultureInfo("id-ID")) : "0";
         
-        // Ready / Mix badge
         public string RmBadgeText => !string.IsNullOrWhiteSpace(ReadyOrMix) ? ReadyOrMix.ToUpper() : "READY";
         public bool IsMix => RmBadgeText.Contains("MIX");
         
-        // Status resolution prioritizing the explicit Status column
         public string NormalizedStatus
         {
             get

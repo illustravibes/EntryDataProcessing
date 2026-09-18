@@ -1,14 +1,14 @@
 <Page x:Class="Entry_Data_Processing.Features.RequestKodeBarang.Views.ReqKodeListPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       Title="Approval Kode Barang"
       ScrollViewer.VerticalScrollBarVisibility="Disabled"
       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
       ScrollViewer.CanContentScroll="False">
 
     <Page.Resources>
-        <!-- Primary Filter Button (Cari Data - Beautiful Ocean Blue Hover) -->
+
         <Style x:Key="PrimaryFilterButton" TargetType="Button">
             <Setter Property="Background" Value="#0284C7" />
             <Setter Property="Foreground" Value="#FFFFFF" />
@@ -22,10 +22,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="6" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -42,7 +42,7 @@
             </Setter>
         </Style>
 
-        <!-- Sync Filter Button (Sync Data - Fresh Mint Green Hover) -->
+
         <Style x:Key="SyncFilterButton" TargetType="Button">
             <Setter Property="Background" Value="#F0FDF4" />
             <Setter Property="Foreground" Value="#166534" />
@@ -57,10 +57,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="6" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -79,7 +79,7 @@
             </Setter>
         </Style>
 
-        <!-- Secondary Filter Button (Reset - Sleek Slate Hover) -->
+
         <Style x:Key="SecondaryFilterButton" TargetType="Button">
             <Setter Property="Background" Value="#F8FAFC" />
             <Setter Property="Foreground" Value="#475569" />
@@ -94,10 +94,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="6" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -116,7 +116,7 @@
             </Setter>
         </Style>
 
-        <!-- Modern Toolbar Button -->
+
         <Style x:Key="ModernToolbarButton" TargetType="Button">
             <Setter Property="Background" Value="#F8FAFC" />
             <Setter Property="Foreground" Value="#334155" />
@@ -129,7 +129,7 @@
             <Setter Property="FontWeight" Value="Medium" />
         </Style>
 
-        <!-- Row Action Detail Button -->
+
         <Style x:Key="RowActionDetailButton" TargetType="Button">
             <Setter Property="Background" Value="#F1F5F9" />
             <Setter Property="BorderBrush" Value="#E2E8F0" />
@@ -142,9 +142,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -159,7 +159,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Row Action Approve Button -->
+
         <Style x:Key="RowActionApproveButton" TargetType="Button">
             <Setter Property="Background" Value="#DCFCE7" />
             <Setter Property="BorderBrush" Value="#BBF7D0" />
@@ -172,9 +172,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -189,7 +189,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Row Action Reject Button -->
+
         <Style x:Key="RowActionRejectButton" TargetType="Button">
             <Setter Property="Background" Value="#FEE2E2" />
             <Setter Property="BorderBrush" Value="#FECACA" />
@@ -202,9 +202,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Border"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -219,7 +219,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Pagination Nav Button (Prev / Next) -->
+
         <Style x:Key="PaginationNavButton" TargetType="Button">
             <Setter Property="Background" Value="#FFFFFF" />
             <Setter Property="Foreground" Value="#475569" />
@@ -231,10 +231,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="5" 
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -254,7 +254,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Pagination Page Number Button -->
+
         <Style x:Key="PaginationNumberButton" TargetType="Button">
             <Setter Property="Background" Value="#FFFFFF" />
             <Setter Property="Foreground" Value="#475569" />
@@ -270,9 +270,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="BtnBorder"
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -294,7 +294,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Modern Status Tab Button Base Style -->
+
         <Style x:Key="StatusTabButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#F1F5F9" />
             <Setter Property="BorderThickness" Value="0" />
@@ -307,10 +307,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="6" 
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -324,7 +324,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Modern Fluent DataGrid CheckBox Style (WPF UI Fluent Aesthetic) -->
+
         <Style x:Key="DataGridCheckBoxStyle" TargetType="CheckBox">
             <Setter Property="MinWidth" Value="18" />
             <Setter Property="MinHeight" Value="18" />
@@ -347,7 +347,7 @@
                                     BorderThickness="1.5"
                                     CornerRadius="5">
                                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <!-- Fluent Rounded Checkmark -->
+
                                     <Path x:Name="CheckMark"
                                           Data="M 3.8,9.2 L 7.4,12.8 L 14.2,5.2"
                                           Stroke="#FFFFFF"
@@ -358,8 +358,8 @@
                                           Visibility="Collapsed"
                                           HorizontalAlignment="Center"
                                           VerticalAlignment="Center" />
-                                    
-                                    <!-- Indeterminate Bar (Smooth Rounded Pill) -->
+
+
                                     <Rectangle x:Name="IndeterminateMark"
                                                Width="9" Height="2.5"
                                                RadiusX="1.25" RadiusY="1.25"
@@ -371,23 +371,23 @@
                             </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
-                            <!-- Hover Unchecked: Subtle Gray Fill & Accent Border -->
+
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#F8FAFC" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
                             </Trigger>
-                            <!-- Pressed Unchecked -->
+
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#F1F5F9" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0369A1" />
                             </Trigger>
-                            <!-- Checked: Fluent Primary Fill & White Checkmark -->
+
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#0284C7" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
                                 <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
                             </Trigger>
-                            <!-- Hover Checked: Darker Accent -->
+
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
                                     <Condition Property="IsChecked" Value="True" />
@@ -396,13 +396,13 @@
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#0369A1" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0369A1" />
                             </MultiTrigger>
-                            <!-- Indeterminate: Fluent Accent Fill & Pill Bar -->
+
                             <Trigger Property="IsChecked" Value="{x:Null}">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#0284C7" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#0284C7" />
                                 <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
                             </Trigger>
-                            <!-- Disabled State: Muted Gray & Inactive Opacity -->
+
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="CheckBorder" Property="Background" Value="#F8FAFC" />
                                 <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#E2E8F0" />
@@ -415,7 +415,7 @@
             </Setter>
         </Style>
 
-        <!-- Modern DataGrid Column Header Base Style with Thin Inset Vertical Divider & Y-Padding -->
+
         <Style x:Key="ModernColumnHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#F8FAFC" />
             <Setter Property="Foreground" Value="#475569" />
@@ -435,17 +435,17 @@
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                
-                                <!-- Clean Thin Inset Separator Line (with Y-padding: 9px top and 9px bottom) -->
-                                <Rectangle Width="1" 
-                                           Fill="#CBD5E1" 
-                                           HorizontalAlignment="Right" 
-                                           VerticalAlignment="Stretch" 
-                                           Margin="0,9,0,9" 
-                                           SnapsToDevicePixels="True" 
+
+
+                                <Rectangle Width="1"
+                                           Fill="#CBD5E1"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Stretch"
+                                           Margin="0,9,0,9"
+                                           SnapsToDevicePixels="True"
                                            IsHitTestVisible="False" />
-                                
-                                <!-- Completely Invisible Resize Gripper (No 3D Bevel Artifacts) -->
+
+
                                 <Thumb x:Name="PART_RightHeaderGripper"
                                        HorizontalAlignment="Right"
                                        Width="6"
@@ -463,25 +463,25 @@
             </Setter>
         </Style>
 
-        <!-- Centered Header Style (Checkbox, NO, AKSI, STATUS, TGL, DISKON) -->
+
         <Style x:Key="ModernCenterColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="Padding" Value="0,0" />
         </Style>
 
-        <!-- First Column Header Style (Checkbox with left margin / gap from card edge) -->
+
         <Style x:Key="ModernFirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="Padding" Value="12,0,0,0" />
         </Style>
 
-        <!-- Right-Aligned Header Style (PRICELIST) -->
+
         <Style x:Key="ModernRightColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ModernColumnHeaderStyle}">
             <Setter Property="HorizontalContentAlignment" Value="Right" />
             <Setter Property="Padding" Value="0,0,12,0" />
         </Style>
 
-        <!-- Last Column Header Style (HARGA BELI - No Vertical Separator on the right edge) -->
+
         <Style x:Key="ModernLastColumnHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#F8FAFC" />
             <Setter Property="Foreground" Value="#475569" />
@@ -507,15 +507,15 @@
         </Style>
     </Page.Resources>
 
-    <!-- FIXED VIEWPORT: Root grid with no outer scrolling -->
+
     <Grid Background="#F8FAFC">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" /> <!-- 0: Filter Card -->
-            <RowDefinition Height="Auto" /> <!-- 1: Status Tabs & Bulk Action Bar -->
-            <RowDefinition Height="*" />    <!-- 2: Data Grid & Integrated Pagination Card -->
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- 0. Modern Filter Card (Cleaned Layout, Single Date Filter, Sync Action) -->
+
         <Border Grid.Row="0" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Margin="14,8,14,6" Padding="14,10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -523,7 +523,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Row 1: Dropdown Filters (Area, Toko, Periode [1 Field] + Optional Specific Date) -->
+
                 <Grid Grid.Row="0" Margin="0,0,0,8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -536,30 +536,30 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Area Filter -->
+
                     <TextBlock Grid.Column="0" Text="Area:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
                     <ComboBox Grid.Column="1" ItemsSource="{Binding Areas}" SelectedItem="{Binding SelectedArea}" Height="32" FontSize="12" />
 
-                    <!-- Toko Filter -->
+
                     <TextBlock Grid.Column="2" Text="Toko:" VerticalAlignment="Center" Margin="16,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
                     <ComboBox Grid.Column="3" ItemsSource="{Binding Tokos}" SelectedItem="{Binding SelectedToko}" Height="32" FontSize="12" />
 
-                    <!-- Single Periode Filter -->
+
                     <TextBlock Grid.Column="4" Text="Periode:" VerticalAlignment="Center" Margin="16,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
                     <ComboBox Grid.Column="5" ItemsSource="{Binding PeriodOptions}" SelectedItem="{Binding SelectedPeriod}" Height="32" FontSize="12" />
 
-                    <!-- Single Date Picker (Only appears when 'Pilih Tanggal Tertentu' is selected) -->
-                    <DatePicker Grid.Column="6" 
-                                SelectedDate="{Binding SelectedSingleDate}" 
-                                SelectedDateFormat="Short" 
-                                Height="32" 
-                                FontSize="12" 
+
+                    <DatePicker Grid.Column="6"
+                                SelectedDate="{Binding SelectedSingleDate}"
+                                SelectedDateFormat="Short"
+                                Height="32"
+                                FontSize="12"
                                 Width="130"
                                 Margin="8,0,0,0"
                                 Visibility="{Binding IsSingleDateVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
 
-                <!-- Row 2: Search Input & Action Buttons (Sync, Reset, Cari) -->
+
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -568,19 +568,19 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0" Text="Cari:" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12" Foreground="#475569" FontWeight="Medium" />
-                    <ui:TextBox Grid.Column="1" 
-                                Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" 
-                                PlaceholderText="Ketik nama barang / supplier / no request / jenis (otomatis filter saat mengetik)..." 
-                                Height="32" 
-                                FontSize="12" 
+                    <ui:TextBox Grid.Column="1"
+                                Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="Ketik nama barang / supplier / no request / jenis (otomatis filter saat mengetik)..."
+                                Height="32"
+                                FontSize="12"
                                 Margin="0,0,12,0" />
 
-                    <!-- Action Buttons Group -->
+
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
-                        <!-- Reset Button -->
+
                         <ui:Button Command="{Binding ResetFilterCommand}"
                                 Style="{StaticResource SecondaryFilterButton}"
-                                Margin="0,0,8,0" 
+                                Margin="0,0,8,0"
                                 ToolTip="Reset Semua Filter ke Default">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:SymbolIcon Symbol="ArrowReset20" FontSize="13" Foreground="#64748B" Margin="0,0,5,0" />
@@ -588,21 +588,21 @@
                             </StackPanel>
                         </ui:Button>
 
-                        <!-- Sync Data Button -->
+
                         <ui:Button Command="{Binding SyncDataCommand}"
-                                Style="{StaticResource SyncFilterButton}"
-                                Margin="0,0,8,0" 
-                                ToolTip="Sinkronisasi &amp; Refresh Data Terbaru dari Server">
+                                   Style="{StaticResource SyncFilterButton}"
+                                   Margin="0,0,8,0"
+                                   ToolTip="Sinkronisasi &amp; Refresh Data Terbaru dari Server">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:SymbolIcon Symbol="ArrowSync20" FontSize="13" Foreground="#16A34A" Margin="0,0,5,0" />
                                 <TextBlock Text="Sync Data" VerticalAlignment="Center" />
                             </StackPanel>
                         </ui:Button>
 
-                        <!-- Cari Data Button (Rich Ocean Blue with Deep Blue Hover) -->
+
                         <ui:Button Command="{Binding LoadDataCommand}"
-                                Style="{StaticResource PrimaryFilterButton}"
-                                ToolTip="Terapkan Filter / Cari Manual">
+                                   Style="{StaticResource PrimaryFilterButton}"
+                                   ToolTip="Terapkan Filter / Cari Manual">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:SymbolIcon Symbol="Search20" FontSize="13" Foreground="White" Margin="0,0,5,0" />
                                 <TextBlock Text="Cari Data" VerticalAlignment="Center" />
@@ -613,16 +613,16 @@
             </Grid>
         </Border>
 
-        <!-- 1. Modern Status Tabs & Bulk Action Floating Bar -->
+
         <Grid Grid.Row="1" Margin="14,0,14,6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <!-- Status Tabs: Pending, Approved, Rejected, Semua -->
+
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <!-- Tab: Pending (Warna Kuning) -->
+
                 <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Pending">
                     <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
@@ -671,7 +671,7 @@
                     </StackPanel>
                 </ui:Button>
 
-                <!-- Tab: Approved -->
+
                 <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Approved">
                     <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
@@ -720,7 +720,7 @@
                     </StackPanel>
                 </ui:Button>
 
-                <!-- Tab: Rejected -->
+
                 <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Rejected">
                     <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
@@ -769,7 +769,7 @@
                     </StackPanel>
                 </ui:Button>
 
-                <!-- Tab: Semua -->
+
                 <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Semua">
                     <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
@@ -819,30 +819,30 @@
                 </ui:Button>
             </StackPanel>
 
-            <!-- Bulk Action Floating Bar (Visible when HasSelection = True) -->
-            <Border Grid.Column="1" 
-                    Background="#1E293B" 
-                    CornerRadius="8" 
-                    Padding="14,6" 
-                    VerticalAlignment="Center" 
+
+            <Border Grid.Column="1"
+                    Background="#1E293B"
+                    CornerRadius="8"
+                    Padding="14,6"
+                    VerticalAlignment="Center"
                     Visibility="{Binding HasSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding SelectedCount, StringFormat='{}{0} item dipilih'}" 
-                               Foreground="#FFFFFF" 
-                               FontWeight="SemiBold" 
-                               FontSize="12.5" 
-                               VerticalAlignment="Center" 
+                    <TextBlock Text="{Binding SelectedCount, StringFormat='{}{0} item dipilih'}"
+                               Foreground="#FFFFFF"
+                               FontWeight="SemiBold"
+                               FontSize="12.5"
+                               VerticalAlignment="Center"
                                Margin="0,0,14,0" />
 
-                    <!-- Approve Bulk Button -->
+
                     <ui:Button Command="{Binding ApproveBulkCommand}"
-                            Background="#16A34A" 
-                            Foreground="#FFFFFF" 
-                            FontWeight="SemiBold" 
-                            BorderThickness="0" 
-                            Padding="12,5" 
-                            Margin="0,0,8,0" 
-                            FontSize="12" 
+                            Background="#16A34A"
+                            Foreground="#FFFFFF"
+                            FontWeight="SemiBold"
+                            BorderThickness="0"
+                            Padding="12,5"
+                            Margin="0,0,8,0"
+                            FontSize="12"
                             Cursor="Hand">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <ui:SymbolIcon Symbol="Checkmark20" FontSize="14" Foreground="White" Margin="0,0,5,0" />
@@ -850,15 +850,15 @@
                         </StackPanel>
                     </ui:Button>
 
-                    <!-- Reject Bulk Button -->
+
                     <ui:Button Command="{Binding RejectBulkCommand}"
-                            Background="#DC2626" 
-                            Foreground="#FFFFFF" 
-                            FontWeight="SemiBold" 
-                            BorderThickness="0" 
-                            Padding="12,5" 
-                            Margin="0,0,8,0" 
-                            FontSize="12" 
+                            Background="#DC2626"
+                            Foreground="#FFFFFF"
+                            FontWeight="SemiBold"
+                            BorderThickness="0"
+                            Padding="12,5"
+                            Margin="0,0,8,0"
+                            FontSize="12"
                             Cursor="Hand">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <ui:SymbolIcon Symbol="Dismiss20" FontSize="14" Foreground="White" Margin="0,0,5,0" />
@@ -866,20 +866,20 @@
                         </StackPanel>
                     </ui:Button>
 
-                    <!-- Cancel / Clear Button -->
+
                     <ui:Button Command="{Binding ClearSelectionCommand}"
-                            Background="Transparent" 
-                            Foreground="#94A3B8" 
-                            BorderThickness="0" 
-                            Padding="8,5" 
-                            FontSize="12" 
-                            Cursor="Hand" 
+                            Background="Transparent"
+                            Foreground="#94A3B8"
+                            BorderThickness="0"
+                            Padding="8,5"
+                            FontSize="12"
+                            Cursor="Hand"
                             Content="Batal" />
                 </StackPanel>
             </Border>
         </Grid>
 
-        <!-- 2. Modern Data Grid Card with Integrated Pagination -->
+
         <Border Grid.Row="2" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Margin="14,0,14,14" ClipToBounds="True">
             <Grid>
                 <Grid.RowDefinitions>
@@ -888,27 +888,27 @@
                 </Grid.RowDefinitions>
 
                 <DataGrid Grid.Row="0"
-                          ItemsSource="{Binding Requests}" 
-                          SelectedItem="{Binding SelectedRequest}" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="False" 
-                          CanUserAddRows="False" 
-                          CanUserDeleteRows="False" 
-                          HeadersVisibility="Column" 
-                          RowHeaderWidth="0" 
-                          GridLinesVisibility="Horizontal" 
-                          HorizontalGridLinesBrush="#F1F5F9" 
-                          Background="#FFFFFF" 
-                          BorderThickness="0" 
-                          RowHeight="44" 
-                          FontSize="12" 
-                          SelectionMode="Single" 
-                          SelectionUnit="FullRow" 
-                          ScrollViewer.CanContentScroll="True" 
-                          ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                          ItemsSource="{Binding Requests}"
+                          SelectedItem="{Binding SelectedRequest}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          HeadersVisibility="Column"
+                          RowHeaderWidth="0"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="#F1F5F9"
+                          Background="#FFFFFF"
+                          BorderThickness="0"
+                          RowHeight="44"
+                          FontSize="12"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
-                    <!-- Custom ControlTemplate ensuring Vertical ScrollBar only sits inside the Table Body (below header) -->
+
                     <DataGrid.Template>
                         <ControlTemplate TargetType="{x:Type DataGrid}">
                             <Border Background="{TemplateBinding Background}"
@@ -931,27 +931,27 @@
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
 
-                                                <!-- Full Header Background Bar spanning top row across all columns -->
-                                                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
-                                                        Background="#F8FAFC" 
-                                                        BorderBrush="#E2E8F0" 
-                                                        BorderThickness="0,0,0,1" 
+
+                                                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                                        Background="#F8FAFC"
+                                                        BorderBrush="#E2E8F0"
+                                                        BorderThickness="0,0,0,1"
                                                         Height="42" />
 
-                                                <!-- Column Headers Presenter -->
+
                                                 <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter"
                                                                                 Grid.Row="0"
                                                                                 Grid.Column="1"
                                                                                 Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
 
-                                                <!-- Table Body (Scroll Content strictly in Row 1) -->
+
                                                 <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
                                                                         Grid.Row="1"
                                                                         Grid.Column="0"
                                                                         Grid.ColumnSpan="2"
                                                                         CanContentScroll="{TemplateBinding CanContentScroll}" />
 
-                                                <!-- Vertical ScrollBar strictly inside Table Body (Row 1, below header) -->
+
                                                 <ScrollBar x:Name="PART_VerticalScrollBar"
                                                            Grid.Row="1"
                                                            Grid.Column="2"
@@ -961,7 +961,7 @@
                                                            Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                            ViewportSize="{TemplateBinding ViewportHeight}" />
 
-                                                <!-- Horizontal ScrollBar in Row 2 -->
+
                                                 <Grid Grid.Row="2" Grid.Column="1">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
@@ -991,7 +991,7 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#0F172A" />
                     </DataGrid.Resources>
 
-                    <!-- Row Hover and Soft Selection Highlight -->
+
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <Setter Property="Background" Value="Transparent" />
@@ -1007,7 +1007,7 @@
                         </Style>
                     </DataGrid.RowStyle>
 
-                    <!-- Cell Style without harsh blue background -->
+
                     <DataGrid.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="BorderThickness" Value="0" />
@@ -1022,7 +1022,7 @@
                         </Style>
                     </DataGrid.CellStyle>
 
-                    <!-- Hide Row Headers to prevent left bracket artifacts -->
+
                     <DataGrid.RowHeaderStyle>
                         <Style TargetType="DataGridRowHeader">
                             <Setter Property="Width" Value="0" />
@@ -1039,7 +1039,7 @@
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <!-- Checkbox Select Column (Width 52) - Perfectly Centered and Aligned -->
+
                         <DataGridTemplateColumn Width="52" CanUserResize="False" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
@@ -1059,25 +1059,25 @@
                             </DataGridTemplateColumn.CellStyle>
                             <DataGridTemplateColumn.Header>
                                 <CheckBox Style="{StaticResource DataGridCheckBoxStyle}"
-                                          IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=Page}}" 
+                                          IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=Page}}"
                                           IsEnabled="{Binding DataContext.IsBulkActionAvailable, RelativeSource={RelativeSource AncestorType=Page}}"
-                                          HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center" 
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
                                           Margin="0" />
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox Style="{StaticResource DataGridCheckBoxStyle}"
-                                              IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
+                                              IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
                                               IsEnabled="{Binding CanApproveOrReject}"
-                                              HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
                                               Margin="0" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 1. NO (Width 46) -->
+
                         <DataGridTextColumn Header="NO" Binding="{Binding RowNumber}" IsReadOnly="True" Width="46" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -1089,31 +1089,31 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- 2. AKSI (Width 108) -->
+
                         <DataGridTemplateColumn Header="AKSI" Width="108" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <!-- Detail (Always visible) -->
+
                                         <ui:Button Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}" 
-                                                Style="{StaticResource RowActionDetailButton}" 
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource RowActionDetailButton}"
                                                 ToolTip="Lihat Detail">
                                             <ui:SymbolIcon Symbol="Eye20" FontSize="13" Foreground="#475569" />
                                         </ui:Button>
-                                        <!-- Approve (Only when Pending) -->
+
                                         <ui:Button Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}" 
-                                                Style="{StaticResource RowActionApproveButton}" 
-                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource RowActionApproveButton}"
+                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 ToolTip="Setujui Request">
                                             <ui:SymbolIcon Symbol="Checkmark20" FontSize="13" Foreground="#16A34A" />
                                         </ui:Button>
-                                        <!-- Reject (Only when Pending) -->
+
                                         <ui:Button Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}" 
-                                                Style="{StaticResource RowActionRejectButton}" 
-                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource RowActionRejectButton}"
+                                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 ToolTip="Tolak Request">
                                             <ui:SymbolIcon Symbol="Dismiss20" FontSize="13" Foreground="#DC2626" />
                                         </ui:Button>
@@ -1122,7 +1122,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 3. STATUS (Width 100) -->
+
                         <DataGridTemplateColumn Header="STATUS" Width="100" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -1172,7 +1172,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 4. TANGGAL REQUEST (Width 130) -->
+
                         <DataGridTextColumn Header="TANGGAL REQUEST" Binding="{Binding FormattedTglRequest}" IsReadOnly="True" Width="130" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -1184,7 +1184,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- 5. TGL APPROVE (Width 130) -->
+
                         <DataGridTextColumn Header="TGL APPROVE" Binding="{Binding FormattedTglAcc}" IsReadOnly="True" Width="130" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -1196,19 +1196,19 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- 5. TOKO (Width 175) -->
+
                         <DataGridTemplateColumn Header="TOKO" Width="175" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
-                                        <TextBlock Text="{Binding TokoKodeAndName}" 
-                                                    FontWeight="SemiBold" 
-                                                    FontSize="12" 
-                                                    Foreground="#0F172A" 
-                                                    TextTrimming="CharacterEllipsis" 
-                                                    MaxWidth="130" 
+                                        <TextBlock Text="{Binding TokoKodeAndName}"
+                                                    FontWeight="SemiBold"
+                                                    FontSize="12"
+                                                    Foreground="#0F172A"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    MaxWidth="130"
                                                     VerticalAlignment="Center" />
-                                        <!-- Area Badge (JGJ) -->
+
                                         <Border Background="#F1F5F9" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="3" Padding="4,1.5" Margin="5,0,0,0" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding AreaBadge}" FontSize="9" FontWeight="Bold" Foreground="#475569" />
                                         </Border>
@@ -1217,19 +1217,19 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 6. NAMA BARANG + Badge (Width Flex *) -->
+
                         <DataGridTemplateColumn Header="NAMA BARANG" Width="*" MinWidth="150" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
-                                        <TextBlock Text="{Binding NmBrg}" 
-                                                    FontWeight="SemiBold" 
-                                                    FontSize="12" 
-                                                    Foreground="#0F172A" 
-                                                    TextTrimming="CharacterEllipsis" 
-                                                    MaxWidth="250" 
+                                        <TextBlock Text="{Binding NmBrg}"
+                                                    FontWeight="SemiBold"
+                                                    FontSize="12"
+                                                    Foreground="#0F172A"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    MaxWidth="250"
                                                     VerticalAlignment="Center" />
-                                        <!-- R/M Inline Badge -->
+
                                         <Border CornerRadius="6" Padding="5,1.5" Margin="6,0,0,0" VerticalAlignment="Center">
                                             <Border.Style>
                                                 <Style TargetType="Border">
@@ -1262,7 +1262,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 7. JENIS (Width 105) -->
+
                         <DataGridTextColumn Header="JENIS" Binding="{Binding JenisDisplay}" IsReadOnly="True" Width="105" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -1275,7 +1275,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- 8. SUPPLIER (Width 130) -->
+
                         <DataGridTemplateColumn Header="SUPPLIER" Width="130" HeaderStyle="{StaticResource ModernColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -1289,7 +1289,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 9. PRICELIST (Width 100) -->
+
                         <DataGridTextColumn Header="PRICELIST" Binding="{Binding FormattedPricelist}" IsReadOnly="True" Width="100" HeaderStyle="{StaticResource ModernRightColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -1302,27 +1302,27 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- 10. DISKON (Badge, Width 70) -->
+
                         <DataGridTemplateColumn Header="DISKON" Width="70" HeaderStyle="{StaticResource ModernCenterColumnHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border HorizontalAlignment="Center" 
-                                            VerticalAlignment="Center" 
-                                            CornerRadius="4" 
-                                            Padding="5,2" 
-                                            Background="{Binding DiscBadgeBackground}" 
-                                            BorderBrush="{Binding DiscBadgeBorder}" 
+                                    <Border HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            CornerRadius="4"
+                                            Padding="5,2"
+                                            Background="{Binding DiscBadgeBackground}"
+                                            BorderBrush="{Binding DiscBadgeBorder}"
                                             BorderThickness="1">
-                                        <TextBlock Text="{Binding DiscBadgeText}" 
-                                                    FontSize="10.5" 
-                                                    FontWeight="SemiBold" 
+                                        <TextBlock Text="{Binding DiscBadgeText}"
+                                                    FontSize="10.5"
+                                                    FontWeight="SemiBold"
                                                     Foreground="{Binding DiscBadgeForeground}" />
                                     </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- 11. HARGA BELI (Last Column, Width 110) -->
+
                         <DataGridTextColumn Header="HARGA BELI" Binding="{Binding FormattedHrgBeli}" IsReadOnly="True" Width="110" HeaderStyle="{StaticResource ModernLastColumnHeaderStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -1338,41 +1338,41 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- Empty State Overlay (Visible when table has no items) -->
-                <Border Grid.Row="0" 
-                        Margin="0,42,0,0" 
+
+                <Border Grid.Row="0"
+                        Margin="0,42,0,0"
                         Background="#FFFFFF"
                         Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="24,40">
-                        <!-- Yellow Circular Icon Badge -->
+
                         <Border Width="64" Height="64" CornerRadius="32" Background="#FEF9C3" BorderBrush="#FEF08A" BorderThickness="1.5" HorizontalAlignment="Center" Margin="0,0,0,16">
                             <ui:SymbolIcon Symbol="ClipboardCheckmark24" FontSize="30" Foreground="#CA8A04" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
 
-                        <!-- Title -->
-                        <TextBlock Text="{Binding EmptyStateTitle}" 
-                                   FontSize="15" 
-                                   FontWeight="Bold" 
-                                   Foreground="#0F172A" 
-                                   HorizontalAlignment="Center" 
+
+                        <TextBlock Text="{Binding EmptyStateTitle}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="#0F172A"
+                                   HorizontalAlignment="Center"
                                    Margin="0,0,0,6" />
 
-                        <!-- Description -->
-                        <TextBlock Text="{Binding EmptyStateDescription}" 
-                                   FontSize="12.5" 
-                                   Foreground="#64748B" 
-                                   HorizontalAlignment="Center" 
-                                   TextAlignment="Center" 
-                                   MaxWidth="480" 
+
+                        <TextBlock Text="{Binding EmptyStateDescription}"
+                                   FontSize="12.5"
+                                   Foreground="#64748B"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   MaxWidth="480"
                                    TextWrapping="Wrap" />
 
-                        <!-- Segarkan Action Button -->
+
                         <ui:Button Command="{Binding LoadDataCommand}"
-                                   Margin="0,18,0,0" 
-                                   Padding="16,6" 
+                                   Margin="0,18,0,0"
+                                   Padding="16,6"
                                    Appearance="Secondary"
                                    CornerRadius="6"
-                                   HorizontalAlignment="Center" 
+                                   HorizontalAlignment="Center"
                                    Cursor="Hand">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:SymbolIcon Symbol="ArrowSync24" FontSize="14" Foreground="#475569" Margin="0,0,6,0" />
@@ -1382,7 +1382,7 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Loading Overlay (Localized to Table, Non-transparent) -->
+
                 <Border Grid.Row="0"
                         Margin="0,42,0,0"
                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -1403,32 +1403,32 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 3. Dynamic Modern Pagination Footer (Integrated inside Card) -->
+
                 <Border Grid.Row="1" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="14,8">
                     <Grid>
-                        <!-- Left: Summary Text -->
-                        <TextBlock Text="{Binding PaginationSummary}" 
+
+                        <TextBlock Text="{Binding PaginationSummary}"
                                    HorizontalAlignment="Left"
-                                   VerticalAlignment="Center" 
-                                   Foreground="#64748B" 
-                                   FontSize="12" 
+                                   VerticalAlignment="Center"
+                                   Foreground="#64748B"
+                                   FontSize="12"
                                    FontWeight="Medium" />
 
-                        <!-- Center: Page Size Selector -->
+
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="Tampilkan:" VerticalAlignment="Center" FontSize="12" Foreground="#64748B" Margin="0,0,6,0" />
-                            <ComboBox ItemsSource="{Binding PageSizeOptions}" 
-                                      SelectedItem="{Binding PageSize}" 
-                                      Height="32" 
-                                      FontSize="12" 
-                                      MinWidth="76" 
+                            <ComboBox ItemsSource="{Binding PageSizeOptions}"
+                                      SelectedItem="{Binding PageSize}"
+                                      Height="32"
+                                      FontSize="12"
+                                      MinWidth="76"
                                       Padding="8,0"
                                       VerticalContentAlignment="Center"
                                       VerticalAlignment="Center" />
                             <TextBlock Text="per halaman" VerticalAlignment="Center" FontSize="12" Foreground="#64748B" Margin="6,0,0,0" />
                         </StackPanel>
 
-                        <!-- Right: Dynamic Pagination Buttons -->
+
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                             <ui:Button Command="{Binding PrevPageCommand}" Style="{StaticResource PaginationNavButton}" ToolTip="Halaman Sebelumnya">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -1446,8 +1446,8 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <ui:Button Content="{Binding PageNumber}"
-                                                Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=Page}}" 
-                                                CommandParameter="{Binding PageNumber}" 
+                                                Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding PageNumber}"
                                                 Style="{StaticResource PaginationNumberButton}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

@@ -14,5 +14,10 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views
             
             Loaded += (_, _) => _viewModel.InitializeCommand.Execute(null);
         }
+
+        private void DataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

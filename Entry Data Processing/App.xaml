@@ -14,10 +14,14 @@
             <SolidColorBrush x:Key="BrandYellowLight" Color="#FBBF24" />
 
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:BooleanToVisibilityConverter
+                x:Key="InverseBooleanToVisibilityConverter"
+                TrueValue="Collapsed"
+                FalseValue="Visible" />
             <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
-            <!-- Global Compact Bottom-Right Floating Toast / Alert Style -->
+
             <Style TargetType="{x:Type ui:Snackbar}" BasedOn="{StaticResource {x:Type ui:Snackbar}}">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="VerticalAlignment" Value="Bottom" />
@@ -54,11 +58,6 @@
                 </Style.Triggers>
             </Style>
 
-            <Style TargetType="{x:Type ui:SnackbarPresenter}">
-                <Setter Property="HorizontalAlignment" Value="Right" />
-                <Setter Property="VerticalAlignment" Value="Bottom" />
-                <Setter Property="Panel.ZIndex" Value="99999" />
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -29,7 +29,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private bool _isLoading;
 
-        // Step 1 Data
         [ObservableProperty]
         private ProductDataDto _productData = new();
         
@@ -41,7 +40,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         [ObservableProperty]
         private ProductDataDto? _selectedProduct;
 
-        // Live validation for New Product Mode
         [ObservableProperty]
         private string _newProductCode = string.Empty;
 
@@ -118,7 +116,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             }
         }
 
-        // Factory Search for New Product Mode
         [ObservableProperty]
         private string _factorySearchQuery = string.Empty;
 
@@ -130,7 +127,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         public ObservableCollection<FactoryDto> FactorySearchResults { get; } = new();
 
-        // Product Type (Jenis) Search for New Product Mode
         [ObservableProperty]
         private string _productTypeSearchQuery = string.Empty;
 
@@ -142,7 +138,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         public ObservableCollection<ProductTypeDto> ProductTypeSearchResults { get; } = new();
 
-        // Step 2 Data
         [ObservableProperty]
         private PriceDataDto _priceData = new();
 
@@ -168,11 +163,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         public ObservableCollection<UnitDto> UnitSearchResults { get; } = new();
 
-        // Step 3 Data
         [ObservableProperty]
         private ItemDataDto _itemData = new();
 
-        // Control properties
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CanGoPrevious))]
         private bool _isFirstStep = true;
@@ -497,7 +490,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             PriceData.IdHrg = null;
         }
 
-        // Factory Selection Commands
         partial void OnSelectedFactoryChanged(FactoryDto? value)
         {
             if (value != null)
@@ -622,7 +614,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             _ = RunSearchSafelyAsync(SearchFactoriesAsync);
         }
 
-        // Product Type (Jenis) Selection Commands
         partial void OnProductTypeSearchQueryChanged(string value)
         {
             _ = RunSearchSafelyAsync(SearchProductTypesAsync);
@@ -670,7 +661,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             ClearValidationWarning();
         }
 
-        // Price Group Selection Commands
         partial void OnPriceGroupSearchQueryChanged(string value)
         {
             _ = RunSearchSafelyAsync(SearchPriceGroupsAsync);
@@ -711,7 +701,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             _ = RunSearchSafelyAsync(SearchPriceGroupsAsync);
         }
 
-        // Unit Selection Commands
         partial void OnUnitSearchQueryChanged(string value)
         {
             _ = RunSearchSafelyAsync(SearchUnitsAsync);
@@ -1150,7 +1139,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
             if (result.IsSuccess)
             {
-                _snackbarService.Show("Sukses", "Permohonan berhasil disetujui", ControlAppearance.Success, null, System.TimeSpan.FromSeconds(3));
                 return true;
             }
             else

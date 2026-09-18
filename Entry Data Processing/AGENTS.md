@@ -67,6 +67,11 @@ Entry Data Processing/
 - Setiap fitur baru **wajib** membuat folder baru di `Features/{NamaFitur}/`.
 - Jangan menaruh logika bisnis di View atau code-behind (`.xaml.cs`).
 
+### Code Comment Policy
+- Jangan menambahkan comment inline, block comment, atau section comment baru di source code dan XAML.
+- Kode harus dibuat self-explanatory melalui naming, struktur method, dan pemisahan service/ViewModel yang jelas.
+- Jika ada penjelasan teknis yang perlu dipelihara, tulis di `AGENTS.md` atau dokumentasi proyek, bukan di dalam file implementasi.
+
 ---
 
 ## 🎨 WPF UI — WAJIB DIGUNAKAN
@@ -97,6 +102,11 @@ xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
 - Inject `ISnackbarService` ke ViewModel via konstruktor.
 - Durasi default: `TimeSpan.FromSeconds(3)` untuk error, `TimeSpan.FromSeconds(2.5)` untuk sukses.
 - Toast harus muncul **kanan bawah**, compact, `MaxWidth="380"`.
+- `RootSnackbar` harus ditempatkan sebagai child langsung dari root `Grid` window, di luar `NavigationView` dan bukan di `NavigationView.ContentOverlay`.
+- Jangan membuat implicit `Style` untuk `ui:SnackbarPresenter` tanpa `BasedOn`; style tersebut dapat menimpa template bawaan WPF-UI dan membuat Snackbar tidak terlihat.
+- Presenter harus dihubungkan saat constructor/`Loaded` window aktif menggunakan `SetSnackbarPresenter(RootSnackbar)`.
+- `ISnackbarService` didaftarkan sebagai `Singleton` agar ViewModel dan window menggunakan service yang sama.
+- Jika presenter tidak terlihat, pastikan aplikasi benar-benar menjalankan binary terbaru; build dapat gagal mengganti `EDP.exe` jika proses masih berjalan.
 - **Dialog lokal**: Jika sebuah `Window` dialog memerlukan toast, buat `SnackbarPresenter` lokal dan swap sementara (`Loaded` → swap, `Closed` → restore).
 
 ```csharp
@@ -112,6 +122,10 @@ ControlAppearance.Danger    // Error / gagal
 ControlAppearance.Caution   // Warning / tolak
 ControlAppearance.Secondary // Informasi netral
 ```
+
+### Theme
+- Aplikasi sementara dipaksa menggunakan Light Theme melalui `<ui:ThemesDictionary Theme="Light" />`.
+- Jangan mengaktifkan `SystemThemeWatcher` sampai style Dashboard untuk Dark Theme sudah tersedia dan diuji.
 
 ---
 
@@ -140,6 +154,15 @@ public partial class MyViewModel : ViewModelBase
 - Gunakan `BooleanToVisibilityConverter` (sudah ada di `App.xaml`) untuk kontrol tampil/sembunyi.
 - **Hindari** code-behind untuk logika; gunakan `Command` binding.
 
+### Implementasi MVVM Saat Ini
+- Semua ViewModel fitur mewarisi `Core.Common.ViewModelBase`.
+- Login menggunakan `LoginCommand`; ViewModel tidak membuat atau mengresolve `MainWindow`.
+- Keberhasilan login dikomunikasikan melalui event `LoginSucceeded`; perpindahan `LoginWindow` ke `MainWindow` ditangani oleh code-behind window sebagai orchestration UI.
+- Operasi async dari `Loaded` page harus memanggil command hasil source generator, bukan menempatkan logika bisnis di event handler.
+- Validasi, pemanggilan service, state loading, dan notifikasi berada di ViewModel/service.
+- Dialog approval dan reject menggunakan factory yang di-resolve melalui DI; ViewModel tidak boleh memakai `new` untuk membuat ViewModel lain.
+- Untuk operasi yang dapat dibatalkan atau gagal, gunakan `try/catch/finally` agar `IsLoading` selalu kembali ke `false`.
+
 ---
 
 ## 🔌 Dependency Injection
@@ -163,6 +186,12 @@ public MyViewModel(IMyService service, ISnackbarService snackbar, IUserSession s
 ```
 
 > `App.GetService<T>()` hanya boleh digunakan dari code-behind View/Window jika tidak ada cara lain.
+
+### Lifetime dan Window Lifecycle
+- `MainWindow` adalah `Singleton` dan tidak boleh dipanggil `Close()` saat logout karena akan membuat instance tidak dapat ditampilkan kembali.
+- Logout harus memakai `Hide()` pada `MainWindow`, menampilkan `LoginWindow`, lalu mengubah `Application.Current.MainWindow`.
+- Setelah login berhasil, `LoginWindow` di-hide dan `MainWindow` singleton ditampilkan kembali.
+- Code-behind Window hanya boleh mengatur lifecycle window, presenter WPF-UI, navigation host, dan event UI; jangan menaruh aturan bisnis di sana.
 
 ---
 
@@ -267,6 +296,13 @@ Loading **harus lokal ke tabel**, bukan ke seluruh aplikasi:
 </Border>
 ```
 
+### Loading State Action
+- Loading tabel tetap menggunakan overlay lokal agar isi tabel tidak dapat diinteraksi selama proses.
+- Tombol aksi Sync Data, Cari Data, dan aksi lain tidak menggunakan overlay global.
+- Saat ini tombol aksi tetap menggunakan `ui:Button` biasa dengan icon dan teks. `IsLoading` digunakan untuk disable command melalui `CanExecute`, bukan untuk menambahkan spinner di tombol.
+- Login memiliki `ProgressRing` inline di dalam tombol login karena proses login membutuhkan feedback langsung pada action tersebut.
+- Jangan membuat component loading button baru tanpa kebutuhan UI yang jelas; tampilan tombol harus tetap ringkas dan konsisten dengan WPF-UI.
+
 ### Tab Status
 Urutan tab standar untuk fitur approval: **Pending → Approved → Rejected → Semua**
 
@@ -327,6 +363,11 @@ Saat menambahkan fitur baru, pastikan:
 - [ ] Daftarkan Page di `PageService`
 - [ ] Gunakan `ISnackbarService` untuk semua notifikasi (bukan `MessageBox`)
 - [ ] Tabel memiliki **empty state** dan **loading overlay lokal**
+- [ ] Command async memiliki state `IsLoading` dan selalu reset melalui `finally`
+- [ ] Loading action tidak memakai overlay global; command disabled selama proses berlangsung
+- [ ] Presenter Snackbar ditempatkan di luar `NavigationView` dan didaftarkan saat window aktif
+- [ ] Login/logout tidak menutup `MainWindow` singleton; gunakan lifecycle `Hide()`/`Show()`
+- [ ] Theme yang digunakan sesuai status implementasi saat ini (Light)
 - [ ] Tab approval mengikuti urutan: Pending → Approved → Rejected → Semua
 - [ ] Semua komponen input menggunakan WPF-UI (`ui:TextBox`, `ui:Button`, dll.)
 - [ ] Tidak ada logika bisnis di code-behind (`.xaml.cs`)
@@ -343,3 +384,5 @@ Saat menambahkan fitur baru, pastikan:
 6. **Kontrol WPF standar** yang sudah punya padanan di WPF-UI (`TextBox`, `ProgressBar`).
 7. **`new MyViewModel()`** langsung di ViewModel lain — selalu resolve dari DI container.
 8. **`App.GetService<T>()`** dari dalam ViewModel — inject via konstruktor.
+9. Menaruh logika bisnis, query database, atau pembuatan ViewModel di code-behind.
+10. Menutup `MainWindow` singleton saat logout.

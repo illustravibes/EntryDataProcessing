@@ -598,7 +598,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                         finalIdHrg = existingIdHrg.Value;
                     }
 
-                    // 3. Handle tmabrg
                     var brKdFormatted = $"{prdKd}.{satKd}.{kdNo}";
                     var checkItemSql = "SELECT COUNT(*) FROM tmabrg WHERE BrKd = @BrKd";
                     var itemCount = await connection.ExecuteScalarAsync<int>(checkItemSql, new { BrKd = brKdFormatted }, transaction);
@@ -621,7 +620,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
                         BrHrgGol = gol
                     }, transaction);
 
-                    // 4. Update request status & hasil barang jadi
                     var updateReqSql = @"
                         UPDATE req_edp_kode 
                         SET kd_prd = @KdPrd,

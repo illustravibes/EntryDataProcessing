@@ -30,19 +30,43 @@
                 <ui:TextBox Text="{Binding Nip, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan NIP..." Margin="0,0,0,15" />
                 
                 <ui:TextBlock Text="Password" Margin="0,0,0,5" FontWeight="Medium" />
-                <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan password..." Margin="0,0,0,24" />
-                
-                <ui:Button Content="Login" Appearance="Primary" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" IsDefault="True" Padding="0,8" />
-                
-                <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,18,0,0" Width="28" Height="28" />
-            </StackPanel>
+                <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Masukkan password..." Margin="0,0,0,12" />
 
-            <ui:SnackbarPresenter x:Name="RootSnackbar"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Bottom"
-                                  Margin="0,0,16,16"
-                                  MaxWidth="380"
-                                  Panel.ZIndex="99999" />
+                <Border Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Background="#FEF2F2"
+                        BorderBrush="#FECACA"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="10,9"
+                        Margin="0,0,0,12">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="ErrorCircle20"
+                                       Foreground="#DC2626"
+                                       FontSize="16"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#B91C1C"
+                                   FontSize="12"
+                                   FontWeight="Medium"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <ui:Button Appearance="Primary" Command="{Binding LoginCommand}" HorizontalAlignment="Stretch" IsDefault="True" Padding="0,8">
+                    <Grid>
+                        <ui:TextBlock Text="Login"
+                                      HorizontalAlignment="Center"
+                                      Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+                        <ui:ProgressRing IsIndeterminate="True"
+                                         Width="20"
+                                         Height="20"
+                                         HorizontalAlignment="Center"
+                                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                </ui:Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </ui:FluentWindow>

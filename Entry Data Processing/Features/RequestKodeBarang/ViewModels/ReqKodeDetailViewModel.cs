@@ -87,11 +87,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         {
             if (RequestDetail == null || _userSession.CurrentUser == null) return;
 
-            // Here we should show a dialog, but for simplicity we'll just prompt for a reason string via custom UI
-            // Assuming the View code-behind or a dialog service handles getting the reason
             
-            // For now, we'll just create a mock reason or expect it to be passed.
-            // A more robust implementation would use a DialogService to show the RejectReasonDialog
             
             var dialog = new Views.Dialogs.RejectReasonDialog(_rejectReasonFactory.Create())
             {

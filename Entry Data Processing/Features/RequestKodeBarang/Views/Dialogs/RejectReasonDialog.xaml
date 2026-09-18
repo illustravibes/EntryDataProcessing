@@ -17,9 +17,9 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
-    <!-- Outer Shadow Layer -->
+
     <Grid Margin="18">
-        <!-- Card -->
+
         <Border Background="#FFFFFF"
                 BorderBrush="#CBD5E1"
                 BorderThickness="1"
@@ -37,7 +37,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Header -->
+
                 <Grid Grid.Row="0" Margin="22,18,16,18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -91,10 +91,10 @@
                     </ui:Button>
                 </Grid>
 
-                <!-- Divider -->
+
                 <Rectangle Grid.Row="1" Height="1" Fill="#E2E8F0" />
 
-                <!-- Body -->
+
                 <StackPanel Grid.Row="2" Margin="22,18,22,18">
                     <TextBlock Text="Alasan Penolakan *"
                                FontSize="12"
@@ -128,10 +128,10 @@
                     </Border>
                 </StackPanel>
 
-                <!-- Divider -->
+
                 <Rectangle Grid.Row="3" Height="1" Fill="#E2E8F0" />
 
-                <!-- Footer -->
+
                 <Grid Grid.Row="4" Margin="22,14">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -146,7 +146,7 @@
                                Foreground="#94A3B8"
                                VerticalAlignment="Center" />
 
-                    <!-- Batal -->
+
                     <ui:Button Grid.Column="1"
                             Content="Batal"
                             Command="{Binding CancelCommand}"
@@ -178,7 +178,7 @@
                         </ui:Button.Template>
                     </ui:Button>
 
-                    <!-- Tolak -->
+
                     <ui:Button Grid.Column="2"
                             x:Name="BtnConfirm"
                             Command="{Binding ConfirmCommand}"

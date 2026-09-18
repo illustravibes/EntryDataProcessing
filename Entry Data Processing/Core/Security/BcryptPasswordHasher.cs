@@ -16,7 +16,6 @@ namespace Entry_Data_Processing.Core.Security
 
             try
             {
-                // 1. Check MD5 hash (32 hex chars, e.g. e10adc3949ba59abbe56e057f20f883e)
                 if (hashedPassword.Length == 32 && IsHex(hashedPassword))
                 {
                     using var md5 = MD5.Create();
@@ -29,13 +28,11 @@ namespace Entry_Data_Processing.Core.Security
                     }
                 }
 
-                // 2. Check BCrypt hash ($2y$, $2a$, $2b$)
                 if (hashedPassword.StartsWith("$2"))
                 {
                     return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
                 }
 
-                // 3. Plain text fallback
                 if (password == hashedPassword)
                 {
                     return true;

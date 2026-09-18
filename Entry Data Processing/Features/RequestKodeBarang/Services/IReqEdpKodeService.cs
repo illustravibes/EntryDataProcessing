@@ -17,7 +17,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Services
         Task<IEnumerable<string>> GetDistinctAreasAsync();
         Task<IEnumerable<string>> GetDistinctTokosAsync();
 
-        // Wizard Approval Methods
         Task<IEnumerable<ProductDataDto>> SearchProductsAsync(string query);
         Task<bool> CheckProductExistsAsync(string brPrdKd);
         Task<bool> CheckItemExistsAsync(string brKd);

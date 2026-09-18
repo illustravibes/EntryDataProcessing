@@ -76,8 +76,6 @@ namespace Entry_Data_Processing.Features.Dashboard.ViewModels
         [RelayCommand]
         private void NavigateToRequestKode()
         {
-            // Note: We need to resolve the type of ReqKodeListPage
-            // Assuming we use type-based navigation
             _navigationService.NavigateTo(typeof(Features.RequestKodeBarang.Views.ReqKodeListPage));
         }
     }

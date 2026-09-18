@@ -13,21 +13,21 @@ namespace Entry_Data_Processing.Shared.Converters
             {
                 var s = str.Trim().ToLowerInvariant();
                 if (s == "approve" || s == "approved" || s == "disetujui")
-                    return new SolidColorBrush(Color.FromRgb(0x15, 0x80, 0x3D)); // Modern Green
+                    return new SolidColorBrush(Color.FromRgb(0x15, 0x80, 0x3D));
                 if (s == "reject" || s == "rejected" || s == "ditolak")
-                    return new SolidColorBrush(Color.FromRgb(0xB9, 0x1C, 0x1C)); // Modern Red
+                    return new SolidColorBrush(Color.FromRgb(0xB9, 0x1C, 0x1C));
                 if (s == "draft")
-                    return new SolidColorBrush(Color.FromRgb(0x43, 0x38, 0xCA)); // Modern Indigo
-                return new SolidColorBrush(Color.FromRgb(0xB4, 0x53, 0x09)); // Modern Amber / Pending
+                    return new SolidColorBrush(Color.FromRgb(0x43, 0x38, 0xCA));
+                return new SolidColorBrush(Color.FromRgb(0xB4, 0x53, 0x09));
             }
             if (value is int status)
             {
                 return status switch
                 {
-                    1 => new SolidColorBrush(Color.FromRgb(0x15, 0x80, 0x3D)), // Approved
-                    2 => new SolidColorBrush(Color.FromRgb(0xB9, 0x1C, 0x1C)), // Rejected
-                    3 => new SolidColorBrush(Color.FromRgb(0x43, 0x38, 0xCA)), // Draft
-                    _ => new SolidColorBrush(Color.FromRgb(0xB4, 0x53, 0x09))  // Pending
+                    1 => new SolidColorBrush(Color.FromRgb(0x15, 0x80, 0x3D)),
+                    2 => new SolidColorBrush(Color.FromRgb(0xB9, 0x1C, 0x1C)),
+                    3 => new SolidColorBrush(Color.FromRgb(0x43, 0x38, 0xCA)),
+                    _ => new SolidColorBrush(Color.FromRgb(0xB4, 0x53, 0x09))
                 };
             }
             return new SolidColorBrush(Colors.Gray);

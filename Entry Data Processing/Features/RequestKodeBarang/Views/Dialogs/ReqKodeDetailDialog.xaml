@@ -48,11 +48,10 @@
         </Style>
     </Window.Resources>
 
-    <!-- Outer Shadow Layer with Rounded Container -->
     <Grid Margin="18">
-        <Border Background="#FFFFFF" 
-                BorderBrush="#CBD5E1" 
-                BorderThickness="1" 
+        <Border Background="#FFFFFF"
+                BorderBrush="#CBD5E1"
+                BorderThickness="1"
                 CornerRadius="16">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Direction="270" ShadowDepth="8" Opacity="0.22" Color="#0F172A" />
@@ -60,17 +59,16 @@
 
             <Grid Background="Transparent">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" /> <!-- Header Bar -->
-                    <RowDefinition Height="*" />    <!-- Content Body -->
-                    <RowDefinition Height="Auto" /> <!-- Footer Bar -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- 1. Rounded Header Bar -->
-                <Border Grid.Row="0" 
-                        Background="#FFFFFF" 
-                        BorderBrush="#F1F5F9" 
-                        BorderThickness="0,0,0,1" 
-                        Padding="22,14" 
+                <Border Grid.Row="0"
+                        Background="#FFFFFF"
+                        BorderBrush="#F1F5F9"
+                        BorderThickness="0,0,0,1"
+                        Padding="22,14"
                         CornerRadius="16,16,0,0"
                         MouseLeftButtonDown="OnHeaderMouseDown">
                     <Grid>
@@ -83,7 +81,7 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:SymbolIcon Symbol="DocumentBulletList24" FontSize="19" Foreground="#0284C7" Margin="0,0,8,0" VerticalAlignment="Center" />
                                 <TextBlock Text="Detail Permohonan Kode Barang" FontSize="16" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center" />
-                                
+
                                 <Border Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="8,2" Margin="10,0,0,0" VerticalAlignment="Center"
                                         Visibility="{Binding HasKdBrg, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -95,19 +93,7 @@
                             <TextBlock Text="Informasi lengkap pengajuan kode barang dari toko" FontSize="11.5" Foreground="#64748B" Margin="27,2,0,0" />
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <ui:Button Content="Tolak Permohonan" 
-                                       Appearance="Secondary" 
-                                       Icon="{ui:SymbolIcon Dismiss20}" 
-                                       Margin="0,0,8,0" 
-                                       Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                       Click="OnRejectClicked" />
-                            <ui:Button Content="Setujui Permohonan" 
-                                       Appearance="Primary" 
-                                       Icon="{ui:SymbolIcon Checkmark20}" 
-                                       Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                       Click="OnApproveClicked" />
-                        </StackPanel>
+
                     </Grid>
                 </Border>
 
@@ -232,11 +218,11 @@
                                     </Border>
                                 </StackPanel>
 
-                                <!-- Jenis Barang -->
+
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Jenis Barang:" Style="{StaticResource DetailLabelStyle}" />
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding JenisDisplay}" Style="{StaticResource DetailValueStyle}" />
 
-                                <!-- Golongan / Satuan -->
+
                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Golongan / Satuan:" Style="{StaticResource DetailLabelStyle}" />
                                 <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Gol, TargetNullValue='-'}" Style="{StaticResource DetailValueStyle}" />
@@ -244,19 +230,19 @@
                                     <TextBlock Text="{Binding Sat, TargetNullValue='-'}" Style="{StaticResource DetailValueStyle}" />
                                 </StackPanel>
 
-                                <!-- Kode Barang -->
+
                                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Kode Barang:" Style="{StaticResource DetailLabelStyle}" />
                                 <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding KdBrg, TargetNullValue='Belum disetujui'}" Style="{StaticResource DetailValueStyle}" Foreground="#0284C7" FontWeight="Bold" />
                             </Grid>
                         </Border>
 
-                        <!-- C. Informasi Supplier (1-Column Vertical Row View) -->
+
                         <Border Style="{StaticResource SectionCardStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" /> <!-- Header -->
-                                    <RowDefinition Height="Auto" /> <!-- Nama Supplier -->
-                                    <RowDefinition Height="Auto" /> <!-- Kode Supplier -->
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="140" />
@@ -268,7 +254,7 @@
                                     <TextBlock Text="Informasi Supplier" FontSize="12.5" FontWeight="Bold" Foreground="#334155" />
                                 </StackPanel>
 
-                                <!-- Nama Supplier -->
+
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Nama Supplier:" Style="{StaticResource DetailLabelStyle}" />
                                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding SupplierNamaDisplay}" Style="{StaticResource DetailValueStyle}" Margin="0,3,6,3" />
@@ -277,21 +263,21 @@
                                     </Border>
                                 </StackPanel>
 
-                                <!-- Kode Supplier -->
+
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Kode Supplier:" Style="{StaticResource DetailLabelStyle}" />
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SupplierKodeDisplay}" Style="{StaticResource DetailValueStyle}" Foreground="#334155" />
                             </Grid>
                         </Border>
 
-                        <!-- D. Informasi Harga & Finansial (1-Column Vertical Row View) -->
+
                         <Border Style="{StaticResource SectionCardStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" /> <!-- Header -->
-                                    <RowDefinition Height="Auto" /> <!-- Pricelist -->
-                                    <RowDefinition Height="Auto" /> <!-- Diskon -->
-                                    <RowDefinition Height="Auto" /> <!-- Harga Beli (Nett) -->
-                                    <RowDefinition Height="Auto" /> <!-- Faktur Pajak -->
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="140" />
@@ -303,21 +289,21 @@
                                     <TextBlock Text="Informasi Harga &amp; Pembelian" FontSize="12.5" FontWeight="Bold" Foreground="#334155" />
                                 </StackPanel>
 
-                                <!-- Pricelist -->
+
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Pricelist:" Style="{StaticResource DetailLabelStyle}" />
                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding FormattedPricelist, StringFormat='{}Rp {0}'}" Style="{StaticResource DetailValueStyle}" />
 
-                                <!-- Diskon -->
+
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Diskon:" Style="{StaticResource DetailLabelStyle}" />
                                 <Border Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" CornerRadius="5" Padding="6,1.5" Margin="0,3" Background="{Binding DiscBadgeBackground}" BorderBrush="{Binding DiscBadgeBorder}" BorderThickness="1" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding DiscBadgeText}" FontSize="10.5" FontWeight="SemiBold" Foreground="{Binding DiscBadgeForeground}" />
                                 </Border>
 
-                                <!-- Harga Beli (Highlighted) -->
+
                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Harga Beli (Nett):" Style="{StaticResource DetailLabelStyle}" FontWeight="Bold" Foreground="#0F172A" />
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding FormattedHrgBeli, StringFormat='{}Rp {0}'}" FontSize="14" FontWeight="Bold" Foreground="#0284C7" VerticalAlignment="Center" />
 
-                                <!-- Faktur Pajak -->
+
                                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Faktur Pajak:" Style="{StaticResource DetailLabelStyle}" />
                                 <TextBlock Grid.Row="4" Grid.Column="1">
                                     <TextBlock.Style>
@@ -335,7 +321,7 @@
                             </Grid>
                         </Border>
 
-                        <!-- E. Keterangan & Alasan Penolakan -->
+
                         <Border Style="{StaticResource SectionCardStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -355,22 +341,22 @@
                                     <TextBlock Text="Keterangan &amp; Catatan" FontSize="12.5" FontWeight="Bold" Foreground="#334155" />
                                 </StackPanel>
 
-                                <!-- Keterangan Toko -->
+
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Keterangan Toko:" Style="{StaticResource DetailLabelStyle}" VerticalAlignment="Top" />
                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding KetBeli, TargetNullValue='Tidak ada keterangan tambahan.'}" Style="{StaticResource DetailValueStyle}" TextWrapping="Wrap" />
 
-                                <!-- Petugas ACC -->
+
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Petugas ACC:" Style="{StaticResource DetailLabelStyle}" Margin="0,4,0,3" />
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding AccByDisplay}" Style="{StaticResource DetailValueStyle}" FontWeight="SemiBold" Margin="0,4,0,3" />
 
-                                <!-- Tanggal Disetujui (Dibawah Petugas ACC) -->
+
                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Tanggal Disetujui:" Style="{StaticResource DetailLabelStyle}" Margin="0,4,0,3" />
                                 <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,3">
                                     <ui:SymbolIcon Symbol="CalendarClock24" FontSize="14" Foreground="#0284C7" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasAccAt, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     <TextBlock Text="{Binding FormattedTglAcc}" Style="{StaticResource DetailValueStyle}" FontWeight="SemiBold" Foreground="#0F172A" />
                                 </StackPanel>
 
-                                <!-- Alasan Tolak (Hanya muncul jika berstatus Rejected) -->
+
                                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Alasan Penolakan:" Style="{StaticResource DetailLabelStyle}" Foreground="#DC2626" FontWeight="Bold" VerticalAlignment="Top" Margin="0,4,0,0" Visibility="{Binding IsRejected, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <Border Grid.Row="4" Grid.Column="1" Background="#FEF2F2" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="6" Padding="8,5" Margin="0,3,0,0" Visibility="{Binding IsRejected, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <TextBlock Text="{Binding KeteranganTolak, TargetNullValue='-'}" FontSize="12" Foreground="#B91C1C" TextWrapping="Wrap" FontWeight="Medium" />
@@ -381,21 +367,32 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- 3. Rounded Footer Bar with Close Button -->
                 <Border Grid.Row="2" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="22,14" CornerRadius="0,0,16,16">
                     <Grid>
-                        <!-- Right: Tutup Button -->
-                        <ui:Button Content="Tutup" 
-                                   Appearance="Secondary" 
-                                   Padding="18,6"
-                                   HorizontalAlignment="Right"
-                                   Click="OnCloseClicked" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <ui:Button Content="Tutup"
+                               Appearance="Secondary"
+                               Padding="18,6"
+                               HorizontalAlignment="Right"
+                               Click="OnCloseClicked" />
+                            <ui:Button Content="Tolak Permohonan"
+                                Appearance="Secondary"
+                                Icon="{ui:SymbolIcon Dismiss20}"
+                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Click="OnRejectClicked" />
+                            <ui:Button Content="Setujui Permohonan"
+                                Appearance="Primary"
+                                Icon="{ui:SymbolIcon Checkmark20}"
+                                Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Click="OnApproveClicked" />
+                        </StackPanel>
+
                     </Grid>
                 </Border>
             </Grid>
         </Border>
 
-        <!-- Modal Toast Alert: Absolute top layer of detail modal, bottom-right, compact -->
+
         <ui:SnackbarPresenter x:Name="DialogSnackbar"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Bottom"

@@ -4,55 +4,75 @@ using CommunityToolkit.Mvvm.Input;
 using Entry_Data_Processing.Core.Common;
 using Entry_Data_Processing.Features.Auth.Models;
 using Entry_Data_Processing.Features.Auth.Services;
-using Wpf.Ui;
 
 namespace Entry_Data_Processing.Features.Auth.ViewModels
 {
     public partial class LoginViewModel : ViewModelBase
     {
         private readonly IAuthService _authService;
-        private readonly ISnackbarService _snackbarService;
-        
+
         [ObservableProperty]
         private string _nip = string.Empty;
-        
+
         [ObservableProperty]
         private string _password = string.Empty;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
         private bool _isLoading;
 
-        public LoginViewModel(IAuthService authService, ISnackbarService snackbarService)
+        [ObservableProperty]
+        private string _errorMessage = string.Empty;
+
+        public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+
+        partial void OnErrorMessageChanged(string value) => OnPropertyChanged(nameof(HasError));
+
+        partial void OnNipChanged(string value) => ErrorMessage = string.Empty;
+        partial void OnPasswordChanged(string value) => ErrorMessage = string.Empty;
+
+        public LoginViewModel(IAuthService authService)
         {
             _authService = authService;
-            _snackbarService = snackbarService;
         }
 
         public event EventHandler? LoginSucceeded;
 
-        [RelayCommand]
+        private bool CanLogin() => !IsLoading;
+
+        [RelayCommand(CanExecute = nameof(CanLogin))]
         private async Task LoginAsync()
         {
             if (string.IsNullOrWhiteSpace(Nip) || string.IsNullOrWhiteSpace(Password))
             {
-                _snackbarService.Show("Error", "NIP dan password tidak boleh kosong.", Wpf.Ui.Controls.ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(3));
+                ErrorMessage = "NIP dan password tidak boleh kosong.";
                 return;
             }
 
             IsLoading = true;
+            ErrorMessage = string.Empty;
 
-            var request = new LoginRequest { Nip = Nip, Password = Password };
-            var result = await _authService.LoginAsync(request);
-
-            IsLoading = false;
-
-            if (result.IsSuccess)
+            try
             {
-                LoginSucceeded?.Invoke(this, EventArgs.Empty);
+                var request = new LoginRequest { Nip = Nip, Password = Password };
+                var result = await _authService.LoginAsync(request);
+
+                if (result.IsSuccess)
+                {
+                    LoginSucceeded?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    ErrorMessage = result.ErrorMessage ?? "NIP atau password salah. Silakan coba lagi.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _snackbarService.Show("Gagal Login", result.ErrorMessage ?? "Terjadi kesalahan", Wpf.Ui.Controls.ControlAppearance.Danger, null, System.TimeSpan.FromSeconds(4));
+                ErrorMessage = $"Gagal terhubung ke server: {ex.Message}";
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
     }
