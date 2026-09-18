@@ -61,16 +61,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
             }
         }
 
-        private void OnSelectExistingMode(object sender, MouseButtonEventArgs e)
-        {
-            _viewModel.IsNewProductMode = false;
-        }
-
-        private void OnSelectNewMode(object sender, MouseButtonEventArgs e)
-        {
-            _viewModel.IsNewProductMode = true;
-        }
-
         private void SearchableComboBox_Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is not ComboBox cb) return;
