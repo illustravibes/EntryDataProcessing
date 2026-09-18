@@ -422,7 +422,22 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         partial void OnProductSearchQueryChanged(string value)
         {
-            _ = SearchProductsAsync();
+            _ = RunSearchSafelyAsync(SearchProductsAsync);
+        }
+
+        private async Task RunSearchSafelyAsync(Func<Task> searchOperation)
+        {
+            try
+            {
+                await searchOperation();
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+                SetValidationWarning("Pencarian Gagal", ex.Message);
+            }
         }
 
         [RelayCommand]
@@ -567,7 +582,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
         partial void OnFactorySearchQueryChanged(string value)
         {
-            _ = SearchFactoriesAsync();
+            _ = RunSearchSafelyAsync(SearchFactoriesAsync);
         }
 
         [RelayCommand]
@@ -604,13 +619,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             ProductData.BrPrdFacKd = string.Empty;
             ProductData.BrPrdFacNm = string.Empty;
             FactorySearchQuery = string.Empty;
-            _ = SearchFactoriesAsync();
+            _ = RunSearchSafelyAsync(SearchFactoriesAsync);
         }
 
         // Product Type (Jenis) Selection Commands
         partial void OnProductTypeSearchQueryChanged(string value)
         {
-            _ = SearchProductTypesAsync();
+            _ = RunSearchSafelyAsync(SearchProductTypesAsync);
         }
 
         [RelayCommand]
@@ -647,7 +662,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             ProductData.BrJnsKd = string.Empty;
             ProductData.BrJnsNm = string.Empty;
             ProductTypeSearchQuery = string.Empty;
-            _ = SearchProductTypesAsync();
+            _ = RunSearchSafelyAsync(SearchProductTypesAsync);
         }
 
         partial void OnSelectedProductChanged(ProductDataDto? value)
@@ -658,7 +673,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         // Price Group Selection Commands
         partial void OnPriceGroupSearchQueryChanged(string value)
         {
-            _ = SearchPriceGroupsAsync();
+            _ = RunSearchSafelyAsync(SearchPriceGroupsAsync);
         }
 
         [RelayCommand]
@@ -693,13 +708,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             SelectedPriceGroup = string.Empty;
             PriceData.BrHrgGol = string.Empty;
             PriceGroupSearchQuery = string.Empty;
-            _ = SearchPriceGroupsAsync();
+            _ = RunSearchSafelyAsync(SearchPriceGroupsAsync);
         }
 
         // Unit Selection Commands
         partial void OnUnitSearchQueryChanged(string value)
         {
-            _ = SearchUnitsAsync();
+            _ = RunSearchSafelyAsync(SearchUnitsAsync);
         }
 
         [RelayCommand]
@@ -735,7 +750,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             SelectedUnit = null;
             PriceData.SatKd = string.Empty;
             UnitSearchQuery = string.Empty;
-            _ = SearchUnitsAsync();
+            _ = RunSearchSafelyAsync(SearchUnitsAsync);
         }
 
         [RelayCommand]

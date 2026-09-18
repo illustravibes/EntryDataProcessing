@@ -6,6 +6,8 @@ using Entry_Data_Processing.Core.Common;
 using Entry_Data_Processing.Core.Navigation;
 using Entry_Data_Processing.Core.Session;
 using Entry_Data_Processing.Features.Dashboard.Services;
+using Wpf.Ui.Controls;
+using SnackbarService = Wpf.Ui.ISnackbarService;
 
 namespace Entry_Data_Processing.Features.Dashboard.ViewModels
 {
@@ -14,6 +16,7 @@ namespace Entry_Data_Processing.Features.Dashboard.ViewModels
         private readonly DashboardService _dashboardService;
         private readonly INavigationService _navigationService;
         private readonly IUserSession _userSession;
+        private readonly SnackbarService _snackbarService;
 
         [ObservableProperty]
         private string _greeting = string.Empty;
@@ -21,11 +24,16 @@ namespace Entry_Data_Processing.Features.Dashboard.ViewModels
         [ObservableProperty]
         private int _pendingRequestCount;
 
-        public DashboardViewModel(DashboardService dashboardService, INavigationService navigationService, IUserSession userSession)
+        public DashboardViewModel(
+            DashboardService dashboardService,
+            INavigationService navigationService,
+            IUserSession userSession,
+            SnackbarService snackbarService)
         {
             _dashboardService = dashboardService;
             _navigationService = navigationService;
             _userSession = userSession;
+            _snackbarService = snackbarService;
         }
 
         [RelayCommand]
@@ -38,10 +46,15 @@ namespace Entry_Data_Processing.Features.Dashboard.ViewModels
                 var summary = await _dashboardService.GetSummaryAsync();
                 PendingRequestCount = summary.PendingRequestCount;
             }
-            catch
+            catch (Exception ex)
             {
-                // In a real app we'd log this or show a toast
                 PendingRequestCount = 0;
+                _snackbarService.Show(
+                    "Dashboard tidak tersedia",
+                    $"Gagal memuat ringkasan: {ex.Message}",
+                    ControlAppearance.Danger,
+                    null,
+                    TimeSpan.FromSeconds(3));
             }
         }
 
