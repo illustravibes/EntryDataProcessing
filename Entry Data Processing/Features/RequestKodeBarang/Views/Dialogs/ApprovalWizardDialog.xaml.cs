@@ -1,13 +1,10 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Entry_Data_Processing.Features.RequestKodeBarang.Models;
 using Entry_Data_Processing.Features.RequestKodeBarang.ViewModels;
-using Wpf.Ui.Controls;
 
 namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
 {
@@ -81,7 +78,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
         private void SetupSearchableComboBox(ComboBox cb)
         {
             cb.ApplyTemplate();
-            var textBox = cb.Template?.FindName("PART_EditableTextBox", cb) as System.Windows.Controls.TextBox ?? FindVisualChild<System.Windows.Controls.TextBox>(cb);
+            var textBox = cb.Template?.FindName("PART_EditableTextBox", cb) as TextBox ?? FindVisualChild<TextBox>(cb);
 
             if (textBox == null)
             {
@@ -107,7 +104,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
                     bool show = string.IsNullOrEmpty(textBox.Text) && cb.SelectedItem == null;
                     if (show)
                     {
-                        var textBlock = new System.Windows.Controls.TextBlock
+                        var textBlock = new TextBlock
                         {
                             Text = placeholder,
                             Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8")),
