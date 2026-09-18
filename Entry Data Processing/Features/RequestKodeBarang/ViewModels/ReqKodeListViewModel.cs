@@ -21,7 +21,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly Core.Navigation.INavigationService _navigationService;
         private readonly IUserSession _userSession;
          private readonly ISnackbarService _snackbarService;
-         private readonly IContentDialogService _contentDialogService;
          private readonly IApprovalWizardViewModelFactory _approvalWizardFactory;
 
         public ObservableCollection<ReqEdpKodeRecord> Requests { get; } = new();
@@ -280,14 +279,12 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             Core.Navigation.INavigationService navigationService,
              IUserSession userSession,
              ISnackbarService snackbarService,
-             IContentDialogService contentDialogService,
              IApprovalWizardViewModelFactory approvalWizardFactory)
         {
             _service = service;
             _navigationService = navigationService;
             _userSession = userSession;
              _snackbarService = snackbarService;
-             _contentDialogService = contentDialogService;
              _approvalWizardFactory = approvalWizardFactory;
 
             Requests.CollectionChanged += OnRequestsCollectionChanged;

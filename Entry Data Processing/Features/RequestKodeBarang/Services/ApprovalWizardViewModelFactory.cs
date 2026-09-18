@@ -9,18 +9,15 @@ public sealed class ApprovalWizardViewModelFactory : IApprovalWizardViewModelFac
     private readonly IReqEdpKodeService _service;
     private readonly IUserSession _userSession;
     private readonly ISnackbarService _snackbarService;
-    private readonly IContentDialogService _contentDialogService;
 
     public ApprovalWizardViewModelFactory(
         IReqEdpKodeService service,
         IUserSession userSession,
-        ISnackbarService snackbarService,
-        IContentDialogService contentDialogService)
+        ISnackbarService snackbarService)
     {
         _service = service;
         _userSession = userSession;
         _snackbarService = snackbarService;
-        _contentDialogService = contentDialogService;
     }
 
     public ApprovalWizardViewModel Create()
@@ -28,7 +25,6 @@ public sealed class ApprovalWizardViewModelFactory : IApprovalWizardViewModelFac
         return new ApprovalWizardViewModel(
             _service,
             _userSession,
-            _snackbarService,
-            _contentDialogService);
+            _snackbarService);
     }
 }

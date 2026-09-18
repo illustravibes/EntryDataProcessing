@@ -17,7 +17,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly Core.Navigation.INavigationService _navigationService;
         private readonly IUserSession _userSession;
          private readonly ISnackbarService _snackbarService;
-         private readonly IContentDialogService _contentDialogService;
          private readonly IApprovalWizardViewModelFactory _approvalWizardFactory;
 
         [ObservableProperty]
@@ -34,18 +33,16 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             Core.Navigation.INavigationService navigationService,
              IUserSession userSession,
              ISnackbarService snackbarService,
-             IContentDialogService contentDialogService,
              IApprovalWizardViewModelFactory approvalWizardFactory)
         {
             _service = service;
             _navigationService = navigationService;
             _userSession = userSession;
              _snackbarService = snackbarService;
-             _contentDialogService = contentDialogService;
              _approvalWizardFactory = approvalWizardFactory;
         }
 
-        public async void LoadRequest(int id)
+        public async Task LoadRequestAsync(int id)
         {
             IsLoading = true;
             try
@@ -78,7 +75,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
 
             if (dialog.IsApproved)
             {
-                LoadRequest(RequestDetail.Id); 
+                await LoadRequestAsync(RequestDetail.Id);
             }
         }
 
@@ -116,7 +113,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 if (result.IsSuccess)
                 {
                     _snackbarService.Show("Ditolak", "Permohonan berhasil ditolak", ControlAppearance.Caution, null, System.TimeSpan.FromSeconds(3));
-                    LoadRequest(RequestDetail.Id);
+                    await LoadRequestAsync(RequestDetail.Id);
                 }
                 else
                 {

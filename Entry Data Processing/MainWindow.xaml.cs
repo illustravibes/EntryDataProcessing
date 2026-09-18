@@ -1,5 +1,6 @@
 using System.Windows;
 using Wpf.Ui.Controls;
+using Wpf.Ui.Appearance;
 using Wpf.Ui;
 using Entry_Data_Processing.Core.Navigation;
 using Entry_Data_Processing.Core.Session;
@@ -24,6 +25,7 @@ namespace Entry_Data_Processing
             MainWindowViewModel viewModel)
         {
             InitializeComponent();
+            SystemThemeWatcher.Watch(this);
             DataContext = _viewModel = viewModel;
             _wpfUiNavigationService = wpfUiNavigationService;
             _coreNavigationService = coreNavigationService;
@@ -32,6 +34,7 @@ namespace Entry_Data_Processing
             _contentDialogService = contentDialogService;
             _viewModel.LogoutRequested += OnLogoutRequested;
             Loaded += OnLoaded;
+            Closed += OnClosed;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -56,6 +59,11 @@ namespace Entry_Data_Processing
             Application.Current.MainWindow = loginWindow;
             Close();
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+        }
+
+        private void OnClosed(object? sender, EventArgs e)
+        {
+            SystemThemeWatcher.UnWatch(this);
         }
     }
 }

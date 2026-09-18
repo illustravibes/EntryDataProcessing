@@ -17,7 +17,6 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly IReqEdpKodeService _service;
         private readonly IUserSession _userSession;
         private readonly ISnackbarService _snackbarService;
-        private readonly IContentDialogService _contentDialogService;
         
         public int RequestId { get; set; }
 
@@ -305,13 +304,11 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         public ApprovalWizardViewModel(
             IReqEdpKodeService service,
             IUserSession userSession,
-            ISnackbarService snackbarService,
-            IContentDialogService contentDialogService)
+            ISnackbarService snackbarService)
         {
             _service = service;
             _userSession = userSession;
             _snackbarService = snackbarService;
-            _contentDialogService = contentDialogService;
         }
 
         public async Task InitializeAsync(int requestId)
@@ -810,7 +807,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                 {
                     PriceData.SatKd = SelectedUnit.SatKd.Trim();
                 }
-                if (string.IsNullOrWhiteSpace(ItemData.BrNm))
+                if (ItemData is not null && ProductData is not null && string.IsNullOrWhiteSpace(ItemData.BrNm))
                 {
                     ItemData.BrNm = ProductData.BrPrdNm;
                 }
@@ -1030,7 +1027,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                     PriceData.IdHrg = manualId;
                 }
 
-                if (string.IsNullOrWhiteSpace(ItemData.BrNm))
+                if (ItemData is not null && ProductData is not null && string.IsNullOrWhiteSpace(ItemData.BrNm))
                 {
                     ItemData.BrNm = ProductData.BrPrdNm;
                 }
@@ -1053,7 +1050,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
                     SetValidationWarning("No. Kode Barang Terlalu Panjang", ItemCodeError);
                     return false;
                 }
-                if (string.IsNullOrWhiteSpace(ItemData.BrNm))
+                if (string.IsNullOrWhiteSpace(ItemData?.BrNm))
                 {
                     ItemNameError = "Nama barang belum tersedia.";
                     SetValidationWarning("Nama Barang Wajib Diisi", ItemNameError);
@@ -1114,9 +1111,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             {
                 RequestId = RequestId,
                 ApproverNip = _userSession.CurrentUser?.Nip ?? "UNKNOWN",
-                ProductData = ProductData,
-                PriceData = PriceData,
-                ItemData = ItemData
+                ProductData = ProductData ?? new ProductDataDto(),
+                PriceData = PriceData ?? new PriceDataDto(),
+                ItemData = ItemData ?? new ItemDataDto()
             };
 
             var result = await _service.ProcessWizardApprovalAsync(submitDto);
