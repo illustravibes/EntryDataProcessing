@@ -1,37 +1,34 @@
 using System.Windows;
 using System.Windows.Input;
+using Entry_Data_Processing.Features.RequestKodeBarang.ViewModels;
 
 namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
 {
     public partial class RejectReasonDialog : Window
     {
-        public string RejectReason { get; private set; } = string.Empty;
+        private readonly RejectReasonViewModel _viewModel;
+
+        public string RejectReason => _viewModel.Reason;
         public bool IsConfirmed { get; private set; } = false;
 
-        public RejectReasonDialog()
+        public RejectReasonDialog(RejectReasonViewModel viewModel)
         {
             InitializeComponent();
-
-            ReasonTextBox.TextChanged += (s, e) =>
-            {
-                var text = ReasonTextBox.Text;
-                var len = text.Length;
-                CharCountLabel.Text = $"{len} karakter";
-                BtnConfirm.IsEnabled = len > 0;
-            };
+            _viewModel = viewModel;
+            DataContext = viewModel;
+            _viewModel.Confirmed += OnConfirmed;
+            _viewModel.Cancelled += OnCancelled;
 
             Loaded += (_, _) => ReasonTextBox.Focus();
         }
 
-        private void OnConfirmClicked(object sender, RoutedEventArgs e)
+        private void OnConfirmed(object? sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ReasonTextBox.Text)) return;
-            RejectReason = ReasonTextBox.Text.Trim();
             IsConfirmed = true;
             Close();
         }
 
-        private void OnCancelClicked(object sender, RoutedEventArgs e)
+        private void OnCancelled(object? sender, EventArgs e)
         {
             IsConfirmed = false;
             Close();
@@ -39,8 +36,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.Views.Dialogs
 
         private void OnCloseClicked(object sender, RoutedEventArgs e)
         {
-            IsConfirmed = false;
-            Close();
+            _viewModel.CancelCommand.Execute(null);
         }
 
         private void OnWindowKeyDown(object sender, KeyEventArgs e)

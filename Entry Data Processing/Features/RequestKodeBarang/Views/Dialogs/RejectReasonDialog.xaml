@@ -103,6 +103,7 @@
                                Margin="0,0,0,7" />
 
                     <ui:TextBox x:Name="ReasonTextBox"
+                                Text="{Binding Reason, UpdateSourceTrigger=PropertyChanged}"
                                 PlaceholderText="Contoh: Barang sudah ada dengan kode X-001, atau spesifikasi tidak sesuai SOP..."
                                 TextWrapping="Wrap"
                                 AcceptsReturn="True"
@@ -139,8 +140,8 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock x:Name="CharCountLabel"
-                               Grid.Column="0"
-                               Text="0 karakter"
+                                Grid.Column="0"
+                               Text="{Binding CharacterCount}"
                                FontSize="11"
                                Foreground="#94A3B8"
                                VerticalAlignment="Center" />
@@ -148,7 +149,7 @@
                     <!-- Batal -->
                     <ui:Button Grid.Column="1"
                             Content="Batal"
-                            Click="OnCancelClicked"
+                            Command="{Binding CancelCommand}"
                             Margin="0,0,8,0"
                             Height="34"
                             Padding="16,0"
@@ -180,12 +181,11 @@
                     <!-- Tolak -->
                     <ui:Button Grid.Column="2"
                             x:Name="BtnConfirm"
-                            Click="OnConfirmClicked"
+                            Command="{Binding ConfirmCommand}"
                             Height="34"
                             Padding="16,0"
                             FontSize="12.5"
                             FontWeight="Bold"
-                            IsEnabled="False"
                             Cursor="Hand">
                         <ui:Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -218,4 +218,3 @@
         </Border>
     </Grid>
 </Window>
-

@@ -22,6 +22,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly IUserSession _userSession;
          private readonly ISnackbarService _snackbarService;
          private readonly IApprovalWizardViewModelFactory _approvalWizardFactory;
+         private readonly IRejectReasonViewModelFactory _rejectReasonFactory;
 
         public ObservableCollection<ReqEdpKodeRecord> Requests { get; } = new();
         private System.Collections.Generic.List<ReqEdpKodeRecord> _rawLoadedRequests = new();
@@ -279,13 +280,15 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             Core.Navigation.INavigationService navigationService,
              IUserSession userSession,
              ISnackbarService snackbarService,
-             IApprovalWizardViewModelFactory approvalWizardFactory)
+             IApprovalWizardViewModelFactory approvalWizardFactory,
+             IRejectReasonViewModelFactory rejectReasonFactory)
         {
             _service = service;
             _navigationService = navigationService;
             _userSession = userSession;
              _snackbarService = snackbarService;
              _approvalWizardFactory = approvalWizardFactory;
+             _rejectReasonFactory = rejectReasonFactory;
 
             Requests.CollectionChanged += OnRequestsCollectionChanged;
         }
@@ -534,7 +537,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var selectedIds = Requests.Where(x => x.IsSelected).Select(x => x.Id).ToList();
             if (!selectedIds.Any()) return;
 
-            var dialog = new Views.Dialogs.RejectReasonDialog
+            var dialog = new Views.Dialogs.RejectReasonDialog(_rejectReasonFactory.Create())
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
@@ -679,7 +682,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var target = record ?? SelectedRequest;
             if (target == null) return;
 
-            var dialog = new Views.Dialogs.RejectReasonDialog
+            var dialog = new Views.Dialogs.RejectReasonDialog(_rejectReasonFactory.Create())
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };

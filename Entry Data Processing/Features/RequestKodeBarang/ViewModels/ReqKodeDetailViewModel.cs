@@ -18,6 +18,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly IUserSession _userSession;
          private readonly ISnackbarService _snackbarService;
          private readonly IApprovalWizardViewModelFactory _approvalWizardFactory;
+         private readonly IRejectReasonViewModelFactory _rejectReasonFactory;
 
         [ObservableProperty]
         private ReqEdpKodeRecord? _requestDetail;
@@ -33,13 +34,15 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             Core.Navigation.INavigationService navigationService,
              IUserSession userSession,
              ISnackbarService snackbarService,
-             IApprovalWizardViewModelFactory approvalWizardFactory)
+             IApprovalWizardViewModelFactory approvalWizardFactory,
+             IRejectReasonViewModelFactory rejectReasonFactory)
         {
             _service = service;
             _navigationService = navigationService;
             _userSession = userSession;
              _snackbarService = snackbarService;
              _approvalWizardFactory = approvalWizardFactory;
+             _rejectReasonFactory = rejectReasonFactory;
         }
 
         public async Task LoadRequestAsync(int id)
@@ -90,7 +93,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             // For now, we'll just create a mock reason or expect it to be passed.
             // A more robust implementation would use a DialogService to show the RejectReasonDialog
             
-            var dialog = new Views.Dialogs.RejectReasonDialog
+            var dialog = new Views.Dialogs.RejectReasonDialog(_rejectReasonFactory.Create())
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
