@@ -20,8 +20,9 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         private readonly IReqEdpKodeService _service;
         private readonly Core.Navigation.INavigationService _navigationService;
         private readonly IUserSession _userSession;
-        private readonly ISnackbarService _snackbarService;
-        private readonly IContentDialogService _contentDialogService;
+         private readonly ISnackbarService _snackbarService;
+         private readonly IContentDialogService _contentDialogService;
+         private readonly IApprovalWizardViewModelFactory _approvalWizardFactory;
 
         public ObservableCollection<ReqEdpKodeRecord> Requests { get; } = new();
         private System.Collections.Generic.List<ReqEdpKodeRecord> _rawLoadedRequests = new();
@@ -277,15 +278,17 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         public ReqKodeListViewModel(
             IReqEdpKodeService service, 
             Core.Navigation.INavigationService navigationService,
-            IUserSession userSession,
-            ISnackbarService snackbarService,
-            IContentDialogService contentDialogService)
+             IUserSession userSession,
+             ISnackbarService snackbarService,
+             IContentDialogService contentDialogService,
+             IApprovalWizardViewModelFactory approvalWizardFactory)
         {
             _service = service;
             _navigationService = navigationService;
             _userSession = userSession;
-            _snackbarService = snackbarService;
-            _contentDialogService = contentDialogService;
+             _snackbarService = snackbarService;
+             _contentDialogService = contentDialogService;
+             _approvalWizardFactory = approvalWizardFactory;
 
             Requests.CollectionChanged += OnRequestsCollectionChanged;
         }
@@ -654,7 +657,7 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
             var target = record ?? SelectedRequest;
             if (target == null) return;
 
-            var wizardVm = new ApprovalWizardViewModel(_service, _userSession, _snackbarService, _contentDialogService);
+            var wizardVm = _approvalWizardFactory.Create();
             await wizardVm.InitializeAsync(target.Id);
 
             var dialog = new Views.Dialogs.ApprovalWizardDialog(wizardVm, _snackbarService);

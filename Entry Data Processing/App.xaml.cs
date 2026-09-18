@@ -111,6 +111,7 @@ namespace Entry_Data_Processing
                     services.AddTransient<Features.Dashboard.Views.DashboardPage>();
 
                     services.AddSingleton<Features.RequestKodeBarang.Services.IReqEdpKodeService, Features.RequestKodeBarang.Services.ReqEdpKodeService>();
+                    services.AddSingleton<Features.RequestKodeBarang.Services.IApprovalWizardViewModelFactory, Features.RequestKodeBarang.Services.ApprovalWizardViewModelFactory>();
                     services.AddTransient<Features.RequestKodeBarang.ViewModels.ReqKodeListViewModel>();
                     services.AddTransient<Features.RequestKodeBarang.ViewModels.ReqKodeDetailViewModel>();
                     services.AddTransient<Features.RequestKodeBarang.Views.ReqKodeListPage>();
