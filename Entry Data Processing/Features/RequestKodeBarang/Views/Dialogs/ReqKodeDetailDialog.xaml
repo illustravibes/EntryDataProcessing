@@ -373,11 +373,13 @@
                             <ui:Button Content="Tutup"
                                Appearance="Secondary"
                                Padding="18,6"
+                               Margin="0,0,10,0"
                                HorizontalAlignment="Right"
                                Click="OnCloseClicked" />
                             <ui:Button Content="Tolak Permohonan"
                                 Appearance="Secondary"
                                 Icon="{ui:SymbolIcon Dismiss20}"
+                                Margin="0,0,10,0"
                                 Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Click="OnRejectClicked" />
                             <ui:Button Content="Setujui Permohonan"

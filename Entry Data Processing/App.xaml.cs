@@ -114,9 +114,7 @@ namespace Entry_Data_Processing
                     services.AddSingleton<Features.RequestKodeBarang.Services.IApprovalWizardViewModelFactory, Features.RequestKodeBarang.Services.ApprovalWizardViewModelFactory>();
                     services.AddSingleton<Features.RequestKodeBarang.Services.IRejectReasonViewModelFactory, Features.RequestKodeBarang.Services.RejectReasonViewModelFactory>();
                     services.AddTransient<Features.RequestKodeBarang.ViewModels.ReqKodeListViewModel>();
-                    services.AddTransient<Features.RequestKodeBarang.ViewModels.ReqKodeDetailViewModel>();
                     services.AddTransient<Features.RequestKodeBarang.Views.ReqKodeListPage>();
-                    services.AddTransient<Features.RequestKodeBarang.Views.ReqKodeDetailPage>();
                 });
     }
 }
