@@ -25,14 +25,14 @@ Aplikasi ini mendukung arsitektur **Multi-Database Provider**, memungkinkan perg
 
 ### Pengaturan di `appsettings.json`
 
-File konfigurasi terletak di root direktori proyek:
+Salin file `appsettings.example.json` menjadi `appsettings.json` di root direktori proyek, lalu sesuaikan koneksinya:
 
 ```json
 {
   "ConnectionStrings": {
     "Provider": "Access",
-    "WambDatabase": "Server=172.22.167.232;Port=3306;Database=db_wamb;Uid=wamb;Pwd=wamb123;Charset=utf8mb4;SslMode=Preferred;",
-    "AccessDatabase": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=P:\\Hastyana\\Perhitungan EDP\\Wajdb.mdb;Jet OLEDB:Database Password=taTan;"
+    "WambDatabase": "Server=YOUR_MYSQL_HOST;Port=3306;Database=db_wamb;Uid=YOUR_USER;Pwd=YOUR_PASSWORD;Charset=utf8mb4;SslMode=Preferred;",
+    "AccessDatabase": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Path\\To\\Your\\Wajdb.mdb;Jet OLEDB:Database Password=YOUR_ACCESS_PASSWORD;"
   },
   "Application": {
     "AppName": "EDP Portal",
