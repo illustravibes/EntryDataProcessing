@@ -2,6 +2,7 @@ using System.Windows;
 using Entry_Data_Processing.Features.Auth.ViewModels;
 using Entry_Data_Processing;
 using Wpf.Ui;
+using Wpf.Ui.Appearance;
 
 namespace Entry_Data_Processing.Features.Auth.Views
 {
@@ -15,7 +16,9 @@ namespace Entry_Data_Processing.Features.Auth.Views
             DataContext = viewModel;
             _snackbarService = snackbarService;
             viewModel.LoginSucceeded += OnLoginSucceeded;
+            SystemThemeWatcher.Watch(this);
             Loaded += OnLoaded;
+            Closed += (_, _) => SystemThemeWatcher.UnWatch(this);
         }
 
         private void OnLoginSucceeded(object? sender, EventArgs e)

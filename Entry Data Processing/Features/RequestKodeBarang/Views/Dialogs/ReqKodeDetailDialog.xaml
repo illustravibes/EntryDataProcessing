@@ -84,7 +84,6 @@
                                 <ui:SymbolIcon Symbol="DocumentBulletList24" FontSize="19" Foreground="#0284C7" Margin="0,0,8,0" VerticalAlignment="Center" />
                                 <TextBlock Text="Detail Permohonan Kode Barang" FontSize="16" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center" />
                                 
-                                <!-- Green Badge for Approved Kode Barang -->
                                 <Border Background="#DCFCE7" BorderBrush="#86EFAC" BorderThickness="1" CornerRadius="6" Padding="8,2" Margin="10,0,0,0" VerticalAlignment="Center"
                                         Visibility="{Binding HasKdBrg, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -96,7 +95,6 @@
                             <TextBlock Text="Informasi lengkap pengajuan kode barang dari toko" FontSize="11.5" Foreground="#64748B" Margin="27,2,0,0" />
                         </StackPanel>
 
-                        <!-- Action Buttons -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                             <ui:Button Content="Tolak Permohonan" 
                                        Appearance="Secondary" 
@@ -113,11 +111,9 @@
                     </Grid>
                 </Border>
 
-                <!-- 2. Scrollable Body Content (Expands to fit full content without scrolling) -->
                 <ScrollViewer Grid.Row="1" MaxHeight="720" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="22,14,22,10" Background="#FFFFFF">
                     <StackPanel Background="#FFFFFF">
 
-                        <!-- A. Header Summary Card: Toko, Tanggal, Pengaju, & Status Badge -->
                         <Border Background="#F1F5F9" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,0,0,10">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -141,7 +137,6 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <!-- Status Pill -->
                                 <Border Grid.Column="1" CornerRadius="12" Padding="10,4" VerticalAlignment="Center">
                                     <Border.Style>
                                         <Style TargetType="Border">
@@ -186,32 +181,28 @@
                             </Grid>
                         </Border>
 
-                        <!-- B. Informasi Barang (1-Column Vertical Row View) -->
                         <Border Style="{StaticResource SectionCardStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" /> <!-- Header -->
-                                    <RowDefinition Height="Auto" /> <!-- Nama Barang -->
-                                    <RowDefinition Height="Auto" /> <!-- Jenis Barang -->
-                                    <RowDefinition Height="Auto" /> <!-- Golongan / Satuan -->
-                                    <RowDefinition Height="Auto" /> <!-- Kode Barang -->
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="140" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Section Header -->
                                 <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,0,0,8">
                                     <ui:SymbolIcon Symbol="Box20" FontSize="14" Foreground="#475569" Margin="0,0,6,0" />
                                     <TextBlock Text="Informasi Barang" FontSize="12.5" FontWeight="Bold" Foreground="#334155" />
                                 </StackPanel>
 
-                                <!-- Nama Barang -->
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Nama Barang:" Style="{StaticResource DetailLabelStyle}" />
                                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding NmBrg}" Style="{StaticResource DetailValueStyle}" Margin="0,3,8,3" />
-                                    <!-- Ready/Mix badge -->
                                     <Border CornerRadius="5" Padding="5,1.5" VerticalAlignment="Center">
                                         <Border.Style>
                                             <Style TargetType="Border">
