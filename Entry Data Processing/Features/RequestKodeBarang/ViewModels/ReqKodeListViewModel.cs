@@ -388,6 +388,13 @@ namespace Entry_Data_Processing.Features.RequestKodeBarang.ViewModels
         }
 
         [RelayCommand]
+        public async Task InitializeAsync()
+        {
+            await InitializeLookupsAsync();
+            await LoadDataAsync();
+        }
+
+        [RelayCommand]
         public void SelectTab(string tab)
         {
             if (SelectedTab == tab) return;

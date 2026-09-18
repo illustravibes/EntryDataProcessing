@@ -28,6 +28,7 @@ namespace Entry_Data_Processing.Features.Dashboard.ViewModels
             _userSession = userSession;
         }
 
+        [RelayCommand]
         public async Task InitializeAsync()
         {
             UpdateGreeting();

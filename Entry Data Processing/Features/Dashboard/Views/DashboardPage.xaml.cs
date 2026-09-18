@@ -1,4 +1,3 @@
-using System.Windows;
 using Entry_Data_Processing.Features.Dashboard.ViewModels;
 
 namespace Entry_Data_Processing.Features.Dashboard.Views
@@ -12,12 +11,7 @@ namespace Entry_Data_Processing.Features.Dashboard.Views
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = viewModel;
-            Loaded += OnLoaded;
-        }
-
-        private async void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            await _viewModel.InitializeAsync();
+            Loaded += (_, _) => _viewModel.InitializeCommand.Execute(null);
         }
     }
 }
