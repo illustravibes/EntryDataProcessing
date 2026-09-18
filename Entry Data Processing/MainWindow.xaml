@@ -41,14 +41,15 @@
                                        Icon="{ui:SymbolIcon Person24}">
                     <ui:NavigationViewItem.Content>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock x:Name="ProfileNameText" Text="Guest" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <TextBlock Text="{Binding ProfileName}" VerticalAlignment="Center" Margin="0,0,6,0" />
                             <Ellipse Width="7" Height="7" Fill="#22C55E" VerticalAlignment="Center" ToolTip="Online" />
                         </StackPanel>
                     </ui:NavigationViewItem.Content>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem x:Name="LogoutMenuItem"
                                        Content="Logout"
-                                       Icon="{ui:SymbolIcon ArrowExit20}" />
+                                       Icon="{ui:SymbolIcon ArrowExit20}"
+                                       Command="{Binding LogoutCommand}" />
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
 

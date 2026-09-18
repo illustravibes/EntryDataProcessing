@@ -8,6 +8,7 @@ using Entry_Data_Processing.Core.Navigation;
 using Entry_Data_Processing.Core.Security;
 using Entry_Data_Processing.Core.Session;
 using Wpf.Ui;
+using Wpf.Ui.Controls;
 
 namespace Entry_Data_Processing
 {
@@ -27,7 +28,19 @@ namespace Entry_Data_Processing
             base.OnStartup(e);
             DispatcherUnhandledException += (s, args) =>
             {
-                MessageBox.Show($"Terjadi kesalahan: {args.Exception.Message}\n\n{args.Exception.StackTrace}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Diagnostics.Debug.WriteLine(args.Exception);
+
+                var snackbarService = GetService<ISnackbarService>();
+                if (snackbarService.GetSnackbarPresenter() is not null)
+                {
+                    snackbarService.Show(
+                        "Terjadi kesalahan",
+                        "Aplikasi mengalami masalah. Silakan coba lagi.",
+                        ControlAppearance.Danger,
+                        null,
+                        TimeSpan.FromSeconds(3));
+                }
+
                 args.Handled = true;
             };
 
@@ -87,6 +100,7 @@ namespace Entry_Data_Processing
                     services.AddSingleton<Wpf.Ui.IContentDialogService, Wpf.Ui.ContentDialogService>();
 
                     services.AddSingleton<MainWindow>();
+                    services.AddTransient<MainWindowViewModel>();
 
                     services.AddSingleton<Features.Auth.Services.IAuthService, Features.Auth.Services.AuthService>();
                     services.AddTransient<Features.Auth.ViewModels.LoginViewModel>();

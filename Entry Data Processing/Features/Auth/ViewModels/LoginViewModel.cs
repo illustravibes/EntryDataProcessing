@@ -5,7 +5,6 @@ using Entry_Data_Processing.Core.Common;
 using Entry_Data_Processing.Features.Auth.Models;
 using Entry_Data_Processing.Features.Auth.Services;
 using Wpf.Ui;
-using System.Windows;
 
 namespace Entry_Data_Processing.Features.Auth.ViewModels
 {
@@ -29,6 +28,8 @@ namespace Entry_Data_Processing.Features.Auth.ViewModels
             _snackbarService = snackbarService;
         }
 
+        public event EventHandler? LoginSucceeded;
+
         [RelayCommand]
         private async Task LoginAsync()
         {
@@ -47,21 +48,7 @@ namespace Entry_Data_Processing.Features.Auth.ViewModels
 
             if (result.IsSuccess)
             {
-                var mainWindow = App.GetService<MainWindow>();
-                Application.Current.MainWindow = mainWindow;
-                mainWindow.Show();
-                
-                // Close LoginWindow safely
-                foreach (Window window in Application.Current.Windows)
-                {
-                    if (window is Features.Auth.Views.LoginWindow)
-                    {
-                        window.Close();
-                        break;
-                    }
-                }
-                
-                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                LoginSucceeded?.Invoke(this, EventArgs.Empty);
             }
             else
             {

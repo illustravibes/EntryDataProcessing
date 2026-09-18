@@ -69,14 +69,14 @@
                                    Margin="0,2,0,0" />
                     </StackPanel>
 
-                    <Button Grid.Column="2"
+                    <ui:Button Grid.Column="2"
                             x:Name="BtnClose"
                             Width="28" Height="28"
                             BorderThickness="0"
                             Cursor="Hand"
                             VerticalAlignment="Top"
                             Click="OnCloseClicked">
-                        <Button.Template>
+                        <ui:Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="Bd" Background="Transparent" CornerRadius="5" Padding="4">
                                     <ui:SymbolIcon Symbol="Dismiss20" FontSize="14" Foreground="#94A3B8" />
@@ -87,8 +87,8 @@
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                        </ui:Button.Template>
+                    </ui:Button>
                 </Grid>
 
                 <!-- Divider -->
@@ -146,7 +146,7 @@
                                VerticalAlignment="Center" />
 
                     <!-- Batal -->
-                    <Button Grid.Column="1"
+                    <ui:Button Grid.Column="1"
                             Content="Batal"
                             Click="OnCancelClicked"
                             Margin="0,0,8,0"
@@ -155,7 +155,7 @@
                             FontSize="12.5"
                             FontWeight="SemiBold"
                             Cursor="Hand">
-                        <Button.Template>
+                        <ui:Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="Bd"
                                         Background="#F1F5F9"
@@ -174,11 +174,11 @@
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                        </ui:Button.Template>
+                    </ui:Button>
 
                     <!-- Tolak -->
-                    <Button Grid.Column="2"
+                    <ui:Button Grid.Column="2"
                             x:Name="BtnConfirm"
                             Click="OnConfirmClicked"
                             Height="34"
@@ -187,7 +187,7 @@
                             FontWeight="Bold"
                             IsEnabled="False"
                             Cursor="Hand">
-                        <Button.Template>
+                        <ui:Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="Bd"
                                         CornerRadius="7"
@@ -211,8 +211,8 @@
                                     </StackPanel>
                                 </Border>
                             </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                        </ui:Button.Template>
+                    </ui:Button>
                 </Grid>
             </Grid>
         </Border>

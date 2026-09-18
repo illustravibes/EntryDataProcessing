@@ -578,7 +578,7 @@
                     <!-- Action Buttons Group -->
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
                         <!-- Reset Button -->
-                        <Button Command="{Binding ResetFilterCommand}" 
+                        <ui:Button Command="{Binding ResetFilterCommand}"
                                 Style="{StaticResource SecondaryFilterButton}"
                                 Margin="0,0,8,0" 
                                 ToolTip="Reset Semua Filter ke Default">
@@ -586,10 +586,10 @@
                                 <ui:SymbolIcon Symbol="ArrowReset20" FontSize="13" Foreground="#64748B" Margin="0,0,5,0" />
                                 <TextBlock Text="Reset" VerticalAlignment="Center" />
                             </StackPanel>
-                        </Button>
+                        </ui:Button>
 
                         <!-- Sync Data Button -->
-                        <Button Command="{Binding SyncDataCommand}" 
+                        <ui:Button Command="{Binding SyncDataCommand}"
                                 Style="{StaticResource SyncFilterButton}"
                                 Margin="0,0,8,0" 
                                 ToolTip="Sinkronisasi &amp; Refresh Data Terbaru dari Server">
@@ -597,17 +597,17 @@
                                 <ui:SymbolIcon Symbol="ArrowSync20" FontSize="13" Foreground="#16A34A" Margin="0,0,5,0" />
                                 <TextBlock Text="Sync Data" VerticalAlignment="Center" />
                             </StackPanel>
-                        </Button>
+                        </ui:Button>
 
                         <!-- Cari Data Button (Rich Ocean Blue with Deep Blue Hover) -->
-                        <Button Command="{Binding LoadDataCommand}" 
+                        <ui:Button Command="{Binding LoadDataCommand}"
                                 Style="{StaticResource PrimaryFilterButton}"
                                 ToolTip="Terapkan Filter / Cari Manual">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:SymbolIcon Symbol="Search20" FontSize="13" Foreground="White" Margin="0,0,5,0" />
                                 <TextBlock Text="Cari Data" VerticalAlignment="Center" />
                             </StackPanel>
-                        </Button>
+                        </ui:Button>
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -623,8 +623,8 @@
             <!-- Status Tabs: Pending, Approved, Rejected, Semua -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <!-- Tab: Pending (Warna Kuning) -->
-                <Button Command="{Binding SelectTabCommand}" CommandParameter="Pending">
-                    <Button.Style>
+                <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Pending">
+                    <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab}" Value="Pending">
@@ -641,7 +641,7 @@
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Button.Style>
+                    </ui:Button.Style>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Pending" FontSize="12.5" />
                         <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
@@ -669,11 +669,11 @@
                             </TextBlock>
                         </Border>
                     </StackPanel>
-                </Button>
+                </ui:Button>
 
                 <!-- Tab: Approved -->
-                <Button Command="{Binding SelectTabCommand}" CommandParameter="Approved">
-                    <Button.Style>
+                <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Approved">
+                    <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab}" Value="Approved">
@@ -690,7 +690,7 @@
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Button.Style>
+                    </ui:Button.Style>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Approved" FontSize="12.5" />
                         <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
@@ -718,11 +718,11 @@
                             </TextBlock>
                         </Border>
                     </StackPanel>
-                </Button>
+                </ui:Button>
 
                 <!-- Tab: Rejected -->
-                <Button Command="{Binding SelectTabCommand}" CommandParameter="Rejected">
-                    <Button.Style>
+                <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Rejected">
+                    <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab}" Value="Rejected">
@@ -739,7 +739,7 @@
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Button.Style>
+                    </ui:Button.Style>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Rejected" FontSize="12.5" />
                         <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
@@ -767,11 +767,11 @@
                             </TextBlock>
                         </Border>
                     </StackPanel>
-                </Button>
+                </ui:Button>
 
                 <!-- Tab: Semua -->
-                <Button Command="{Binding SelectTabCommand}" CommandParameter="Semua">
-                    <Button.Style>
+                <ui:Button Command="{Binding SelectTabCommand}" CommandParameter="Semua">
+                    <ui:Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource StatusTabButtonStyle}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab}" Value="Semua">
@@ -788,7 +788,7 @@
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Button.Style>
+                    </ui:Button.Style>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Semua" FontSize="12.5" />
                         <Border CornerRadius="10" Padding="8,2" Margin="8,0,0,0">
@@ -816,7 +816,7 @@
                             </TextBlock>
                         </Border>
                     </StackPanel>
-                </Button>
+                </ui:Button>
             </StackPanel>
 
             <!-- Bulk Action Floating Bar (Visible when HasSelection = True) -->
@@ -835,7 +835,7 @@
                                Margin="0,0,14,0" />
 
                     <!-- Approve Bulk Button -->
-                    <Button Command="{Binding ApproveBulkCommand}" 
+                    <ui:Button Command="{Binding ApproveBulkCommand}"
                             Background="#16A34A" 
                             Foreground="#FFFFFF" 
                             FontWeight="SemiBold" 
@@ -848,10 +848,10 @@
                             <ui:SymbolIcon Symbol="Checkmark20" FontSize="14" Foreground="White" Margin="0,0,5,0" />
                             <TextBlock Text="Approve" FontWeight="Bold" VerticalAlignment="Center" />
                         </StackPanel>
-                    </Button>
+                    </ui:Button>
 
                     <!-- Reject Bulk Button -->
-                    <Button Command="{Binding RejectBulkCommand}" 
+                    <ui:Button Command="{Binding RejectBulkCommand}"
                             Background="#DC2626" 
                             Foreground="#FFFFFF" 
                             FontWeight="SemiBold" 
@@ -864,10 +864,10 @@
                             <ui:SymbolIcon Symbol="Dismiss20" FontSize="14" Foreground="White" Margin="0,0,5,0" />
                             <TextBlock Text="Reject" FontWeight="Bold" VerticalAlignment="Center" />
                         </StackPanel>
-                    </Button>
+                    </ui:Button>
 
                     <!-- Cancel / Clear Button -->
-                    <Button Command="{Binding ClearSelectionCommand}" 
+                    <ui:Button Command="{Binding ClearSelectionCommand}"
                             Background="Transparent" 
                             Foreground="#94A3B8" 
                             BorderThickness="0" 
@@ -1095,28 +1095,28 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <!-- Detail (Always visible) -->
-                                        <Button Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        <ui:Button Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}" 
                                                 Style="{StaticResource RowActionDetailButton}" 
                                                 ToolTip="Lihat Detail">
                                             <ui:SymbolIcon Symbol="Eye20" FontSize="13" Foreground="#475569" />
-                                        </Button>
+                                        </ui:Button>
                                         <!-- Approve (Only when Pending) -->
-                                        <Button Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        <ui:Button Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}" 
                                                 Style="{StaticResource RowActionApproveButton}" 
                                                 Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                                 ToolTip="Setujui Request">
                                             <ui:SymbolIcon Symbol="Checkmark20" FontSize="13" Foreground="#16A34A" />
-                                        </Button>
+                                        </ui:Button>
                                         <!-- Reject (Only when Pending) -->
-                                        <Button Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        <ui:Button Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}" 
                                                 Style="{StaticResource RowActionRejectButton}" 
                                                 Visibility="{Binding CanApproveOrReject, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                                 ToolTip="Tolak Request">
                                             <ui:SymbolIcon Symbol="Dismiss20" FontSize="13" Foreground="#DC2626" />
-                                        </Button>
+                                        </ui:Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -1367,7 +1367,7 @@
                                    TextWrapping="Wrap" />
 
                         <!-- Segarkan Action Button -->
-                        <ui:Button Command="{Binding LoadDataCommand}" 
+                        <ui:Button Command="{Binding LoadDataCommand}"
                                    Margin="0,18,0,0" 
                                    Padding="16,6" 
                                    Appearance="Secondary"
@@ -1430,12 +1430,12 @@
 
                         <!-- Right: Dynamic Pagination Buttons -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Command="{Binding PrevPageCommand}" Style="{StaticResource PaginationNavButton}" ToolTip="Halaman Sebelumnya">
+                            <ui:Button Command="{Binding PrevPageCommand}" Style="{StaticResource PaginationNavButton}" ToolTip="Halaman Sebelumnya">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <ui:SymbolIcon Symbol="ChevronLeft20" FontSize="12" Margin="0,0,3,0" />
                                     <TextBlock Text="Prev" FontSize="11.5" FontWeight="Medium" VerticalAlignment="Center" />
                                 </StackPanel>
-                            </Button>
+                            </ui:Button>
 
                             <ItemsControl ItemsSource="{Binding PageNumbers}">
                                 <ItemsControl.ItemsPanel>
@@ -1445,7 +1445,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Button Content="{Binding PageNumber}" 
+                                        <ui:Button Content="{Binding PageNumber}"
                                                 Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=Page}}" 
                                                 CommandParameter="{Binding PageNumber}" 
                                                 Style="{StaticResource PaginationNumberButton}" />
@@ -1453,12 +1453,12 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
-                            <Button Command="{Binding NextPageCommand}" Style="{StaticResource PaginationNavButton}" ToolTip="Halaman Berikutnya">
+                            <ui:Button Command="{Binding NextPageCommand}" Style="{StaticResource PaginationNavButton}" ToolTip="Halaman Berikutnya">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Text="Next" FontSize="11.5" FontWeight="Medium" VerticalAlignment="Center" />
                                     <ui:SymbolIcon Symbol="ChevronRight20" FontSize="12" Margin="3,0,0,0" />
                                 </StackPanel>
-                            </Button>
+                            </ui:Button>
                         </StackPanel>
                     </Grid>
                 </Border>
